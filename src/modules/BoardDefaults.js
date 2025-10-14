@@ -108,14 +108,17 @@ class BaseBoard {
 	get captchaAfterSubmit() {
 		return null;
 	}
-	get captchaInit() {
-		return null;
+	initCaptchaAsync() {
+		return Promise.resolve(null);
 	}
 	get captchaLang() {
 		return this.captchaRu ? 2 : 1;
 	}
-	get captchaUpdate() {
-		return null;
+	get needCallUpdateCaptchaAsync() {
+		return false;
+	}
+	updateCaptchaAsync() {
+		return Promise.resolve(null);
 	}
 	get catalogUrl() {
 		return `${ this.protocol }//${ this.host }/${ this.b }/catalog.html`;
@@ -153,6 +156,9 @@ class BaseBoard {
 	get isArchived() {
 		return false;
 	}
+	initAsync() {
+		return Promise.resolve();
+	}
 	get lastPage() {
 		const el = $q(this.qPages);
 		let value = el && +Array.prototype.pop.call(el.textContent.match(/\d+/g) || []) || 0;
@@ -171,8 +177,8 @@ class BaseBoard {
 	get handlePostClick() {
 		return null;
 	}
-	get postersCount() {
-		return '';
+	getPostersCountAsync() {
+		return Promise.resolve('');
 	}
 	get reCrossLinks() {
 		const value = new RegExp(`>https?:\\/\\/[^\\/]*${ this.domain }\\/([a-z0-9]+)\\/${
@@ -180,8 +186,8 @@ class BaseBoard {
 		Object.defineProperty(this, 'reCrossLinks', { value });
 		return value;
 	}
-	get reportForm() {
-		return null;
+	reportForm() {
+		return Promise.resolve(null);
 	}
 	get sendHTML5Post() {
 		return null;

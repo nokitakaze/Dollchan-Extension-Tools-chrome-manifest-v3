@@ -4,7 +4,7 @@
 
 const Panel = Object.create({
 	isVidEnabled: false,
-	initPanel(formEl) {
+	async initPanel(formEl) {
 		const filesCount = $Q(aib.qPostImg, formEl).length;
 		const isThr = aib.t;
 		(postform?.pArea[0] || formEl).insertAdjacentHTML('beforebegin', `<div id="de-main">
@@ -41,7 +41,7 @@ const Panel = Object.create({
 						<span id="de-panel-info-files" title="${ Lng.panelBtn.filesCount[lang] }">${
 							filesCount }</span>
 						<span id="de-panel-info-posters" title="${ Lng.panelBtn.postersCount[lang] }">${
-							aib.postersCount }</span>
+							await aib.getPostersCountAsync() }</span>
 					</span>` : '') }
 				</span>
 			</div>

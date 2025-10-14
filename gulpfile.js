@@ -6,10 +6,16 @@ const gulp         = require('gulp');
 const newfile      = require('gulp-file');
 const headerfooter = require('gulp-headerfooter');
 const replace      = require('gulp-replace');
+const clone = require('gulp-clone');
+const merge = require('merge-stream');
 const streamify    = require('gulp-streamify');
 const strip        = require('gulp-strip-comments');
 const tap          = require('gulp-tap');
 const source       = require('vinyl-source-stream');
+const { deleteAsync } = require('del');
+const fs = require('fs');
+const path = require('path');
+const vm = require('vm');
 
 const watchedPaths = [
 	'src/modules/*',
@@ -55,9 +61,32 @@ gulp.task('make:es6', gulp.series('updatecommit', () =>
 ));
 
 // Copy es6 script from src/ to extension/ folder
-gulp.task('copyext', () => gulp.src('src/Dollchan_Extension_Tools.es6.user.js')
-	.pipe(replace(/\s+\/\/ <EXCLUDED_FROM_EXTENSION>[\s\S]*?<\/EXCLUDED_FROM_EXTENSION>/g, ''))
-	.pipe(gulp.dest('extension/v2')).pipe(gulp.dest('extension/v3')));
+gulp.task('copyext', () => {
+	const src = gulp
+		.src('src/Dollchan_Extension_Tools.es6.user.js')
+		// вырезаем блоки, помеченные как EXCLUDED_FROM_EXTENSION
+		.pipe(replace(/\s+\/\/ <EXCLUDED_FROM_EXTENSION>[\s\S]*?<\/EXCLUDED_FROM_EXTENSION>/g, ''));
+
+	// Ветка для extension/v2
+	const v2 = src
+		.pipe(clone())
+		.pipe(replace(
+			/const DOLLCHAN_IMPORT_MODE = '[\w\d/_-]*?';/g,
+			'const DOLLCHAN_IMPORT_MODE = \'extension/v2\';'
+		))
+		.pipe(gulp.dest('extension/v2'));
+
+	// Ветка для extension/v3
+	const v3 = src
+		.pipe(clone())
+		.pipe(replace(
+			/const DOLLCHAN_IMPORT_MODE = '[\w\d/_-]*?';/g,
+			'const DOLLCHAN_IMPORT_MODE = \'extension/v3\';'
+		))
+		.pipe(gulp.dest('extension/v3'));
+
+	return merge(v2, v3);
+});
 
 // Makes es5-script from es6-script
 gulp.task('make:es5', gulp.series(
@@ -66,6 +95,10 @@ gulp.task('make:es5', gulp.series(
 		.transform('babelify', { presets: ['@babel/preset-env'] })
 		.bundle()
 		.pipe(source('Dollchan_Extension_Tools.user.js'))
+		.pipe(replace(
+			/DOLLCHAN_IMPORT_MODE = '[\w\d/_-]*?';/g,
+			'DOLLCHAN_IMPORT_MODE = \'user_js\';'
+		))
 		.pipe(streamify(strip()))
 		.pipe(streamify(headerfooter(
 			'/* eslint-disable */\n(function deMainFuncOuter(localData) {\n',
@@ -75,7 +108,38 @@ gulp.task('make:es5', gulp.series(
 	'copyext'
 ));
 
-gulp.task('make', gulp.series('make:es5'));
+gulp.task('make:compile_injections', (cb) => {
+	try {
+		const srcPath = path.resolve('src/modules/CodeInjections.js');
+		const outPath = path.resolve('extension/v3/compiled_scripts.js');
+		const code = fs.readFileSync(srcPath, 'utf8');
+
+		// Изолированная песочница: никаких require/процессов/etc.
+		const sandbox = { WORLD_CODE_INJECTIONS: undefined };
+		vm.createContext(sandbox);
+		vm.runInContext(code, sandbox, { filename: 'CodeInjections.js' });
+
+		const map = sandbox.WORLD_CODE_INJECTIONS || {};
+		const keys = Object.keys(map);
+
+		let out = '/* eslint-disable */\n';
+		out += 'export const compiledScripts = [];\n\n';
+
+		for(const k of keys) {
+			// Текст кода как есть, без экранирования — он попадает внутрь лямбды
+			out += `compiledScripts[${JSON.stringify(k)}] = () => {\n${map[k]}\n};\n\n`;
+		}
+
+		fs.mkdirSync(path.dirname(outPath), { recursive: true });
+		fs.writeFileSync(outPath, out, 'utf8');
+		cb();
+	} catch(err) {
+		cb(err);
+	}
+});
+
+// the MAKE itself
+gulp.task('make', gulp.series('make:es5', 'make:compile_injections'));
 
 // Split es6-script into separate module files
 gulp.task('make:modules', () => gulp.src('src/Dollchan_Extension_Tools.es6.user.js').pipe(tap(file => {
@@ -99,3 +163,12 @@ gulp.task('make:modules', () => gulp.src('src/Dollchan_Extension_Tools.es6.user.
 // Waits for changes in watchedPaths files, then makes es5 and es6-scripts
 gulp.task('watch', () => gulp.watch(watchedPaths, gulp.series('make')));
 gulp.task('default', gulp.parallel('make', 'watch'));
+
+// Удаляет сборочные артефакты
+gulp.task('clean', () => deleteAsync([
+	'./extension/v2/Dollchan_Extension_Tools.es6.user.js',
+	'./extension/v3/Dollchan_Extension_Tools.es6.user.js',
+	'./Dollchan_Extension_Tools.user.js',
+	'./src/Dollchan_Extension_Tools.es6.user.js',
+	'./extension/v3/compiled_scripts.js',
+]));

@@ -61,13 +61,13 @@ class Captcha {
 			insertText(e.target, chr);
 			break;
 		}
-		case 'focus': this.updateOutdated();
+		case 'focus': this.updateOutdated().then(_ => {});
 		}
 		e.preventDefault();
 		e.stopPropagation();
 	}
-	initCapPromise() {
-		const initPromise = aib.captchaInit ? aib.captchaInit(this) : null;
+	async initCapPromise() {
+		const initPromise = await aib.initCaptchaAsync() ? await aib.initCaptchaAsync(this) : null;
 		if(initPromise) {
 			initPromise.then(() => this.showCaptcha(), err => {
 				if(err instanceof AjaxError) {
@@ -95,11 +95,11 @@ class Captcha {
 		this.textEl.onkeypress = null;
 		this.textEl.onfocus = null;
 	}
-	showCaptcha(isUpdateImage = false) {
+	async showCaptcha(isUpdateImage = false) {
 		if(!this.textEl) {
 			$show(this.parentEl);
-			if(aib.captchaUpdate) {
-				aib.captchaUpdate(this, false);
+			if(aib.needCallUpdateCaptchaAsync) {
+				await aib.updateCaptchaAsync(this, false);
 			} else if(this._isRecap) {
 				this._updateRecap();
 			}
@@ -117,13 +117,13 @@ class Captcha {
 			a.replaceWith(img);
 		}
 		if(isUpdateImage) {
-			this.refreshCaptcha(false);
+			await this.refreshCaptcha(false);
 		} else {
 			this._lastUpdate = Date.now();
 		}
 		$show(this.parentEl);
 	}
-	refreshCaptcha(isFocus, isError = false, tNum = this.tNum) {
+	async refreshCaptcha(isFocus, isError = false, tNum = this.tNum) {
 		if(!this.isAdded || tNum !== this.tNum) {
 			this.tNum = tNum;
 			this.isAdded = false;
@@ -136,10 +136,13 @@ class Captcha {
 			return;
 		}
 		this._lastUpdate = Date.now();
-		if(aib.captchaUpdate) {
-			const updatePromise = aib.captchaUpdate(this, isError);
-			if(updatePromise) {
-				updatePromise.then(() => this._updateTextEl(isFocus), err => this._setUpdateError(err));
+		if(aib.needCallUpdateCaptchaAsync) {
+			try {
+				debugger;
+				await aib.updateCaptchaAsync(this, isError);
+				this._updateTextEl(isFocus);
+			} catch(err) {
+				this._setUpdateError(err);
 			}
 		} else if(this._isRecap) {
 			this._updateRecap();
@@ -179,9 +182,9 @@ class Captcha {
 			}
 		}));
 	}
-	updateOutdated() {
+	async updateOutdated() {
 		if(!aib.makaba && this._lastUpdate && (Date.now() - this._lastUpdate > Cfg.capUpdTime * 1e3)) {
-			this.refreshCaptcha(false);
+			await this.refreshCaptcha(false);
 		}
 	}
 

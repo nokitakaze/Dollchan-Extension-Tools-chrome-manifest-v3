@@ -397,7 +397,7 @@ class PostForm {
 		this.cap = new Captcha(capEl, this.tNum);
 		const updCapFn = () => {
 			this.cap.addCaptcha();
-			this.cap.updateOutdated();
+			this.cap.updateOutdated().then();
 		};
 		this.txta.addEventListener('focus', updCapFn);
 		if(this.files) {

@@ -62,7 +62,7 @@ function $button(value, title, fn, className = 'de-button') {
 	return el;
 }
 
-function $script(text) {
+function _script_direct_inject(text) {
 	try {
 		const el = doc.createElement('script');
 		el.type = 'text/javascript';
@@ -70,6 +70,39 @@ function $script(text) {
 		doc.head.append(el);
 		el.remove();
 	} catch(err) {}
+}
+
+function _script_background_inject(mode) {
+	return new Promise((resolve, reject) => {
+		chrome.runtime.sendMessage(
+			{
+				'de-messsage' : 'world_script_run',
+				function      : mode
+			},
+			response => {
+				console.debug('_script_background_inject::response', response);
+				if(chrome.runtime.lastError) {
+					return reject(new Error(chrome.runtime.lastError.message));
+				}
+
+				resolve(response);
+			});
+	});
+}
+
+function $script(mode) {
+	if(DOLLCHAN_IMPORT_MODE !== 'extension/v3') {
+		if(!(mode in WORLD_CODE_INJECTIONS)){
+			console.error('Unknown mode to inject into MAIN WORLD', mode);
+			return Promise.resolve();
+		}
+
+		const text = WORLD_CODE_INJECTIONS[mode];
+		_script_direct_inject(text);
+		return Promise.resolve();
+	}
+
+	return _script_background_inject(mode);
 }
 
 function $css(text) {

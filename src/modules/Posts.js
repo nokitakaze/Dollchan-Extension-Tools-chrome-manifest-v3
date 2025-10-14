@@ -501,7 +501,7 @@ class AbstractPost {
 			postform.quotedText = '';
 			return;
 		}
-		case 'post-report': aib.reportForm(num, this.thr.num); return;
+		case 'post-report': await aib.reportForm(num, this.thr.num); return;
 		case 'thr-exp': {
 			const task = +el.textContent.match(/\d+/);
 			this.thr.loadPosts(!task ? 'all' : task === 10 ? 'more' : task);

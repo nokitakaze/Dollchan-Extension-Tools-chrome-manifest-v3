@@ -1,18 +1,19 @@
 /* eslint indent: ["error", "tab", { "outerIIFEBody": 0 }] */
+import { compiledScripts } from './compiled_scripts.js';  // импорт именованных экспортов
+
 (function() {
 'use strict';
 let isEnabled = false;
 
-async function getStored(id) {
+function getStored(id) {
 	// Read storage.local first. If it not existed then read storage.sync
-	const value = await new Promise(resolve => chrome.storage.local.get(id, obj => {
+	return new Promise(resolve => chrome.storage.local.get(id, obj => {
 		if(Object.keys(obj).length) {
 			resolve(obj[id]);
 		} else {
 			chrome.storage.sync.get(id, obj => resolve(obj[id]));
 		}
 	}));
-	return value;
 }
 
 function setStored(id, value) {
@@ -119,7 +120,39 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 		}).catch(err => sendResponse({ isError: true, answer: err }));
 		return true; // Will respond asynchronously
 	}
-	default: sendResponse({ answer: 'Unknown request' });
+	case 'world_script_run': {
+		console.debug('world_script_run', request, sender, sendResponse);
+
+		if((typeof request['function'] === 'undefined') || (request['function'] === null) || (request['function'] === '')) {
+			sendResponse();
+			return true;
+		}
+
+		let func;
+		if(request['function'] in compiledScripts) {
+			func = compiledScripts[request['function']];
+		} else {
+			console.warn('Была вызвана функция', request['function'], ', которой нет');
+			func = () => {
+				console.warn('Была вызвана функция', request['function'], ', которой нет');
+			};
+		}
+
+		const target = { tabId: sender.tab.id };
+		if(sender.frameId !== undefined && sender.frameId !== null) {
+			target.frameIds = [sender.frameId];
+		}
+
+		const promise = chrome.scripting.executeScript({
+			target : target,
+			world  : 'MAIN',
+			func   : func
+		}).then(sendResponse);
+		console.debug('world_script_run::promise', promise);
+		return true; // Will respond asynchronously
+	}
+	default:
+		sendResponse({ answer: 'Unknown request' });
 	}
 });
 

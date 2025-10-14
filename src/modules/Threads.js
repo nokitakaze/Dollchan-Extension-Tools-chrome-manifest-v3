@@ -182,9 +182,15 @@ class Thread {
 	*  Adds new posts to the end of current thread.
 	*  @returns {Promise} - resolves with Object, { newCount: Number, locked: Boolean }
 	*/
-	loadNewPosts() {
-		return ajaxPostsLoad(aib.b, this.num, true)
-			.then(pBuilder => pBuilder ? this._loadNewFromBuilder(pBuilder) : { newCount: 0, locked: false });
+	// noinspection JSUnusedGlobalSymbols
+	async loadNewPosts() {
+		const pBuilder = await ajaxPostsLoad(aib.b, this.num, true);
+		return pBuilder
+			? this._loadNewFromBuilder(pBuilder)
+			: {
+				newCount : 0,
+				locked : false
+			};
 	}
 	toggleFavState(isEnable, preview = null) {
 		let host, board, num, cnt, txt, last;
@@ -437,8 +443,7 @@ class Thread {
 			Panel.updateCounter(
 				pBuilder.length + 1 - (Cfg.panelCounter === 2 ? this.hiddenCount : 0),
 				$Q(`.de-reply:not(.de-post-removed) ${
-					aib.qPostImg }, .de-oppost ${ aib.qPostImg }`, this.el).length,
-				pBuilder.postersCount);
+					aib.qPostImg }, .de-oppost ${ aib.qPostImg }`, this.el).length, pBuilder.postersCount);
 			Pview.updatePosition(true);
 		}
 		if(pBuilder.isClosed) {

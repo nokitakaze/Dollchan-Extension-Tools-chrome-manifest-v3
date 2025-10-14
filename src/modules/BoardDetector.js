@@ -39,7 +39,7 @@ function getImageBoard(checkDomains, checkEngines) {
 			}
 			return super.getImgRealName(wrap);
 		}
-		init() {
+		async initAsync() {
 			const el = $id('posttypeindicator');
 			if(el) {
 				el.previousSibling?.remove();
@@ -173,8 +173,8 @@ function getImageBoard(checkDomains, checkEngines) {
 		getTNum(thr) {
 			return +$q('input[type="checkbox"]', thr).name.match(/\d+/);
 		}
-		init() {
-			$script('window.FormData = void 0;');
+		async initAsync() {
+			await $script('injection1');
 			const formEl = $q(this.qForm);
 			if(formEl) {
 				formEl.insertAdjacentHTML('beforeend',
@@ -216,14 +216,14 @@ function getImageBoard(checkDomains, checkEngines) {
 		fixHTMLHelper(str) {
 			return str.replace(/"(?:\/vichan)?\/player\.php\?v=([^&]+)&[^"]+"/g, '"$1"');
 		}
-		init() {
-			super.init();
+		async initAsync() {
+			await super.initAsync();
 			if(locStorage.file_dragdrop !== 'false') {
 				locStorage.file_dragdrop = false;
 				deWindow.location.reload();
 				return true;
 			}
-			$script('highlightReply = Function.prototype;');
+			await $script('injection2');
 			setTimeout(() => $id('updater')?.remove(), 0);
 			$id('body')?.removeAttribute('id');
 			return false;
@@ -264,7 +264,7 @@ function getImageBoard(checkDomains, checkEngines) {
 			}
 			return super.getImgRealName(wrap);
 		}
-		init() {
+		async initAsync() {
 			$Q('.message > .omittedposts').forEach(el => {
 				el.insertAdjacentHTML('afterend',
 					'<span class="abbrev">Post too long. <a href="#">Click to view.</a>');
@@ -326,9 +326,8 @@ function getImageBoard(checkDomains, checkEngines) {
 		get markupTags() {
 			return ['\'\'\'', '\'\'', '__', '~~', '**', '[code'];
 		}
-		captchaUpdate() {
-			$script('reloadCaptcha();');
-			return null;
+		updateCaptchaAsync() {
+			return $script('injection3');
 		}
 		changeReplyMode(form, tNum) {
 			const action = form.getAttribute('action');
@@ -370,19 +369,8 @@ function getImageBoard(checkDomains, checkEngines) {
 		getTNum(thr) {
 			return +$q('.deletionCheckBox', thr).name.split('-')[1];
 		}
-		init() {
-			$script(`if("autoRefresh" in window) {
-					clearInterval(refreshTimer);
-				}
-				if("thread" in window) {
-					if(thread.refreshTimer) {
-						clearInterval(thread.refreshTimer);
-						Object.defineProperty(thread, "startTimer",
-							{ value: Function.prototype, writable: false, configurable: false });
-					}
-					Object.defineProperty(thread, "changeRefresh",
-						{ value: Function.prototype, writable: false, configurable: false });
-				}`);
+		async initAsync() {
+			await $script('injection4');
 			const submEl = $id('formButton');
 			if(submEl) {
 				this._hasNewAPI = true;
@@ -517,7 +505,7 @@ function getImageBoard(checkDomains, checkEngines) {
 		getTNum(thr) {
 			return +thr.getAttribute('data-thread-num');
 		}
-		init() {
+		async initAsync() {
 			defaultCfg.ajaxUpdThr = 0;
 			const el = $q('.search_box');
 			if(el) {
@@ -546,17 +534,16 @@ function getImageBoard(checkDomains, checkEngines) {
 			this.hasCatalog = true;
 			this.multiFile = true;
 		}
-		get captchaInit() {
-			$script('Captcha.init(); Captcha.initForm(document.getElementById("postform"));');
+		async initCaptchaAsync() {
+			await $script('injection5');
 			return null;
 		}
 		get css() {
 			return `.content > hr, .extrabtns, .postbutt, .replymode { display: none; }
 				form { position: initial; }`;
 		}
-		captchaUpdate() {
-			$script('var captchaTimeout = 29.5; Captcha.state = "init";');
-			return null;
+		updateCaptchaAsync() {
+			return $script('injection6');
 		}
 		fixFileInputs(el) {
 			const str = ' class="de-file-wrap"><input type="file" name="file"></div>';
@@ -682,10 +669,10 @@ function getImageBoard(checkDomains, checkEngines) {
 		get markupTags() {
 			return ['B', 'I', 'U', 'S', 'SPOILER', '', 'SUP', 'SUB'];
 		}
-		get postersCount() {
+		async getPostersCountAsync() {
 			return $q('span[title="Постеры"]')?.innerHTML.match(/\d+$/)[0] || '';
 		}
-		get reportForm() {
+		async reportForm() {
 			const value = (pNum, tNum) => ($q('input[type="button"]', $popup(
 				'edit-report',
 				`<input name="comment" value="" placeholder="${
@@ -724,14 +711,13 @@ function getImageBoard(checkDomains, checkEngines) {
 			Object.defineProperty(this, 'reportForm', { value });
 			return value;
 		}
-		captchaInit() {
-			$script(`const loadCapFn =
+		async initCaptchaAsync() {
+			await $script(`const loadCapFn =
 				() => new EmojiCaptcha({ createWarningFn: generateWarning }).requestController();`);
 			return null;
 		}
-		captchaUpdate() {
-			$script('loadCapFn();');
-			return null;
+		updateCaptchaAsync() {
+			return $script('injection8');
 		}
 		clearFileInputs() {
 			$delAll('.sticker-input, .postform__sticker-img');
@@ -818,7 +804,7 @@ function getImageBoard(checkDomains, checkEngines) {
 				e.stopPropagation();
 			}
 		}
-		init() {
+		async initAsync() {
 			if($id('js-posts')) { // New Makaba engine
 				this._isBeta = true;
 				$Q('.thread__missed').forEach(el =>
@@ -855,16 +841,7 @@ function getImageBoard(checkDomains, checkEngines) {
 							.file-attr { margin-bottom: 1px; }` : '' }`
 				});
 			}
-			$script(`(function() {
-				function fixGlobalFunc(name) {
-					Object.defineProperty(window, name,
-						{ value: Function.prototype, writable: false, configurable: false });
-				}
-				${ this._isBeta ? '' : 'fixGlobalFunc("autorefresh_start");' }
-				fixGlobalFunc("linkremover");
-				fixGlobalFunc("Media");
-				window.FormData = void 0;
-			})();`);
+			await $script(this._isBeta ? 'injection9a' : 'injection9b');
 			$Q('.autorefresh').forEach(el => {
 				const inpEl = $q('input', el);
 				if(inpEl.checked) {
@@ -920,13 +897,16 @@ function getImageBoard(checkDomains, checkEngines) {
 
 			this.JsonBuilder = null;
 		}
-		get reportForm() {
-			return null;
+		reportForm() {
+			return Promise.resolve(null);
 		}
-		captchaInit(cap) {
-			return this.captchaUpdate(cap);
+		initCaptchaAsync(cap) {
+			return this.updateCaptchaAsync(cap);
 		}
-		captchaUpdate(cap) {
+		get needCallUpdateCaptchaAsync() {
+			return true;
+		}
+		async updateCaptchaAsync(cap) {
 			const url = `/api/captcha/service_id?board=${ this.b }&thread=` + postform.tNum;
 			return cap.updateHelper(url, xhr => {
 				const box = $q('.captcha');
@@ -964,8 +944,8 @@ function getImageBoard(checkDomains, checkEngines) {
 		getCapParent() {
 			return $q('.captcha');
 		}
-		init() {
-			super.init();
+		async initAsync() {
+			await super.initAsync();
 			this.qFormFile = 'input[name="formimages[]"]';
 			this.qFormTd = 'div[class^="freply__"]';
 			this.qFormTr = 'div[class^="freply__"]';
@@ -1005,7 +985,10 @@ function getImageBoard(checkDomains, checkEngines) {
 				#subject + div { display: inline !important; }
 				.replypage .reply .reflink::before { content: "" }`;
 		}
-		captchaUpdate(cap) {
+		get needCallUpdateCaptchaAsync() {
+			return true;
+		}
+		updateCaptchaAsync(cap) {
 			return cap.updateHelper('/cgi/captcha?task=get_id', ({ responseText: id }) => {
 				$id('imgcaptcha').src = '/cgi/captcha?task=get_image&id=' + id;
 				$id('captchaid').value = id;
@@ -1017,8 +1000,8 @@ function getImageBoard(checkDomains, checkEngines) {
 				postNum : json.num ? +json.num : null
 			};
 		}
-		init() {
-			$script('postFormSubmit = Function.prototype;');
+		async initAsync() {
+			await $script('injection10');
 			$id('postform').insertAdjacentHTML('beforeend', '<input type="hidden" name="json" value="1">');
 			return false;
 		}
@@ -1055,7 +1038,10 @@ function getImageBoard(checkDomains, checkEngines) {
 		get markupTags() {
 			return ['**', '*', '__', '^^', '%%', '`'];
 		}
-		captchaUpdate(cap) {
+		get needCallUpdateCaptchaAsync() {
+			return true;
+		}
+		updateCaptchaAsync(cap) {
 			return cap.updateHelper(`/api_adaptive.php?board=${ this.b }`, xhr => {
 				if(xhr.responseText === '1') {
 					cap.textEl.disabled = true;
@@ -1119,28 +1105,37 @@ function getImageBoard(checkDomains, checkEngines) {
 		get qPostImgNameLink() {
 			return '.fileText > a';
 		}
-		get captchaUpdate() {
-			let value = null;
-			if($id('captchaFormPart')) {
-				value = cap => {
-					const containerEl = $id('t-root');
-					if(!containerEl) {
-						cap.hasCaptcha = false;
-						return;
-					}
-					containerEl.insertAdjacentHTML('afterend', '<div id="t-root"></div>');
-					containerEl.remove();
-					$script('initTCaptcha();');
-					setTimeout(() => {
-						cap.textEl = $id('t-resp');
-						cap.textEl.tabIndex = 999;
-						cap.initTextEl();
-					}, 1e3);
-					return null;
-				};
+		get needCallUpdateCaptchaAsync() {
+			return true;
+		}
+		updateCaptchaAsync(cap) {
+			if(!$id('captchaFormPart')) {
+				return Promise.resolve(null);
 			}
-			Object.defineProperty(this, 'captchaUpdate', { value });
-			return value;
+
+			const _z = async () => {
+				const containerEl = $id('t-root');
+				if(!containerEl) {
+					cap.hasCaptcha = false;
+					return;
+				}
+				containerEl.insertAdjacentHTML('afterend', '<div id="t-root"></div>');
+				containerEl.remove();
+				await $script('injection11');
+				setTimeout(() => {
+					cap.textEl = $id('t-resp');
+					cap.textEl.tabIndex = 999;
+					cap.initTextEl();
+				}, 1e3);
+				return null;
+			};
+
+			const promise = new Promise(resolve => {
+				_z().then(resolve);
+			});
+
+			Object.defineProperty(this, 'captchaUpdate', { promise });
+			return promise;
 		}
 		get css() {
 			return `.backlink, #blotter, .de-file-utils + .desktop, .extButton, hr.desktop, .navLinks,
@@ -1161,12 +1156,10 @@ function getImageBoard(checkDomains, checkEngines) {
 			return ['', '', '', '', $q('input[type="checkbox"][name="spoiler"]') ? '[spoiler' : '',
 				this.b === 'g' ? '[code' : ''];
 		}
-		get postersCount() {
+		async getPostersCountAsync() {
 			const value = $q('span[class="ts-ips"]')?.innerHTML || '';
 			if(!value) {
-				$script(`setTimeout(function() {
-					document.getElementById("de-panel-info-posters").textContent = window.unique_ips || "";
-				}, 0)`);
+				await $script('injection12');
 			}
 			return value;
 		}
@@ -1208,8 +1201,9 @@ function getImageBoard(checkDomains, checkEngines) {
 				post._downloadImageByLink(el, e);
 			}
 		}
-		reportForm(pNum) {
-			$script(`Report.open('${ pNum }', '${ this.b }');`);
+		async reportForm(pNum) {
+			// todo fix me
+			await $script(`Report.open('${ pNum }', '${ this.b }');`);
 			return true;
 		}
 		getSage(post) {
@@ -1231,7 +1225,7 @@ function getImageBoard(checkDomains, checkEngines) {
 		getTNum(thr) {
 			return +$q('input[type="checkbox"]', thr).name.match(/\d+/);
 		}
-		init() {
+		async initAsync() {
 			Cfg.findImgFile = 0;
 			Cfg.txtBtnsLoc = 0;
 			$id('styleSelector')?.setAttribute('onchange', 'setActiveStyleSheet(this.value);');
@@ -1241,7 +1235,7 @@ function getImageBoard(checkDomains, checkEngines) {
 	ibDomains['4chan.org'] = ibDomains['4channel.org'] = _4chan;
 
 	class _7chan extends Kusaba {
-		init() {
+		async initAsync() {
 			return true;
 		}
 	}
@@ -1253,9 +1247,8 @@ function getImageBoard(checkDomains, checkEngines) {
 				.reloadCaptchaButton { display: none !important; }
 				${ Cfg.addSageBtn ? '#useSageSpan { display: none; }' : '' }`;
 		}
-		captchaUpdate() {
-			$script('captchaUtils.reloadCaptcha();');
-			return null;
+		updateCaptchaAsync() {
+			return $script('injection14');
 		}
 	}
 	ibDomains['8chan.moe'] = _8chan;
@@ -1346,7 +1339,7 @@ function getImageBoard(checkDomains, checkEngines) {
 		getTNum(thr) {
 			return this.getPNum(this.getOp(thr));
 		}
-		init() {
+		async initAsync() {
 			defaultCfg.ajaxUpdThr = 0;
 			setTimeout(() => {
 				const delPosts = $Q('.post_deleted');
@@ -1372,9 +1365,8 @@ function getImageBoard(checkDomains, checkEngines) {
 		get markupTags() {
 			return ['**', '*', '', '~~', '%%', ''];
 		}
-		captchaUpdate() {
-			$script('load_captcha("/vichan/inc/captcha/entrypoint.php", "abcdefghijklmnopqrstuvwxyz");');
-			return null;
+		updateCaptchaAsync() {
+			return $script('injection15');
 		}
 	}
 	ibDomains['dobrochan.net'] = Dobrochan;
@@ -1388,7 +1380,7 @@ function getImageBoard(checkDomains, checkEngines) {
 			this.multiFile = true;
 			this.timePattern = 'yy+nn+dd+w+hh+ii+ss';
 		}
-		get captchaInit() {
+		async initCaptchaAsync() {
 			const switchCaptcha = status => {
 				const hasPasscode = status === 'validpasscode';
 				$toggle($id('captchablock').lastElementChild, !hasPasscode);
@@ -1420,7 +1412,7 @@ function getImageBoard(checkDomains, checkEngines) {
 		getImgRealName(wrap) {
 			return $q('.filesize > a', wrap).textContent;
 		}
-		init() {
+		async initAsync() {
 			return false;
 		}
 	}
@@ -1440,8 +1432,8 @@ function getImageBoard(checkDomains, checkEngines) {
 					.linkPreview, #modeBanner, .watchButton { display: none !important; }
 				#de-main, .de-pview { font-size: 75%; }`;
 		}
-		init() {
-			super.init();
+		async initAsync() {
+			await super.initAsync();
 			$Q('.imgLink > img[src^="/.youtube/"]').forEach(el => el.closest('figure').remove());
 			$Q('.youtube_wrapper').forEach(el => {
 				const src = $q('a', el).href;
@@ -1599,9 +1591,9 @@ function getImageBoard(checkDomains, checkEngines) {
 		getImgRealName(wrap) {
 			return $q('.filesize > em', wrap).textContent.split(',')[2] || super.getImgRealName(wrap);
 		}
-		init() {
+		async initAsync() {
 			defaultCfg.addSageBtn = 0;
-			$script('highlight = Function.prototype;');
+			await $script('injection16');
 			let el = $q(this.qFormSpoiler);
 			if(el) {
 				$hide(el = el.parentNode);
@@ -1771,7 +1763,7 @@ function getImageBoard(checkDomains, checkEngines) {
 		getSage(post) {
 			return $q('.sage', post).hasChildNodes();
 		}
-		init() {
+		async initAsync() {
 			if(!this.host.includes('nocsp.') && this.host.includes('kohlchan.net')) {
 				deWindow.location.assign(deWindow.location.href
 					.replace(/(www\.)?kohlchan\.net/, 'nocsp.kohlchan.net'));
@@ -1784,7 +1776,7 @@ function getImageBoard(checkDomains, checkEngines) {
 				return true;
 			}
 			$Q('.imgLink').forEach(el => (el.className = 'de-img-link'));
-			return super.init();
+			return await super.initAsync();
 		}
 		sendHTML5Post(form, data, needProgress, hasFiles) {
 			const oekakiEl = $id('wPaint');
@@ -1836,8 +1828,8 @@ function getImageBoard(checkDomains, checkEngines) {
 		getImgRealName(wrap) {
 			return $q('.details > a, .postfilename', wrap).textContent;
 		}
-		init() {
-			super.init();
+		async initAsync() {
+			await super.initAsync();
 			$Q('.files + .post.op').forEach(el => el.prepend(el.previousElementSibling));
 			return false;
 		}
@@ -1856,8 +1848,8 @@ function getImageBoard(checkDomains, checkEngines) {
 		get markupTags() {
 			return ['**', '***', '', '^H', '', ''];
 		}
-		init() {
-			$script('highlight = Function.prototype;');
+		async initAsync() {
+			await $script('injection16');
 			return false;
 		}
 	}
@@ -1892,7 +1884,7 @@ function getImageBoard(checkDomains, checkEngines) {
 		getSubmitData({ error, id }) {
 			return { error, postNum: id && +id };
 		}
-		init() {
+		async initAsync() {
 			const el = $id('postform');
 			if(el) {
 				el.setAttribute('action', el.getAttribute('action') + '?json=1');
@@ -1922,8 +1914,8 @@ function getImageBoard(checkDomains, checkEngines) {
 		getImgRealName(wrap) {
 			return $q('.post-filename', wrap).textContent;
 		}
-		init() {
-			super.init();
+		async initAsync() {
+			await super.initAsync();
 			$Q('img[data-mature-src]').forEach(el => (el.src = el.getAttribute('data-mature-src')));
 			return false;
 		}
@@ -1958,14 +1950,12 @@ function getImageBoard(checkDomains, checkEngines) {
 		get markupTags() {
 			return ['b', 'i', 'u', 's', 'spoiler', 'code', 'sup', 'sub'];
 		}
-		captchaUpdate() {
-			$script(`load_captcha("/inc/captcha/entrypoint.php", "abcdefghijklmnopqrstuvwxyz");
-				actually_load_captcha("/inc/captcha/entrypoint.php", "abcdefghijklmnopqrstuvwxyz");`);
-			return null;
+		updateCaptchaAsync() {
+			return $script('injection17');
 		}
-		init() {
-			super.init();
-			$script('$("textarea#body").on("change input propertychange", countSymbols); countSymbols();');
+		async initAsync() {
+			await super.initAsync();
+			await $script('injection18');
 			$q('form[name="post"]').name = 'de-post';
 		}
 	}
@@ -1992,14 +1982,14 @@ function getImageBoard(checkDomains, checkEngines) {
 		get markupTags() {
 			return ['b', 'i', 'u', 's', 'spoiler', 'code', 'sup', 'sub'];
 		}
-		init() {
+		async initAsync() {
 			const val = '{ "simpleNavbar": true }';
 			if(locStorage.settings !== val) {
 				locStorage.settings = val;
 				deWindow.location.reload();
 				return true;
 			}
-			super.init();
+			await super.initAsync();
 			defaultCfg.timePattern = 'w+dd+m+yyyy+hh+ii+ss';
 			defaultCfg.timeOffset = 4;
 			defaultCfg.correctTime = 1;

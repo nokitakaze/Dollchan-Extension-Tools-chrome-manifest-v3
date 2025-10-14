@@ -39,7 +39,7 @@ export default [
 					while: { after: false }
 				}
 			}],
-			'linebreak-style': ['error', 'windows'],
+			'linebreak-style': ['error', 'unix'], // todo обратно на windows
 			'max-len': ['error', 110, { ignoreRegExpLiterals: true, ignoreUrls: true }],
 			'new-cap': ['error', {
 				capIsNewExceptions: [

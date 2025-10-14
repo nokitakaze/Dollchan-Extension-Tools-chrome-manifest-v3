@@ -70,14 +70,20 @@ async function runMain(checkDomains, dataPromise) {
 		initNavFuncs();
 	}
 	const [favObj] = await (dataPromise || Promise.all([readFavorites(), readCfg()]));
-	if(!Cfg.disabled && aib.init?.() || !localData && doc.body.classList.contains('de-mode-local')) {
+	if(!Cfg.disabled) {
+		const u = await aib.initAsync();
+		if(u) {
+			return;
+		}
+	}
+	if(!localData && doc.body.classList.contains('de-mode-local')) {
 		return;
 	}
 	doc.body.classList.add('de-runned');
 	Logger.log('Storage loading');
 	addSVGIcons();
 	if(Cfg.disabled) {
-		Panel.initPanel(formEl);
+		await Panel.initPanel(formEl);
 		scriptCSS();
 		return;
 	}
@@ -140,7 +146,7 @@ async function runMain(checkDomains, dataPromise) {
 	}
 	initPage();
 	Logger.log('Init page');
-	Panel.initPanel(formEl);
+	await Panel.initPanel(formEl);
 	Logger.log('Add panel');
 	embedPostMsgImages(DelForm.first.el);
 	Logger.log('Image-links');

@@ -3,8 +3,8 @@
 (function deMainFuncInner(deWindow, prestoStorage, FormData, scrollTo, localData) {
 'use strict';
 
-const version = '24.9.16.0';
-const commit = '801e2e0';
+const version = '24.9.17.0';
+const commit = 'd4b7f9f';
 
 /* ==[ GlobalVars.js ]== */
 /* ==[ DefaultCfg.js ]== */
@@ -43,6 +43,7 @@ const commit = '801e2e0';
 /* ==[ SvgIcons.js ]== */
 /* ==[ Css.js ]== */
 /* ==[ Main.js ]== */
+/* ==[ CodeInjections.js ]== */
 /* ==[ Tail ]== */
 }(
 	window,
@@ -51,3 +52,5 @@ const commit = '801e2e0';
 	(x, y) => window.scrollTo(x, y),
 	/* global localData */ typeof localData === 'object' ? localData : null
 ));
+
+const DOLLCHAN_IMPORT_MODE = '__IMPORT_MODE__';
