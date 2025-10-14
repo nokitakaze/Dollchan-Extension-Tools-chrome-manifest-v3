@@ -27,53 +27,37 @@ function setIcon(enabled) {
 	chrome.action.setTitle({ title: `Dollchan Extension ${ enabled ? '(enabled)' : '(disabled)' }` });
 }
 
-async function runScript(tabId, url, frameId = null) {
-	let scopeObj = await getStored('DESU_scope');
-	if(!scopeObj) {
-		setStored('DESU_scope', scopeObj = { includes: '*', excludes: '' });
-	}
-	const inc = (scopeObj.includes || '*').split(/\r\n|\r|\n/);
-	const exc = (scopeObj.excludes || '').split(/\r\n|\r|\n/);
-	for(let i = 0, len = exc.length; i < len; ++i) {
-		if(exc[i] && new RegExp(exc[i].replace(/\*/g, '.*?')).test(url)) {
-			return false;
-		}
-	}
-	for(let i = 0, len = inc.length; i < len; ++i) {
-		if(inc[i] && new RegExp(inc[i].replace(/\*/g, '.*?')).test(url)) {
-			try {
-				await chrome.scripting.executeScript({
-				files: ['Dollchan_Extension_Tools.es6.user.js'],
-				target: { allFrames: true, tabId }
-			});
-			} catch (err) {
-				console.warn(`Failed to execute Dollchan script: ${ err }`);
-			}
-			return true;
-		}
-	}
-	return false;
+// Installation into pages
+const SCOPE_KEY = 'DESU_scope';
+const SCRIPT_ID = 'dollchan';
+
+function splitLines(s='') { return s.split(/\r?\n/).map(v=>v.trim()).filter(Boolean); }
+// ВАЖНО: тут ожидаются chrome match patterns, не regex.
+// Если у вас были произвольные regex — полностью эквивалентно через registerContentScripts не получится.
+
+async function applyScope() {
+  const { [SCOPE_KEY]: scope = { includes: '*', excludes: '' } } =
+    await chrome.storage.local.get(SCOPE_KEY);
+
+  const toPatterns = arr => arr.map(p => p === '*' ? '<all_urls>' : p);
+
+  await chrome.scripting.unregisterContentScripts({ ids: [SCRIPT_ID] }).catch(()=>{});
+  await chrome.scripting.registerContentScripts([{
+    id: SCRIPT_ID,
+    matches: toPatterns(splitLines(scope.includes)),
+    excludeMatches: toPatterns(splitLines(scope.excludes)),
+    js: ['Dollchan_Extension_Tools.es6.user.js'],
+    runAt: 'document_idle',
+    allFrames: true
+  }]);
 }
 
-function runScriptInFrame(details) {
-	if(isEnabled) {
-		runScript(details.tabId, details.url);
-	}
-}
-
-// Script loading
-chrome.webNavigation.onCommitted.addListener(details => {
-	if(details.transitionType === 'manual_subframe') {
-		// Running in target iframe, when it updates its content
-		const callback = details => {
-			runScriptInFrame(details);
-			chrome.webNavigation.onDOMContentLoaded.removeListener(callback);
-		};
-		chrome.webNavigation.onDOMContentLoaded.addListener(callback);
-	}
-	runScriptInFrame(details); // Regular loading at document_start
+chrome.runtime.onInstalled.addListener(applyScope);
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (area === 'local' && changes[SCOPE_KEY]) applyScope();
 });
 
+// Script signals
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 	switch(request['de-messsage']) {
 	case 'toggleDollchan': // Conversation with menu.js

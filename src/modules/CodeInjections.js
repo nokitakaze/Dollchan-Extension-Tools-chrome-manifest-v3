@@ -42,7 +42,9 @@ WORLD_CODE_INJECTIONS.injection9b = `(function() {
 WORLD_CODE_INJECTIONS.injection10 = 'postFormSubmit = Function.prototype;';
 WORLD_CODE_INJECTIONS.injection11 = 'initTCaptcha();';
 WORLD_CODE_INJECTIONS.injection12 = `setTimeout(function() {
-					document.getElementById("de-panel-info-posters").textContent = window.unique_ips || "";
+					const element = document.getElementById("de-panel-info-posters");
+					if (element === null) return;
+					element.textContent = window.unique_ips || "";
 				}, 0)`;
 // WORLD_CODE_INJECTIONS.injection13 = 'debugger';
 WORLD_CODE_INJECTIONS.injection14 = 'captchaUtils.reloadCaptcha();';
