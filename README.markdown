@@ -13,6 +13,14 @@
 - **License:** © 2023 Dollchan Extension Tools Team.<br>See the [LICENSE file](https://github.com/SthephanShinkufag/Dollchan-Extension-Tools/blob/master/LICENSE) for license rights and limitations (MIT).
 
 ---
+⚠Attention! This is a Proof of Concept update of the original extension. Script injection has been replaced with proper code
+execution in the page context via a VM, allowing us to bypass CORS restrictions.
+
+Works on 2ch.su & 4chan.org. However, as of October 14, 2025, some of the code is 100% broken.
+
+This fork was created ONLY to migrate the old Manifest V2 to V3; now this WebExtension works AGAIN in Google Chrome.
+
+---
 **Dollchan Extension** is the userscript and extension that combines various options & features, making you hang out on [imageboards](https://en.wikipedia.org/wiki/Imageboard) in an easier and more convenient way. If you have visited sites like [4chan.org](http://4chan.org/) or [2ch.hk](https://2ch.hk/), then you probably already heard about it.
 
 It provides such functions:
@@ -28,7 +36,7 @@ It provides such functions:
 - Embedding player to YouTube and Vimeo links.
 - Easy navigation through attached pictures / videos in posts.
 - Applying search services to pictures and stills from videos.
-- Reading metadata form webm files.
+- Reading metadata from webm files.
 - Adding pictures to the reply form with convenient preview thumbnails.
 - Posting pictures with random bytes added and custom names.
 - Embedding preview thumbnails to .jpg / .png / .gif links.
@@ -43,20 +51,30 @@ Dollchan has both cross-browser and cross-board working scope. A list of support
 ### Compilation:
 
 1. Install [Git](https://git-scm.com/) and [Node.js](https://nodejs.org/) if not yet.
-2. Install [Gulp](http://gulpjs.com/) using Git:<br>
-`npm rm -g gulp`<br>
-`npm install -g gulp-cli`
-3. Using Git, go to Dollchan repo and update dependencies:<br>
-`npm install`
-4. Then you can make both ES5 and ESNext userscript versions from [/src/modules](https://github.com/SthephanShinkufag/Dollchan-Extension-Tools/tree/master/src/modules) by running:<br>
-`gulp make`
-5. Or you can make ESNext version only:<br>
-`gulp make:es6`
-6. Also you can make separate source modules from your ESNext version:<br>
-`gulp make:modules`
+2. Install [Gulp](http://gulpjs.com/) using Git:
+```shell
+npm rm -g gulp
+npm install -g gulp-cli
+```
+3. Using Git, go to Dollchan repo and update dependencies:
+```shell
+npm install
+```
+4. Then you can make both ES5 and ESNext userscript versions from [/src/modules](https://github.com/SthephanShinkufag/Dollchan-Extension-Tools/tree/master/src/modules) by running:
+```shell
+gulp make
+```
+5. Or you can make ESNext version only:
+```shell
+gulp make:es6
+```
+6. Also you can make separate source modules from your ESNext version:
+```shell
+gulp make:modules
+```
 
 ---
-### How to test an extension:
+### How to install the extension:
 
 **Chrome**
 1. Go to the extensions page by typing `chrome://extensions/` in your browser's address bar,<br>
@@ -83,8 +101,10 @@ If you don't have a Dollchan repo, download and unpack the [repository archive](
 5. Attach your device to the development computer using a USB cable.<br>
 When prompted, allow USB debugging for the connection.
 6. In the settings view for Firefox for Android Nightly, enable "Remote debugging via USB."
-7. Run with Git:<br>
-`web-ext run -t firefox-android --source-dir ./extension/v3 --adb-device XXX --firefox-apk org.mozilla.fenix`<br>
+7. Run with Git:
+```shell
+web-ext run -t firefox-android --source-dir ./extension/v3 --adb-device XXX --firefox-apk org.mozilla.fenix
+```
 where `XXX` is the name of your device (it will be displayed if you enter `XXX` instead of the name, replace `XXX` with the given name and run the command again)
 
 ---
