@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name            Dollchan Extension Tools
-// @version         24.9.17.2
+// @version         24.9.17.3
 // @namespace       http://www.freedollchan.org/scripts/*
 // @author          Sthephan Shinkufag @ FreeDollChan
 // @copyright       © Dollchan Extension Team. See the LICENSE file for license rights and limitations (MIT).
@@ -28,7 +28,7 @@
 'use strict';
 
 const version = '24.9.17.0';
-const commit = 'ac542de';
+const commit = '87a4a54';
 
 /* ==[ GlobalVars.js ]== */
 
@@ -16462,52 +16462,6 @@ function getImageBoard(checkDomains, checkEngines) {
 		}
 		get qPostImgNameLink() {
 			return '.file-attr > .desktop, .post__file-attr > .desktop';
-		}
-		get css() {
-			return `.js-post-findimg, .js-post-saveimg, .media-expand-button, .media-thumbnail, .newpost,
-					.post__btn:not(.icon_type_active), .post__number, .post__refmap
-					{ display: none !important; }
-				._captcha-container { margin: 0 !important; }
-				._captcha-keyboard-button { width: 35px !important; height: 35px !important;
-					padding: 0 !important; }
-				._captcha-keyboard-selected-stub { display: none !important; }
-				.de-fullimg-wrap-inpost { margin-right: 16px; }
-				.de-refmap { margin: 0 16px 4px; }
-				.de-pview > .post__details { margin-left: 4px; }
-				.de-reply-class { background: var(--theme_default_postbg);
-					border: 1px solid var(--theme_default_border); border-radius: 3px; }
-				#down-nav-arrow, #up-nav-arrow { z-index: 0; }
-				.header__opts_sticky { z-index: 10; }
-				.oekaki-height, .oekaki-width { width: 36px !important; }
-				.post_type_hidden { opacity: unset; cursor: default; }
-				.post_type_hidden .post__message:not(.de-post-hiddencontent),
-					.post_type_hidden .post__images:not(.de-post-hiddencontent) { display: block !important; }
-				.post_type_reply { max-width: 100%; }
-				.postarea { display: initial !important; }
-				.postform { width: auto; }
-				.postform__sticker-btn, .postform__sticker-prev { bottom: ` +
-					`${ !Cfg.txtBtnsLoc || !Cfg.addTextBtns ? 3 :
-					Cfg.addTextBtns === 1 ? 28 : Cfg.addTextBtns === 2 ? 19 : 25 }px !important; }
-				.post__message { padding-left: 0px; margin-left: 16px; min-width: 15%; word-wrap: normal;
-					word-break: normal; }
-				${ Cfg.addSageBtn ? `.options__box[onclick="ToggleSage()"]
-					{ display: none !important; }` : '' }
-				${ Cfg.addTextBtns ? '.js-postform-mu { display: none; }' : '' }
-				${ Cfg.expandTrunc ? `.expand-large-comment,
-					div[id^="shrinked-post"] { display: none !important; }
-					div[id^="original-post"] { display: block !important; }` : '' }
-				${ Cfg.imgNames === 2 ? `.post__filezise { display: inline !important; }
-					.post__file-attr { margin-bottom: 1px; }` : '' }
-				${ Cfg.noSpoilers ? '.spoiler::after { width: 0; }' : '' }`;
-		}
-		get isArchived() {
-			return this.b.includes('/arch');
-		}
-		get lastPage() {
-			const els = $Q('.pager > a:not([class])');
-			const value = els ? els.length : 1;
-			Object.defineProperty(this, 'lastPage', { value });
-			return value;
 		}
 		get markupTags() {
 			return ['B', 'I', 'U', 'S', 'SPOILER', '', 'SUP', 'SUB'];
