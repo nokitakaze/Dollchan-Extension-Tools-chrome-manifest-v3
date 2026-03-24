@@ -132,7 +132,7 @@ async function remove404Favorites(favObj) {
 function isPostRefToYou(post, myPosts) {
 	if(Cfg.markMyPosts && (myPosts || MyPosts)) {
 		const isMatch = myPosts ? num => myPosts[num] : num => MyPosts.has(num);
-		const links = $Q(aib.qPostMsg.split(', ').join(' a, ') + ' a', post);
+		const links = $Q(aib.qPostMsg + ' a', post);
 		for(let a = 0, linksLen = links.length; a < linksLen; ++a) {
 			const tc = links[a].textContent;
 			if(tc[0] === '>' && tc[1] === '>' && isMatch(parseInt(tc.substr(2), 10))) {
@@ -371,7 +371,7 @@ function showFavoritesWindow(winBody, favObj) {
 	// Appending DOM and events
 	if(html) {
 		$bEnd(winBody, `<div class="de-fav-table">${ html }</div>`).addEventListener('click', e => {
-			let el = nav.fixEventEl(e.target);
+			let el = e.target;
 			let parentEl = el.parentNode;
 			if(el.tagName.toLowerCase() === 'svg') {
 				el = parentEl;
@@ -443,12 +443,12 @@ function showFavoritesWindow(winBody, favObj) {
 				const iconEl = $q('.de-fav-inf-icon', el);
 				const titleEl = iconEl.parentNode;
 				thrInfo.push({
-					found     : false,
-					num       : +el.getAttribute('de-num'),
-					pageEl    : $q('.de-fav-inf-page', el),
-					iconClass : iconEl.getAttribute('class'),
+					found    : false,
+					num      : +el.getAttribute('de-num'),
+					pageEl   : $q('.de-fav-inf-page', el),
+					iconClass: iconEl.getAttribute('class'),
 					iconEl,
-					iconTitle : titleEl.getAttribute('title'),
+					iconTitle: titleEl.getAttribute('title'),
 					titleEl
 				});
 				iconEl.setAttribute('class', 'de-fav-inf-icon de-fav-wait');
@@ -456,7 +456,7 @@ function showFavoritesWindow(winBody, favObj) {
 			}
 			// Sequentially load pages and search for favorites threads
 			// We cannot know a count of pages while in the thread
-			const endPage = (aib.lastPage || 10) + 1; // Check up to 10 page, if we donʼt know
+			const endPage = (aib.lastPage || 10) + 1; // Check up to 10 page, if we don't know
 			let infoLoaded = 0;
 			const updateInf = (inf, page) => {
 				inf.iconEl.setAttribute('class', inf.iconClass);
@@ -470,8 +470,7 @@ function showFavoritesWindow(winBody, favObj) {
 			for(let page = 0; page < endPage; ++page) {
 				const tNums = new Set();
 				try {
-					const form = await ajaxLoad(aib.getPageUrl(aib.b, page));
-					const els = DelForm.getThreads(form);
+					const els = DelForm.getThreads(await ajaxLoad(aib.getPageUrl(aib.b, page)));
 					for(let i = 0, len = els.length; i < len; ++i) {
 						tNums.add(aib.getTNum(els[i]));
 					}
@@ -503,19 +502,18 @@ function showFavoritesWindow(winBody, favObj) {
 	);
 
 	// Deletion of confirm/cancel buttons
-	const delBtns = $bEnd(winBody, '<div id="de-fav-del-confirm" style="display: none;"></div>');
-	delBtns.append(
+	$bEnd(winBody, '<div id="de-fav-del-confirm" style="display: none;"></div>').append(
 		$button(Lng.remove[lang], Lng.delEntries[lang], () => {
 			$Q('.de-entry > .de-fav-del-btn[de-checked]', winBody).forEach(
 				el => el.parentNode.setAttribute('de-removed', ''));
 			remove404Favorites();
 			$show(btns);
-			$hide(delBtns);
+			$hide($id('de-fav-del-confirm'));
 		}),
 		$button(Lng.cancel[lang], '', () => {
 			$Q('.de-fav-del-btn', winBody).forEach(el => el.removeAttribute('de-checked'));
 			$show(btns);
-			$hide(delBtns);
+			$hide($id('de-fav-del-confirm'));
 		})
 	);
 }

@@ -70,25 +70,24 @@ class AbstractPost {
 	}
 	handleEvent(e) {
 		let temp;
-		let el = nav.fixEventEl(e.target);
+		let el = e.target;
+		let { classList } = el;
 		const { type } = e;
 		const isOutEvent = type === 'mouseout';
 		const isPview = this instanceof Pview;
 
 		// Click event
 		if(type === 'click') {
-			if(aib.handlePostClick) {
-				aib.handlePostClick(this, el, e);
-			}
+			aib.handlePostClick?.(this, el, e);
 			// Skip the click by wheel button
 			switch(e.button) {
-			case 0: break;
-			case 1: e.stopPropagation();
+			case 0: break; // Primary button
+			case 1: e.stopPropagation(); // Wheel button
 				/* falls through */
 			default: return;
 			}
 			// Hide the dropdown menu after the click on its option
-			if(this._menu && el.classList.contains('de-menu-item')) {
+			if(this._menu && classList.contains('de-menu-item')) {
 				this._menu.removeMenu();
 				this._menu = null;
 			}
@@ -96,7 +95,7 @@ class AbstractPost {
 			switch(el.tagName.toLowerCase()) {
 			case 'a':
 				// Click on YouTube link - show/hide player or thumbnail
-				if(el.classList.contains('de-video-link')) {
+				if(classList.contains('de-video-link')) {
 					this.videos.clickLink(el, Cfg.embedYTube);
 					e.preventDefault();
 					return;
@@ -139,13 +138,14 @@ class AbstractPost {
 					return;
 				}
 				el = temp; // The link is an image container
+				({ classList } = el);
 				/* falls through */
 			case 'img': // Click on attached image - expand/collapse
-				if(el.classList.contains('de-video-thumb')) {
+				if(classList.contains('de-video-thumb')) {
 					if(Cfg.embedYTube === 1) {
 						const { videos } = this;
 						videos.currentLink.classList.add('de-current');
-						videos.setPlayer(videos.playerInfo, el.classList.contains('de-ytube'));
+						videos.setPlayer(videos.playerInfo, classList.contains('de-ytube'));
 						e.preventDefault();
 					}
 				} else if(Cfg.expandImgs !== 0) {
@@ -160,7 +160,7 @@ class AbstractPost {
 				return;
 			}
 			// Click on post buttons
-			switch(el.classList[0]) {
+			switch(classList[0]) {
 			case 'de-btn-expthr':
 				if(nav.isMobile) {
 					this._menuToggleClickBtn(el, arrTags(Lng.selExpandThr[lang],
@@ -211,7 +211,7 @@ class AbstractPost {
 					el.isNotRefLink = true;
 					return;
 				}
-				// Donʼt use classList here, 'de-link-postref ' should be first
+				// Don't use classList here, 'de-link-postref ' should be first
 				el.className = 'de-link-postref ' + el.className;
 				/* falls through */
 			case 'de-link-backref':
@@ -238,18 +238,18 @@ class AbstractPost {
 			['click', 'mouseout'].forEach(e => this.el.addEventListener(e, this, true));
 		}
 		// Mouseover/mouseout on YouTube links
-		if(Cfg.embedYTube === 2 && el.classList.contains('de-video-link')) {
+		if(Cfg.embedYTube === 2 && classList.contains('de-video-link')) {
 			this.videos.toggleFloatedThumb(el, isOutEvent);
 		}
 		// Mouseover/mouseout on attached images/videos - update title
 		if(!isOutEvent && Cfg.expandImgs &&
-			el.tagName.toLowerCase() === 'img' && !el.classList.contains('de-fullimg') &&
+			el.tagName.toLowerCase() === 'img' && !classList.contains('de-fullimg') &&
 			(temp = this.images.getImageByEl(el)) && (temp.isImage || temp.isVideo)
 		) {
 			el.title = Cfg.expandImgs === 1 ? Lng.expImgInline[lang] : Lng.expImgFull[lang];
 		}
 		// Mouseover/mouseout on post buttons - update title, add/delete dropdown menu
-		switch(el.classList[0]) {
+		switch(classList[0]) {
 		case 'de-btn-expthr':
 			this.btns.title = Lng.expandThr[lang];
 			if(!nav.isMobile) {
@@ -296,7 +296,7 @@ class AbstractPost {
 				el.isNotRefLink = true;
 				return;
 			}
-			// Donʼt use classList here, 'de-link-postref ' should be first
+			// Don't use classList here, 'de-link-postref ' should be first
 			el.className = 'de-link-postref ' + el.className;
 			/* falls through */
 		case 'de-link-backref':
@@ -306,7 +306,7 @@ class AbstractPost {
 			}
 			if(isOutEvent) { // Mouseout - We need to delete previews
 				clearTimeout(this._linkTO);
-				if(!(aib.getPostOfEl(nav.fixEventEl(e.relatedTarget)) instanceof Pview) && Pview.top) {
+				if(!(aib.getPostOfEl(e.relatedTarget) instanceof Pview) && Pview.top) {
 					Pview.top.markToDel(); // If cursor is not over one of previews - delete all previews
 				} else if(this.kid) {
 					this.kid.markToDel(); // If cursor is over any preview - delete its kids
@@ -334,10 +334,10 @@ class AbstractPost {
 		}
 		this.msg.replaceWith(newMsg);
 		Object.defineProperties(this, {
-			msg   : { configurable: true, value: newMsg },
-			trunc : { configurable: true, value: null }
+			msg  : { configurable: true, value: newMsg },
+			trunc: { configurable: true, value: null }
 		});
-		Post.Сontent.removeTempData(this);
+		Post.Content.removeTempData(this);
 		if(Cfg.embedYTube) {
 			this.videos.updatePost(videoLinks, $Q('a[href*="youtu"], a[href*="vimeo.com"]', newMsg), false);
 			if(videoExt) {
@@ -362,17 +362,7 @@ class AbstractPost {
 			}
 		});
 	}
-
-	_clickImage(el, e) {
-		const image = this.images.getImageByEl(el);
-		if(!image || (!image.isImage && !image.isVideo)) {
-			return;
-		}
-		image.expandImg((Cfg.expandImgs === 1) ^ e.ctrlKey, e);
-		e.preventDefault();
-		e.stopPropagation();
-	}
-	async _downloadImageByLink(el, e) {
+	async downloadImageByLink(el, e) {
 		e.preventDefault();
 		$popup('file-loading', Lng.loading[lang], true);
 		const url = el.href;
@@ -384,6 +374,16 @@ class AbstractPost {
 		closePopup('file-loading');
 		downloadBlob(new Blob([data], { type: getFileMime(url) }), el.getAttribute('download'));
 	}
+
+	_clickImage(el, e) {
+		const image = this.images.getImageByEl(el);
+		if(!image || (!image.isImage && !image.isVideo)) {
+			return;
+		}
+		image.expandImg((Cfg.expandImgs === 1) ^ e.ctrlKey, e);
+		e.preventDefault();
+		e.stopPropagation();
+	}
 	_getFullMsg(truncEl, isInit) {
 		if(aib.deleteTruncMsg) {
 			aib.deleteTruncMsg(this, truncEl, isInit);
@@ -392,13 +392,13 @@ class AbstractPost {
 		if(!isInit) {
 			$popup('load-fullmsg', Lng.loading[lang], true);
 		}
-		ajaxLoad(aib.getThrUrl(aib.b, this.tNum)).then(form => {
+		ajaxLoad(aib.getThrUrl(aib.b, this.tNum)).then(formEl => {
 			let sourceEl;
 			const maybeSpells = new Maybe(SpellsRunner);
 			if(this.isOp) {
-				sourceEl = form;
+				sourceEl = formEl;
 			} else {
-				const posts = $Q(aib.qPost, form);
+				const posts = $Q(aib.qPost, formEl);
 				for(let i = 0, len = posts.length; i < len; ++i) {
 					const post = posts[i];
 					if(this.num === aib.getPNum(post)) {
@@ -433,10 +433,9 @@ class AbstractPost {
 				end = end.parentNode;
 			}
 			const inMsgSel = `${ aib.qPostMsg }, ${ aib.qPostMsg } *`;
-			if((nav.matchesSelector(start, inMsgSel) && nav.matchesSelector(end, inMsgSel)) || (
-				nav.matchesSelector(start, aib.qPostSubj) &&
-				nav.matchesSelector(end, aib.qPostSubj)
-			)) {
+			if((start.matches(inMsgSel) && end.matches(inMsgSel)) ||
+				(start.matches(aib.qPostSubj) && end.matches(aib.qPostSubj))
+			) {
 				if(this._selText.includes('\n')) {
 					await Spells.addSpell(1 /* #exp */,
 						`/${ escapeRegExp(this._selText).replace(/\r?\n/g, '\\n') }/`, false);
@@ -484,7 +483,7 @@ class AbstractPost {
 			this.setUserVisib(isHide);
 			return;
 		case 'hide-refsonly': await Spells.addSpell(0 /* #words */, '>>' + num, false); return;
-		case 'img-load': this._downloadImageByLink(el, e); return;
+		case 'img-load': this.downloadImageByLink(el, e); return;
 		case 'post-markmy': {
 			const isAdd = !MyPosts.has(num);
 			if(isAdd) {
@@ -667,10 +666,10 @@ class Post extends AbstractPost {
 			.getBoundingClientRect().bottom;
 	}
 	get headerEl() {
-		return new Post.Сontent(this).headerEl;
+		return new Post.Content(this).headerEl;
 	}
 	get html() {
-		return new Post.Сontent(this).html;
+		return new Post.Content(this).html;
 	}
 	get nextInThread() {
 		const post = this.next;
@@ -689,13 +688,13 @@ class Post extends AbstractPost {
 		return value;
 	}
 	get posterName() {
-		return new Post.Сontent(this).posterName;
+		return new Post.Content(this).posterName;
 	}
 	get posterTrip() {
-		return new Post.Сontent(this).posterTrip;
+		return new Post.Content(this).posterTrip;
 	}
 	get posterUid() {
-		return new Post.Сontent(this).posterUid;
+		return new Post.Content(this).posterUid;
 	}
 	get sage() {
 		const value = aib.getSage(this.el);
@@ -703,13 +702,13 @@ class Post extends AbstractPost {
 		return value;
 	}
 	get subj() {
-		return new Post.Сontent(this).subj;
+		return new Post.Content(this).subj;
 	}
 	get text() {
-		return new Post.Сontent(this).text;
+		return new Post.Content(this).text;
 	}
 	get title() {
-		return new Post.Сontent(this).title;
+		return new Post.Content(this).title;
 	}
 	get tNum() {
 		return this.thr.num;
@@ -719,7 +718,7 @@ class Post extends AbstractPost {
 			.getBoundingClientRect().top;
 	}
 	get wrap() {
-		return new Post.Сontent(this).wrap;
+		return new Post.Content(this).wrap;
 	}
 	addFuncs() {
 		super.addFuncs();
@@ -819,11 +818,11 @@ class Post extends AbstractPost {
 				}
 			}
 			sendStorageEvent('__de-post', {
-				hide   : isHide,
-				brd    : aib.b,
+				hide  : isHide,
+				brd   : aib.b,
 				num,
-				thrNum : this.thr.num,
-				title  : this.isOp ? this.title : ''
+				thrNum: this.thr.num,
+				title : this.isOp ? this.title : ''
 			});
 		}
 		this.ref.toggleRef(isHide, false);
@@ -895,15 +894,15 @@ class Post extends AbstractPost {
 	_getMenuHide() {
 		const item = name => `<span info="hide-${ name }" class="de-menu-item">${
 			Lng.selHiderMenu[name][lang] }</span>`;
-		const sel = deWindow.getSelection();
-		const ssel = sel.toString().trim();
-		if(ssel) {
-			this._selText = ssel;
-			this._selRange = sel.getRangeAt(0);
+		const selection = deWindow.getSelection();
+		const selText = selection.rangeCount > 0 ? selection.toString().trim() : '';
+		if(selText) {
+			this._selText = selText;
+			this._selRange = selection.getRangeAt(0);
 		}
 		return `${ nav.isMobile ? `<span info="hide-post" class="de-menu-item">${
 			this.isOp ? Lng.toggleThr[lang] : Lng.togglePost[lang] }</span>` : '' }${
-			ssel ? item('sel') : '' }${
+			selText ? item('sel') : '' }${
 			this.posterName ? item('name') : '' }${
 			this.posterTrip ? item('trip') : '' }${
 			this.posterUid ? item('uid') : '' }${
@@ -946,7 +945,7 @@ class Post extends AbstractPost {
 }
 Post.hasNew = false;
 Post.hiddenNums = new Set();
-Post.Сontent = class PostContent extends TemporaryContent {
+Post.Content = class PostContent extends TemporaryContent {
 	constructor(post) {
 		super(post);
 		if(this._isInited) {
@@ -1074,8 +1073,8 @@ Post.sizing = {
 			this._enabled = true;
 		}
 		Object.defineProperties(this, {
-			wHeight : { writable: true, configurable: true, value },
-			wWidth  : { writable: true, configurable: true, value: nav.viewportWidth() }
+			wHeight: { writable: true, configurable: true, value },
+			wWidth : { writable: true, configurable: true, value: nav.viewportWidth() }
 		});
 		return value;
 	},
@@ -1086,8 +1085,8 @@ Post.sizing = {
 			this._enabled = true;
 		}
 		Object.defineProperties(this, {
-			wHeight : { writable: true, configurable: true, value: nav.viewportHeight() },
-			wWidth  : { writable: true, configurable: true, value }
+			wHeight: { writable: true, configurable: true, value: nav.viewportHeight() },
+			wWidth : { writable: true, configurable: true, value }
 		});
 		return value;
 	},

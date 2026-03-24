@@ -23,7 +23,10 @@ class Thread {
 			prev.next = this;
 		}
 		let lastPost = this.op = new Post(aib.getOp(el), this, num, 0, true, prev ? prev.last : null);
-		pByEl.set(el, lastPost);
+		pByEl.set(el, this.op);
+		if(!aib.t) {
+			Thread._updateReplyBtn(this.op.el);
+		}
 		for(let i = 0; i < len; ++i) {
 			const pEl = els[i];
 			lastPost = new Post(pEl, this, aib.getPNum(pEl), omitted + i, false, lastPost);
@@ -34,15 +37,15 @@ class Thread {
 		if(localData) {
 			return;
 		}
-		this.btns = $bEnd(el, `<div class="de-thr-buttons">${ Post.getPostBtns(true, true) }
-			<span class="de-thr-updater">[<a class="de-thr-updater-link de-abtn" href="#"></a>` +
-			(!aib.t ? ']</span>' : '<span id="de-updater-count" style="display: none;"></span>]</span>') +
+		this.btns = $bEnd(el, '<div class="de-thr-buttons">' + Post.getPostBtns(true, true) +
+			'<span class="de-thr-updater"><a class="de-thr-updater-link link-button" href="#"></a>' +
+			(!aib.t ? '</span>' : '<span id="de-updater-count" style="display: none;"></span></span>') +
 			'</div>');
 		['click', 'mouseover'].forEach(e => this.btns.addEventListener(e, this));
 		[this.btnHide,, this.btnFav, this.btnUpd] = [...this.btns.children];
 		if(!aib.t && Cfg.hideReplies) {
 			this.btnReplies = $bEnd(this.btns,
-				' <span class="de-btn-replies">[<a class="de-abtn" href="#"></a>]</span>');
+				' <span class="de-btn-replies"><a class="link-button" href="#"></a></span>');
 			this._toggleReplies();
 		}
 	}
@@ -105,12 +108,11 @@ class Thread {
 	}
 	handleEvent(e) {
 		e.preventDefault();
-		const el = nav.fixEventEl(e.target);
-		const elClass = el.classList[0];
+		const el = e.target;
 		const nextThr = this.next;
 		let oldCoord = false;
 		if(e.type === 'click') {
-			switch(elClass) {
+			switch(el.classList[0]) {
 			case 'de-btn-fav': this.toggleFavState(true); break;
 			case 'de-btn-fav-sel': this.toggleFavState(false); break;
 			case 'de-btn-hide':
@@ -242,11 +244,29 @@ class Thread {
 		} while((thr = thr.next));
 	}
 
-	_addPost(parent, el, i, prev, maybeVParser) {
+	static _updateReplyBtn(postEl) {
+		const el = $q(aib.qReplyBtn, postEl);
+		if(!el) {
+			return;
+		}
+		const prevEl = el.previousSibling;
+		if(prevEl?.nodeType === Node.TEXT_NODE) {
+			prevEl.nodeValue = prevEl.nodeValue.replace(/\s*\[$/, '');
+		}
+		const nextEl = el.nextSibling;
+		if(nextEl?.nodeType === Node.TEXT_NODE) {
+			nextEl.nodeValue = nextEl.nodeValue.replace(/^\]/, '');
+		}
+		el.className = 'link-button de-gotothr-button';
+	}
+	_addPost(fragment, el, i, prev, maybeVParser) {
 		const num = aib.getPNum(el);
 		const wrap = doc.adoptNode(aib.getPostWrap(el, false));
 		const post = new Post(el, this, num, i, false, prev);
-		parent.append(wrap);
+		fragment.append(wrap);
+		if(aib.hasPostsBreak) {
+			fragment.append(doc.createElement('br'));
+		}
 		if(aib.t && !doc.hidden && Cfg.animation) {
 			$animate(el, 'de-post-new');
 		}
@@ -287,7 +307,7 @@ class Thread {
 		const nums = [];
 		const newCount = end - begin;
 		let newVisCount = newCount;
-		let fragm;
+		let fragment;
 		if(aib.JsonBuilder && nav.hasTemplate) {
 			const html = [];
 			for(let i = begin; i < end; ++i) {
@@ -296,23 +316,23 @@ class Thread {
 			}
 			const temp = doc.createElement('template');
 			temp.innerHTML = aib.fixHTML(html.join(''));
-			fragm = temp.content;
-			const posts = $Q(aib.qPost, fragm);
+			fragment = temp.content;
+			const posts = $Q(aib.qPost, fragment);
 			for(let i = 0, len = posts.length; i < len; ++i) {
-				last = this._addPost(fragm, posts[i], begin + i + 1, last, maybeVParser);
+				last = this._addPost(fragment, posts[i], begin + i + 1, last, maybeVParser);
 				newVisCount -= maybeSpells.value.runSpells(last);
 				embedPostMsgImages(last.el);
 			}
 		} else {
-			fragm = doc.createDocumentFragment();
+			fragment = doc.createDocumentFragment();
 			for(; begin < end; ++begin) {
-				last = this._addPost(fragm, pBuilder.getPostEl(begin), begin + 1, last, maybeVParser);
+				last = this._addPost(fragment, pBuilder.getPostEl(begin), begin + 1, last, maybeVParser);
 				nums.push(last.num);
 				newVisCount -= maybeSpells.value.runSpells(last);
 				embedPostMsgImages(last.el);
 			}
 		}
-		return [newCount, newVisCount, fragm, last, nums];
+		return [newCount, newVisCount, fragment, last, nums];
 	}
 	_loadFromBuilder(last, smartScroll, pBuilder) {
 		let nextCoord;
@@ -324,8 +344,8 @@ class Thread {
 				smartScroll = false;
 			}
 		}
-		const { op, el: thrEl } = this;
-		$q(aib.qOmitted + ', .de-omitted', thrEl)?.remove();
+		const { op, el: threadEl } = this;
+		$q(aib.qOmitted + ', .de-omitted', threadEl)?.remove();
 		if(this.loadCount === 0) {
 			if(op.trunc) {
 				op.updateMsg(pBuilder.getOpMessage(), maybeSpells.value);
@@ -341,7 +361,7 @@ class Thread {
 		let existed = hasPosts ? this.postsCount - post.count : 0;
 		switch(last) {
 		case 'new': // get new posts
-			needToHide = $Q('.de-hidden', thrEl).length;
+			needToHide = $Q('.de-hidden', threadEl).length;
 			needToOmit = hasPosts ? needToHide + post.count - 1 : 0;
 			needToShow = pBuilder.length - needToOmit;
 			break;
@@ -350,7 +370,7 @@ class Thread {
 			needToShow = pBuilder.length;
 			break;
 		case 'more': // show 10 omitted posts + get new posts
-			needToHide = $Q('.de-hidden', thrEl).length - 10;
+			needToHide = $Q('.de-hidden', threadEl).length - 10;
 			needToOmit = Math.max(hasPosts ? needToHide + post.count - 1 : 0, 0);
 			needToHide = Math.max(needToHide, 0);
 			needToShow = pBuilder.length - needToOmit;
@@ -369,7 +389,7 @@ class Thread {
 		} else {
 			const nonExisted = pBuilder.length - existed;
 			const maybeVParser = new Maybe(Cfg.embedYTube ? VideosParser : null);
-			const [,, fragm, last, nums] = this._importPosts(
+			const [,, fragment, last, nums] = this._importPosts(
 				op, pBuilder,
 				Math.max(0, nonExisted + existed - needToShow),
 				nonExisted,
@@ -378,7 +398,7 @@ class Thread {
 			if(maybeVParser.hasValue) {
 				maybeVParser.value.endParser();
 			}
-			op.wrap.after(fragm);
+			op.wrap.after(fragment);
 			DollchanAPI.notify('newpost', nums);
 			last.next = post;
 			if(post) {
@@ -407,8 +427,8 @@ class Thread {
 		const btns = this._moveBtnsToEnd();
 		if(!$q('.de-thr-collapse', btns)) {
 			btns.insertAdjacentHTML('beforeend',
-				`<span class="de-thr-collapse"> [<a class="de-thr-collapse-link de-abtn" href="${
-					aib.getThrUrl(aib.b, this.num) }"></a>]</span>`);
+				`<span class="de-thr-collapse">&nbsp;<a class="de-thr-collapse-link link-button" href="${
+					aib.getThrUrl(aib.b, this.num) }"></a></span>`);
 		}
 		if(needToShow > Thread.visPosts) {
 			thrNavPanel.addThr(this);
@@ -425,7 +445,7 @@ class Thread {
 		}
 		Pview.updatePosition(false);
 		if(Cfg.hideReplies) {
-			this.btnReplies.firstElementChild.className = 'de-replies-hide de-abtn';
+			this.btnReplies.firstElementChild.className = 'de-replies-hide link-button';
 			if(Cfg.updThrBtns) {
 				$show(this.btnUpd);
 			}
@@ -550,7 +570,7 @@ class Thread {
 			post.wrap.classList.toggle('de-hidden', isHide);
 		}
 		this.btnReplies.firstElementChild.className =
-			`${ isHide ? 'de-replies-show' : 'de-replies-hide' } de-abtn`;
+			`${ isHide ? 'de-replies-show' : 'de-replies-hide' } link-button`;
 		[...this.btns.children].forEach(el => el !== this.btnReplies && $toggle(el, !isHide));
 		$q(aib.qOmitted + ', .de-omitted', this.el)?.remove();
 		i = this.postsCount - 1 - (isHide ? 0 : i);
@@ -574,8 +594,8 @@ const thrNavPanel = {
 	handleEvent(e) {
 		switch(e.type) {
 		case 'scroll': deWindow.requestAnimationFrame(() => this._checkThreads()); break;
-		case 'mouseover': this._expandCollapse(true, nav.fixEventEl(e.relatedTarget)); break;
-		case 'mouseout': this._expandCollapse(false, nav.fixEventEl(e.relatedTarget)); break;
+		case 'mouseover': this._expandCollapse(true, e.relatedTarget); break;
+		case 'mouseout': this._expandCollapse(false, e.relatedTarget); break;
 		case 'click': this._handleClick(e); break;
 		}
 	},
@@ -604,11 +624,11 @@ const thrNavPanel = {
 		}
 	},
 
-	_currentThr : null,
-	_el         : null,
-	_toggleTO   : null,
-	_thrs       : null,
-	_visible    : false,
+	_currentThr: null,
+	_el        : null,
+	_toggleTO  : null,
+	_thrs      : null,
+	_visible   : false,
 	_checkThreads() {
 		const el = this._findCurrentThread();
 		if(el) {
@@ -623,7 +643,7 @@ const thrNavPanel = {
 	_expandCollapse(isExpand, targetEl) {
 		if(!$contains(this._el, targetEl)) {
 			clearTimeout(this._toggleTO);
-			this._toggleTO =setTimeout(() => this._el.classList.toggle('de-thr-navpanel-hidden', !isExpand),
+			this._toggleTO = setTimeout(() => this._el.classList.toggle('de-thr-navpanel-hidden', !isExpand),
 				Cfg.linksOver);
 		}
 	},
@@ -646,7 +666,7 @@ const thrNavPanel = {
 		return this._findCurrentThread();
 	},
 	_handleClick(e) {
-		const el = nav.fixEventEl(e.target);
+		const el = e.target;
 		switch((el.tagName.toLowerCase() === 'svg' ? el.parentNode : el).id) {
 		case 'de-thr-navup':
 			scrollTo(deWindow.pageXOffset, deWindow.pageYOffset +

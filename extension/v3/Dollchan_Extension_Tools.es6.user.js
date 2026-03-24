@@ -24,11 +24,11 @@
 
 /* eslint indent: ["error", "tab", { "flatTernaryExpressions": true, "outerIIFEBody": 0 }] */
 
-(function deMainFuncInner(deWindow, prestoStorage, FormData, scrollTo, localData) {
+(function deMainFuncInner(deWindow, FormData, scrollTo, localData) {
 'use strict';
 
 const version = '24.9.17.0';
-const commit = '7d9b9f9';
+const commit = '31eca1b';
 
 /* ==[ GlobalVars.js ]== */
 
@@ -48,149 +48,148 @@ let topWinZ = 10;
 =========================================================================================================== */
 
 const defaultCfg = {
-	disabled     : 0,    // Dollchan enabled by default
-	language     : 1,    // Dollchan language [0=ru, 1=en, 2=ua]
+	disabled    : 0,    // Dollchan enabled by default
+	language    : 1,    // Dollchan language [0=ru, 1=en, 2=ua]
 	// FILTERS
-	hideBySpell  : 1,    // hide posts by spells
-	spells       : null, // user defined spells
-	sortSpells   : 0,    // sort spells and remove duplicates
-	hideRefPsts  : 0,    // hide replies to hidden posts
-	nextPageThr  : 0,    // load threads from next pages instead of hidden
-	delHiddPost  : 0,    // remove placeholders [0=off, 1=all, 2=posts only, 3=threads only]
+	hideBySpell : 1,    // hide posts by spells
+	spells      : null, // user defined spells
+	sortSpells  : 0,    // sort spells and remove duplicates
+	hideRefPsts : 0,    // hide replies to hidden posts
+	nextPageThr : 0,    // load threads from next pages instead of hidden
+	delHiddPost : 0,    // remove placeholders [0=off, 1=all, 2=posts only, 3=threads only]
 	// POSTS
-	ajaxUpdThr   : 1,    // threads updater
-	updThrDelay  : 20,   //    update interval (sec)
-	updCount     : 1,    //    show countdown to thread update
-	favIcoBlink  : 1,    //    blink the favicon on new posts
-	desktNotif   : 0,    //    desktop notifications for new posts
-	markNewPosts : 1,    //    highlight new posts with color
-	markMyPosts  : 1,    // highlight my own posts
-	expandTrunc  : 0,    // auto-expand truncated posts
-	widePosts    : 0,    // stretch posts to screen width
-	limitPostMsg : 2000, // limit text width in posts nessages
-	showHideBtn  : 1,    // show "Hide" buttons [0=off, 1=with menu, 2=no menu]
-	showRepBtn   : 1,    // show "Quick reply" buttons [0=off, 1=with menu, 2=no menu]
-	postBtnsCSS  : 2,    // post buttons style [0=simple, 1=gradient grey, 2=custom]
-	postBtnsBack : '#8c8c8c', //    custom background color
-	thrBtns      : 1,    // buttons under threads [0=off, 1=all, 2=all (on board), 3='New posts' on board]
-	noSpoilers   : 1,    // text spoilers expansion [0=off, 1=grey, 2=native]
-	noPostNames  : 0,    // hide poster names
-	correctTime  : 0,    // time correction in posts
-	timeOffset   : '+0', //    time offset (h)
-	timePattern  : '',   //    search pattern
-	timeRPattern : '',   //    replace pattern
+	ajaxUpdThr  : 1,    // threads updater
+	updThrDelay : 20,   //    update interval (sec)
+	updCount    : 1,    //    show countdown to thread update
+	favIcoBlink : 1,    //    blink the favicon on new posts
+	desktNotif  : 0,    //    desktop notifications for new posts
+	markNewPosts: 1,    //    highlight new posts with color
+	markMyPosts : 1,    // highlight my own posts
+	expandTrunc : 0,    // auto-expand truncated posts
+	widePosts   : 0,    // stretch posts to screen width
+	limitPostMsg: 2000, // limit text width in posts nessages
+	showHideBtn : 1,    // show "Hide" buttons [0=off, 1=with menu, 2=no menu]
+	showRepBtn  : 1,    // show "Quick reply" buttons [0=off, 1=with menu, 2=no menu]
+	postBtnsCSS : 2,    // post buttons style [0=simple, 1=gradient grey, 2=custom]
+	postBtnsBack: '#8c8c8c', //    custom background color
+	thrBtns     : 1,    // buttons under threads [0=off, 1=all, 2=all (on board), 3='New posts' on board]
+	noSpoilers  : 1,    // text spoilers expansion [0=off, 1=grey, 2=native]
+	noPostNames : 0,    // hide poster names
+	correctTime : 0,    // time correction in posts
+	timeOffset  : '+0', //    time offset (h)
+	timePattern : '',   //    search pattern
+	timeRPattern: '',   //    replace pattern
 	// IMAGES
-	expandImgs   : 2,    // expand images on click [0=off, 1=in post, 2=by center]
-	imgNavBtns   : 1,    //    add buttons to navigate images
-	imgInfoLink  : 1,    //    show name under expanded image
-	resizeDPI    : 0,    //    donʼt upscale images on high DPI displays
-	resizeImgs   : 1,    //    resize large images to fit screen [0=off', '1=by width', '2=width+height]
-	minImgSize   : 100,  //    minimal size for expanded images (px)
-	maxImgSize   : 2000, //    maximum size for expanded images (px)
-	zoomFactor   : 20,   //    images zoom sensibility [1-100%]
-	webmControl  : 1,    //    show control bar for WebM
-	webmTitles   : 1,    //    load titles from WebM metadata
-	webmVolume   : 100,  //    default volume for WebM [0-100%]
-	minWebmWidth : 320,  //    minimal width for WebM (px)
-	preLoadImgs  : 0,    // preload images [0=off, 1=all, 2=non-WebM]
-	findImgFile  : 0,    //    detect embedded files in images
-	openImgs     : 0,    // replace thumbs with original images [0=off, 1=all, 2=GIFs only, 3=non-GIFs]
-	imgSrcBtns   : 1,    // add "Search" buttons for images
-	imgNames     : 0,    // image names in links [0=off, 1=original, 2=hide]
-	maskImgs     : 0,    // NSFW mode
-	maskVisib    : 7,    // image opacity in NSFW mode [0-100%]
+	expandImgs  : 2,    // expand images on click [0=off, 1=in post, 2=by center]
+	imgNavBtns  : 1,    //    add buttons to navigate images
+	imgInfoLink : 1,    //    show name under expanded image
+	resizeDPI   : 0,    //    don't upscale images on high DPI displays
+	resizeImgs  : 1,    //    resize large images to fit screen [0=off', '1=by width', '2=width+height]
+	minImgSize  : 100,  //    minimal size for expanded images (px)
+	maxImgSize  : 2000, //    maximum size for expanded images (px)
+	zoomFactor  : 20,   //    images zoom sensibility [1-100%]
+	webmControl : 1,    //    show control bar for WebM
+	webmTitles  : 1,    //    load titles from WebM metadata
+	webmVolume  : 100,  //    default volume for WebM [0-100%]
+	minWebmWidth: 320,  //    minimal width for WebM (px)
+	preLoadImgs : 0,    // preload images [0=off, 1=all, 2=non-WebM]
+	findImgFile : 0,    //    detect embedded files in images
+	openImgs    : 0,    // replace thumbs with original images [0=off, 1=all, 2=GIFs only, 3=non-GIFs]
+	imgSrcBtns  : 1,    // add "Search" buttons for images
+	imgNames    : 0,    // image names in links [0=off, 1=original, 2=hide]
+	maskImgs    : 0,    // NSFW mode
+	maskVisib   : 7,    // image opacity in NSFW mode [0-100%]
 	// LINKS
-	linksNavig   : 1,    // posts navigation by >>links
-	linksOver    : 100,  //    delay appearance (ms)
-	linksOut     : 1500, //    delay disappearance (ms)
-	markViewed   : 0,    //    mark viewed posts
-	strikeHidd   : 0,    //    strike >>links to hidden posts
-	removeHidd   : 0,    //        also remove from reply maps
-	noNavigHidd  : 0,    //    donʼt show previews for hidden posts
-	markMyLinks  : 1,    // mark links to my posts with (You)
-	crossLinks   : 1,    // replace http:// with >>/b/links*
-	decodeLinks  : 1,    // decode %D0%A5%D1 in links
-	insertNum    : 1,    // insert >>link on №postnumber click*
-	addOPLink    : 1,    // insert >>link when replying to OP on board
-	addImgs      : 0,    // load images to jpg/png/gif links*
-	addMP3       : 1,    // embed mp3 links
-	addVocaroo   : 1,    // embed Vocaroo links
-	embedYTube   : 1,    // embed YouTube links [0=off, 1=preview+player, 2=onclick]
-	YTubeWidth   : 360,  //    player width (px)
-	YTubeHeigh   : 270,  //    player height (px)
-	YTubeTitles  : 1,    //    load titles for YouTube links
-	ytApiKey     : '',   //    YouTube API key
-	addVimeo     : 1,    //    embed Vimeo links
+	linksNavig  : 1,    // posts navigation by >>links
+	linksOver   : 100,  //    delay appearance (ms)
+	linksOut    : 1500, //    delay disappearance (ms)
+	markViewed  : 0,    //    mark viewed posts
+	strikeHidd  : 0,    //    strike >>links to hidden posts
+	removeHidd  : 0,    //        also remove from reply maps
+	noNavigHidd : 0,    //    don't show previews for hidden posts
+	markMyLinks : 1,    // mark links to my posts with (You)
+	crossLinks  : 1,    // replace http:// with >>/b/links*
+	decodeLinks : 1,    // decode %D0%A5%D1 in links
+	insertNum   : 1,    // insert >>link on №postnumber click*
+	addOPLink   : 1,    // insert >>link when replying to OP on board
+	addImgs     : 0,    // load images to jpg/png/gif links*
+	addMP3      : 1,    // embed mp3 links
+	addVocaroo  : 1,    // embed Vocaroo links
+	embedYTube  : 1,    // embed YouTube links [0=off, 1=preview+player, 2=onclick]
+	YTubeWidth  : 360,  //    player width (px)
+	YTubeHeigh  : 270,  //    player height (px)
+	YTubeTitles : 1,    //    load titles for YouTube links
+	ytApiKey    : '',   //    YouTube API key
+	addVimeo    : 1,    //    embed Vimeo links
 	// POSTFORM
-	ajaxPosting  : 1,    // posting without refresh
-	postSameImg  : 1,    //    ability to post duplicate images
-	removeEXIF   : 0,    //    remove EXIF from JPEG
-	removeFName  : 0,    //    clear file names [0=off, 1=empty, 2=unixtime, 3=unixtime-random]
-	sendErrNotif : 1,    //    inform in title about post send error
-	scrAfterRep  : 0,    //    scroll to bottom after reply
-	fileInputs   : 2,    //    enhanced file attachment field  [0=off, 1=simple, 2=preview]
-	addPostForm  : 2,    // reply form display in thread [0=at top, 1=at bottom, 2=hidden]
-	spacedQuote  : 1,    // insert a space when quoting "> "
-	favOnReply   : 1,    // add thread to Favorites after reply
-	warnSubjTrip : 0,    // warn about a tripcode in "Subject" field
-	addSageBtn   : 1,    // replace "Email" with Sage button
-	saveSage     : 1,    //    remember sage
-	sageReply    : 0,    //    reply with sage
-	altCaptcha   : 0,    // use alternative captcha (if available)
-	capUpdTime   : 300,  // captcha update interval (sec)
-	captchaLang  : 0,    // forced captcha input language [0=off, 1=en, 2=ru]
-	addTextBtns  : 1,    // text markup buttons [0=off, 1=graphics, 2=text, 3=usual]
-	txtBtnsLoc   : 1,    //    located at [0=top, 1=bottom]
-	userPassw    : 1,    // user password
-	passwValue   : '',   //    value
-	userName     : 0,    // user name
-	nameValue    : '',   //    value
-	noBoardRule  : 0,    // hide board rules
-	noPassword   : 1,    // hide form "Password" field
-	noName       : 0,    // hide form "Name" field
-	noSubj       : 0,    // hide form "Subject" field
+	ajaxPosting : 1,    // posting without refresh
+	postSameImg : 1,    //    ability to post duplicate images
+	removeEXIF  : 0,    //    remove EXIF from JPEG
+	removeFName : 0,    //    clear file names [0=off, 1=empty, 2=unixtime, 3=unixtime-random]
+	sendErrNotif: 1,    //    inform in title about post send error
+	scrAfterRep : 0,    //    scroll to bottom after reply
+	fileInputs  : 2,    //    enhanced file attachment field  [0=off, 1=simple, 2=preview]
+	addPostForm : 2,    // reply form display in thread [0=at top, 1=at bottom, 2=hidden]
+	spacedQuote : 1,    // insert a space when quoting "> "
+	favOnReply  : 1,    // add thread to Favorites after reply
+	warnSubjTrip: 0,    // warn about a tripcode in "Subject" field
+	addSageBtn  : 1,    // replace "Email" with Sage button
+	saveSage    : 1,    //    remember sage
+	sageReply   : 0,    //    reply with sage
+	capUpdTime  : 300,  // captcha update interval (sec)
+	captchaLang : 1,    // forced captcha input language [0=off, 1=en, 2=ru]
+	addTextBtns : 1,    // text markup buttons [0=off, 1=graphics, 2=text, 3=usual]
+	txtBtnsLoc  : 1,    //    located at [0=top, 1=bottom]
+	userPassw   : 1,    // user password
+	passwValue  : '',   //    value
+	userName    : 0,    // user name
+	nameValue   : '',   //    value
+	noBoardRule : 0,    // hide board rules
+	noPassword  : 1,    // hide form "Password" field
+	noName      : 0,    // hide form "Name" field
+	noSubj      : 0,    // hide form "Subject" field
 	// COMMON
-	scriptStyle  : 0,    /* Dollchan style [
+	scriptStyle : 0,    /* Dollchan style [
 		0=gradient darkblue, 1=gradient blue, 2=solid grey, 3=transparent blue, 4=square dark,
 		5=gradient pink] */
-	userCSS      : 0,    // user CSS
-	userCSSTxt   : '',   //    css text
-	expandPanel  : 0,    // show full main panel
-	animation    : 1,    // CSS3 animation
-	hotKeys      : 1,    // hotkeys
-	loadPages    : 1,    //    number of pages that are loaded on F5
-	panelCounter : 1,    // panel counter for posts/images [0=off, 1=all posts, 2=except hidden]
-	rePageTitle  : 1,    // show thread title in the page tab
-	inftyScroll  : 1,    // infinite scrolling for pages
-	hideReplies  : 0,    // show only op-posts in threads list
-	scrollToTop  : 0,    // always scroll to top in the threads list
-	saveScroll   : 1,    // remember the scroll position in threads
-	favFolders   : 1,    // boards folders in the Favorites Window
-	favThrOrder  : 0,    /* threads sorting order in the Favorites window
+	userCSS     : 0,    // user CSS
+	userCSSTxt  : '',   //    css text
+	expandPanel : 0,    // show full main panel
+	animation   : 1,    // CSS3 animation
+	hotKeys     : 1,    // hotkeys
+	loadPages   : 1,    //    number of pages that are loaded on F5
+	panelCounter: 1,    // panel counter for posts/images [0=off, 1=all posts, 2=except hidden]
+	rePageTitle : 1,    // show thread title in the page tab
+	inftyScroll : 1,    // infinite scrolling for pages
+	hideReplies : 0,    // show only op-posts in threads list
+	scrollToTop : 0,    // always scroll to top in the threads list
+	saveScroll  : 1,    // remember the scroll position in threads
+	favFolders  : 1,    // boards folders in the Favorites Window
+	favThrOrder : 0,    /* threads sorting order in the Favorites window
 		[0=by opnum, 1=by opnum (desc), 2=by adding, 3=by adding (desc)] */
-	favWinOn     : 0,    // always open the Favorites window
-	closePopups  : 0,    // close popups automatically
-	updDollchan  : 2,    // Check for Dollchan updates [0=off, 1=per day, 2=2days, 3=week, 4=2weeks, 5=month]
+	favWinOn    : 0,    // always open the Favorites window
+	closePopups : 0,    // close popups automatically
+	updDollchan : 2,    // Check for Dollchan updates [0=off, 1=per day, 2=2days, 3=week, 4=2weeks, 5=month]
 	// WINDOWS
-	textaWidth   : 300,  // textarea width (px)
-	textaHeight  : 115,  // textarea height (px)
-	replyWinDrag : 0,          // draggable "Quick Reply" form
-	replyWinX    : 'right: 0', //    "Quick Reply" form X position
-	replyWinY    : 'top: 0',   //    "Quick Reply" form Y position
-	cfgTab       : 'filters',  // remembered tab in "Settings" window
-	cfgWinDrag   : 0,          // draggable "Settings" window
-	cfgWinX      : 'right: 0', //    "Settings" window X position
-	cfgWinY      : 'top: 0',   //    "Settings" window Y position
-	hidWinDrag   : 0,          // draggable "Hidden" window
-	hidWinX      : 'right: 0', //    "Hidden" window X position
-	hidWinY      : 'top: 0',   //    "Hidden" window Y position
-	favWinDrag   : 0,          // draggable "Favorites" window
-	favWinX      : 'right: 0', //    "Favorites" window X position
-	favWinY      : 'top: 0',   //    "Favorites" window Y position
-	favWinWidth  : 500,        //    "Favorites" window width (px)
-	vidWinDrag   : 0,          // draggable "Video" window
-	vidWinX      : 'right: 0', //    "Video" window X position
-	vidWinY      : 'top: 0'    //    "Video" window Y position
+	textaWidth  : 300,  // textarea width (px)
+	textaHeight : 115,  // textarea height (px)
+	replyWinDrag: 0,          // draggable "Quick Reply" form
+	replyWinX   : 'right: 0', //    "Quick Reply" form X position
+	replyWinY   : 'top: 0',   //    "Quick Reply" form Y position
+	cfgTab      : 'filters',  // remembered tab in "Settings" window
+	cfgWinDrag  : 0,          // draggable "Settings" window
+	cfgWinX     : 'right: 0', //    "Settings" window X position
+	cfgWinY     : 'top: 0',   //    "Settings" window Y position
+	hidWinDrag  : 0,          // draggable "Hidden" window
+	hidWinX     : 'right: 0', //    "Hidden" window X position
+	hidWinY     : 'top: 0',   //    "Hidden" window Y position
+	favWinDrag  : 0,          // draggable "Favorites" window
+	favWinX     : 'right: 0', //    "Favorites" window X position
+	favWinY     : 'top: 0',   //    "Favorites" window Y position
+	favWinWidth : 500,        //    "Favorites" window width (px)
+	vidWinDrag  : 0,          // draggable "Video" window
+	vidWinX     : 'right: 0', //    "Video" window X position
+	vidWinY     : 'top: 0'    //    "Video" window Y position
 };
 
 /* ==[ Localization.js ]======================================================================================
@@ -205,19 +204,19 @@ const Lng = {
 		'Для застосування необхідне перезавантаження'],
 	// Settings window: tab names
 	cfgTab: {
-		filters : ['Фильтры', 'Filters', 'Фільтри'],
-		posts   : ['Посты', 'Posts', 'Дописи'],
-		images  : ['Картинки', 'Images', 'Зображ.'],
-		links   : ['Ссылки', 'Links', 'Посил.'],
-		form    : ['Форма', 'Form', 'Форма'],
-		common  : ['Общее', 'Common', 'Спільне'],
-		info    : ['Инфо', 'Info', 'Інфо']
+		filters: ['Фильтры', 'Filters', 'Фільтри'],
+		posts  : ['Посты', 'Posts', 'Дописи'],
+		images : ['Картинки', 'Images', 'Зображ.'],
+		links  : ['Ссылки', 'Links', 'Посил.'],
+		form   : ['Форма', 'Form', 'Форма'],
+		common : ['Общее', 'Common', 'Спільне'],
+		info   : ['Инфо', 'Info', 'Інфо']
 	},
 	// Settings window: options
 	cfg: {
 		language: {
-			sel : [['Ru', 'En', 'Ua'], ['Ru', 'En', 'Ua'], ['Ru', 'En', 'Ua']],
-			txt : ['', '', '']
+			sel: [['Ru', 'En', 'Ua'], ['Ru', 'En', 'Ua'], ['Ru', 'En', 'Ua']],
+			txt: ['', '', '']
 		},
 
 		// "Filters" tab
@@ -379,10 +378,10 @@ const Lng = {
 		imgInfoLink: [
 			'Имя файла под раскрытой картинкой',
 			'Show file name under expanded image',
-			'Імʼя файлу під розкритим зображенням'],
+			'Ім\'я файлу під розкритим зображенням'],
 		resizeDPI: [
 			'Не растягивать на дисплеях с высоким DPI',
-			'Donʼt upscale images on high DPI displays',
+			'Don\'t upscale images on high DPI displays',
 			'Не розтягувати на дисплеях з високим DPI'],
 		resizeImgs: {
 			sel: [
@@ -453,7 +452,7 @@ const Lng = {
 		imgNames: {
 			sel: [
 				['Не изменять', 'Настоящие (сокр.)', 'Скрывать', 'Настоящие (полные)'],
-				['Donʼt change', 'Original (trunc.)', 'Hide', 'Original (full)'],
+				['Don\'t change', 'Original (trunc.)', 'Hide', 'Original (full)'],
 				['Не змінювати', 'Справжні (скороч.)', 'Ховати', 'Справжні (повні)']],
 			txt: [
 				'имена картинок',
@@ -492,8 +491,8 @@ const Lng = {
 			'Також видаляти із зворотніх >>посилань'],
 		noNavigHidd: [
 			'Не отображать превью для скрытых постов',
-			'Donʼt show previews for hidden posts',
-			'Не показувати превʼю до cхованих дописів'],
+			'Don\'t show previews for hidden posts',
+			'Не показувати прев\'ю до cхованих дописів'],
 		markMyLinks: [
 			'Помечать ссылки на мои посты как (You)',
 			'Mark links to my posts with (You)',
@@ -534,7 +533,7 @@ const Lng = {
 			sel: [
 				['Ничего', 'Превью+плеер', 'Плеер по клику'],
 				['Nothing', 'Preview+player', 'On click player'],
-				['Нічого', 'Превʼю+плеєр', 'Плеєр по кліку']],
+				['Нічого', 'Прев\'ю+плеєр', 'Плеєр по кліку']],
 			txt: [
 				'к YouTube ссылкам',
 				'for YouTube links',
@@ -565,7 +564,7 @@ const Lng = {
 		removeFName: {
 			sel: [
 				['Не изменять', 'Удалять', 'Unixtime', 'Unixtime-random'],
-				['Donʼt change', 'Clear', 'Unixtime', 'Unixtime-random'],
+				['Don\'t change', 'Clear', 'Unixtime', 'Unixtime-random'],
 				['Не змінювати', 'Видаляти', 'Unixtime', 'Unixtime-random']],
 			txt: [
 				'имена файлов',
@@ -584,7 +583,7 @@ const Lng = {
 			sel: [
 				['Откл.', 'Упрощ.', 'Превью'],
 				['Disable', 'Simple', 'Preview'],
-				['Вимкн.', 'Спрощене', 'Превʼю']],
+				['Вимкн.', 'Спрощене', 'Прев\'ю']],
 			txt: [
 				'Улучшенное поле добавления файлов',
 				'Enhanced file attachment field',
@@ -613,17 +612,13 @@ const Lng = {
 			'Warn about a tripcode in "Subject" field',
 			'Сповіщувати про трипкод в полі "Тема"'],
 		addSageBtn: [
-			'Кнопка Sage вместо поля "Email" ',
-			'Replace "Email" with Sage button ',
-			'Кнопка Sage замість "E-mail" '],
+			'Кнопка <svg class="de-btn-sage"><use xlink:href="#de-symbol-post-sage"/></svg>Sage ',
+			'Sage <svg class="de-btn-sage"><use xlink:href="#de-symbol-post-sage"/></svg>button ',
+			'Кнопка <svg class="de-btn-sage"><use xlink:href="#de-symbol-post-sage"/></svg>Sage '],
 		saveSage: [
 			'Помнить сажу',
 			'Remember sage',
-			'Памʼятати сажу'],
-		altCaptcha: [
-			'Использовать альтернативную капчу',
-			'Use alternative captcha',
-			'Використовувати альтернативну капчу'],
+			'Пам\'ятати сажу'],
 		capUpdTime: [
 			'Интервал обновления капчи (сек)',
 			'Captcha update interval (sec)',
@@ -659,7 +654,7 @@ const Lng = {
 		userName: [
 			'Постоянное имя',
 			'Fixed name',
-			'Постійне імʼя'],
+			'Постійне ім\'я'],
 		noBoardRule: [
 			'Правила ',
 			'Rules ',
@@ -671,7 +666,7 @@ const Lng = {
 		noName: [
 			'Имя ',
 			'Name ',
-			'Імʼя '],
+			'Ім\'я '],
 		noSubj: [
 			'Тему',
 			'Subject',
@@ -899,7 +894,12 @@ const Lng = {
 	attachPview: [
 		'Закрепить превью',
 		'Attach preview',
-		'Закріпити превʼю'],
+		'Закріпити прев\'ю'],
+	goToThr: [
+		'В тред',
+		'To thread',
+		'До треду'
+	],
 
 	// Windows buttons: tooltips
 	closeWindow: [
@@ -1006,6 +1006,14 @@ const Lng = {
 		['Каждые 30 сек.', 'Каждую минуту', 'Каждые 2 мин.', 'Каждые 5 мин.'],
 		['Every 30 sec.', 'Every minute', 'Every 2 min.', 'Every 5 min.'],
 		['Кожні 30 сек.', 'Щохвилини', 'Кожні 2 хв.', 'Кожні 5 хв.']],
+	moderatePost: [
+		'Модерировать пост',
+		'Moderate a post',
+		'Модерувати допис'],
+	moderateThread: [
+		'Модерировать тред',
+		'Moderate a thread',
+		'Модерувати тред'],
 	reportPost: [
 		'Жалоба на пост',
 		'Report a post',
@@ -1014,6 +1022,10 @@ const Lng = {
 		'Жалоба на тред',
 		'Report a thread',
 		'Скарга на тред'],
+	reportReason: [
+		'Причина вашей жалобы',
+		'A reason for your complaint',
+		'Причина вашої скарги'],
 	markMyPost: [
 		'Пометить как мой пост',
 		'Mark as my post',
@@ -1033,15 +1045,15 @@ const Lng = {
 	origName: [
 		'Оригинальное имя',
 		'Original name',
-		'Оригінальне імʼя'],
+		'Оригінальне ім\'я'],
 	metaName: [
 		'Имя из метаданных',
 		'Name from metadata',
-		'Імʼя з метаданих'],
+		'Ім\'я з метаданих'],
 	boardName: [
 		'Имя, присвоенное доской',
 		'Name assigned by the board',
-		'Імʼя, присвоєне дошкою'],
+		'Ім\'я, присвоєне дошкою'],
 	searchIn: [
 		'Искать в ',
 		'Search in ',
@@ -1064,7 +1076,7 @@ const Lng = {
 		'Зберегти отриманий кадр'],
 	errSaucenao: [
 		'Ошибка: не могу загрузить на saucenao.com',
-		'Error: canʼt load to saucenao.com',
+		'Error: can\'t load to saucenao.com',
 		'Помилка: не можу завантажити на saucenao.com'],
 
 	// Hotkeys editor
@@ -1104,7 +1116,7 @@ const Lng = {
 		'%l%i23 – hide post/thread%/l',
 		'%l%i32 – go to thread%/l',
 		'%l%i33 – expand thread%/l',
-		'%l%i211 – expand postʼs images%/l',
+		'%l%i211 – expand post\'s images%/l',
 		'%l%i22 – quick reply%/l',
 		'%l%i25t – send post%/l',
 		'%l%i210 – open/close "Settings"%/l',
@@ -1166,11 +1178,11 @@ const Lng = {
 		['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
 		['Нед', 'Пон', 'Вів', 'Сер', 'Чет', 'Птн', 'Сбт']],
 	monthDict: {
-		/* eslint-disable key-spacing, max-len, object-property-newline */
+		/* eslint-disable max-len, object-property-newline */
 		янв: 0, фев: 1, мар: 2, апр: 3, май: 4, мая: 4, июн: 5, июл: 6, авг: 7, сен: 8, окт: 9, ноя: 10, дек: 11,
 		jan: 0, feb: 1, mar: 2, apr: 3, may: 4, jun: 5, jul: 6, aug: 7, sep: 8, oct: 9, nov: 10, dec: 11,
 		січ: 0, лют: 1, бер: 2, кві: 3, тра: 4, чер: 5, лип: 6, сер: 7, вер: 8, жов: 9, лис: 10, гру: 11
-		/* eslint-enable key-spacing, max-len, object-property-newline */
+		/* eslint-enable max-len, object-property-newline */
 	},
 
 	// Spells: popups
@@ -1208,11 +1220,11 @@ const Lng = {
 		'пропущено закривну дужку'],
 	seRepsInParens: [
 		'спелл #%s не должен располагаться в скобках',
-		'spell #%s shouldnʼt be inside parentheses',
+		'spell #%s shouldn\'t be inside parentheses',
 		'спелл #%s не може бути в дужках'],
 	seOpInReps: [
 		'недопустимо использовать оператор %s со спеллами #rep и #outrep',
-		'donʼt use operator %s with spells #rep & #outrep',
+		'don\'t use operator %s with spells #rep & #outrep',
 		'неприпустимо використовувати оператор %s зі спеллами #rep и #outrep'],
 	seRow: [
 		' (строка ',
@@ -1522,12 +1534,12 @@ const Lng = {
 		'Завантажуються файли'],
 	cantLoad: [
 		'Не могу загрузить',
-		'Canʼt load',
+		'Can\'t load',
 		'Не можу завантажити'],
 	willSavePview: [
 		'Будет сохранено превью',
 		'Thumbnail will be saved',
-		'Буде збережено превʼю'],
+		'Буде збережено прев\'ю'],
 	loadErrors: [
 		'Во время загрузки произошли ошибки:',
 		'An error occurred during the loading:',
@@ -1542,9 +1554,17 @@ const Lng = {
 		'Жалоба успешно отправлена',
 		'Succesfully reported',
 		'Скарга успішно відправлена'],
+	alreadyReported: [
+		'Вы уже отправляли жалобу на этот пост!',
+		'You have already sent a report to this post!',
+		'Ви вже відправляли скаргу на цей пост!'],
+	reportError: [
+		'При отправке жалобы произошла ошибка.',
+		'An error occurred while sending the report.',
+		'Під час надсилання скарги сталася помилка.'],
 	errDelete: [
 		'Не могу удалить',
-		'Canʼt delete',
+		'Can\'t delete',
 		'Не можу видалити'],
 	fileCorrupt: [
 		'Файл повреждён',
@@ -1557,7 +1577,7 @@ const Lng = {
 	noConnect: [
 		'Ошибка подключения',
 		'Connection failed',
-		'Помилка зʼєднання'],
+		'Помилка з\'єднання'],
 	thrNotFound: [
 		'Тред недоступен',
 		'Thread is unavailable',
@@ -1570,14 +1590,6 @@ const Lng = {
 		'Тред в архиве',
 		'Thread is archived',
 		'Тред заархівовано'],
-	stormWallCheck: [
-		'Проверка StormWall защиты от DDoS атак...',
-		'Checking for the StormWall DDoS protection...',
-		'Перевірка StormWall захисту від DDoS атак...'],
-	stormWallErr: [
-		'Пожалуйста, решите капчу StormWall защиты',
-		'Please resolve the StormWall protection captcha',
-		'Будь ласка, вирішіть капчу StormWall захисту'],
 
 	// Other warnings
 	internalError: [
@@ -1618,46 +1630,46 @@ const Lng = {
 		'Завантажте скрипт для відтворення WebM (VP9/Opus)'],
 	errFormLoad: [
 		'Не удаётся загрузить форму ответа',
-		'Canʼt load the reply form',
+		'Can\'t load the reply form',
 		'Не вдалося завантажити форму відповіді'
 	],
 
 	// Single words
-	second    : ['с', 's', 'с'],
-	sizeByte  : [' Байт', ' Byte', ' Байт'],
-	sizeKByte : [' КБ', ' KB', ' КБ'],
-	sizeMByte : [' МБ', ' MB', ' МБ'],
-	sizeGByte : [' ГБ', ' GB', ' ГБ'],
-	name      : ['Имя', 'Name', 'Імʼя'],
-	subj      : ['Тема', 'Subject', 'Тема'],
-	mail      : ['Почта', 'Email', 'Пошта'],
-	video     : ['Видео', 'Video', 'Відео'],
-	cap       : ['Капча', 'Captcha', 'Капча'],
-	add       : ['Добавить', 'Add', 'Додати'],
-	apply     : ['Применить', 'Apply', 'Застосувати'],
-	cancel    : ['Отмена', 'Cancel', 'Скасувати'],
-	clear     : ['Очистить', 'Clear', 'Очистити'],
-	refresh   : ['Обновить', 'Refresh', 'Оновити'],
-	save      : ['Сохранить', 'Save', 'Зберегти'],
-	load      : ['Загрузить', 'Load', 'Завантажити'],
-	edit      : ['Правка', 'Edit', 'Правка'],
-	file      : ['Файл', 'File', 'Файл'],
-	global    : ['Глобальные', 'Global', 'Глобальні'],
-	reset     : ['Сброс', 'Reset', 'Скинути'],
-	remove    : ['Удалить', 'Remove', 'Видалити'],
-	change    : ['Сменить', 'Change', 'Змінити'],
-	page      : ['Страница', 'Page', 'Сторінка'],
-	reply     : ['Ответ', 'Reply', 'Відповідь'],
-	replies   : ['Ответы:', 'Replies:', 'Відповіді:'],
-	makeReply : ['Ответить', 'Reply', 'Відповісти'],
-	error     : ['Ошибка', 'Error', 'Помилка'],
-	loading   : ['Загрузка…', 'Loading…', 'Завантаження…'],
-	sending   : ['Отправка…', 'Sending…', 'Надсилання…'],
-	checking  : ['Проверка…', 'Checking…', 'Перевірка…'],
-	updating  : ['Обновление…', 'Updating…', 'Оновлення…'],
-	deleting  : ['Удаление…', 'Deleting…', 'Видалення…'],
-	deleted   : ['удалён', 'deleted', 'видалено'],
-	hide      : ['Скрыть: ', 'Hide: ', 'Сховати: '],
+	second   : ['с', 's', 'с'],
+	sizeByte : [' Байт', ' Byte', ' Байт'],
+	sizeKByte: [' КБ', ' KB', ' КБ'],
+	sizeMByte: [' МБ', ' MB', ' МБ'],
+	sizeGByte: [' ГБ', ' GB', ' ГБ'],
+	name     : ['Имя', 'Name', 'Ім\'я'],
+	subj     : ['Тема', 'Subject', 'Тема'],
+	mail     : ['Почта', 'Email', 'Пошта'],
+	video    : ['Видео', 'Video', 'Відео'],
+	captcha  : ['Капча', 'Captcha', 'Капча'],
+	add      : ['Добавить', 'Add', 'Додати'],
+	apply    : ['Применить', 'Apply', 'Застосувати'],
+	cancel   : ['Отмена', 'Cancel', 'Скасувати'],
+	clear    : ['Очистить', 'Clear', 'Очистити'],
+	refresh  : ['Обновить', 'Refresh', 'Оновити'],
+	save     : ['Сохранить', 'Save', 'Зберегти'],
+	load     : ['Загрузить', 'Load', 'Завантажити'],
+	edit     : ['Правка', 'Edit', 'Правка'],
+	file     : ['Файл', 'File', 'Файл'],
+	global   : ['Глобальные', 'Global', 'Глобальні'],
+	reset    : ['Сброс', 'Reset', 'Скинути'],
+	remove   : ['Удалить', 'Remove', 'Видалити'],
+	change   : ['Сменить', 'Change', 'Змінити'],
+	page     : ['Страница', 'Page', 'Сторінка'],
+	reply    : ['Ответ', 'Reply', 'Відповідь'],
+	replies  : ['Ответы:', 'Replies:', 'Відповіді:'],
+	makeReply: ['Ответить', 'Reply', 'Відповісти'],
+	error    : ['Ошибка', 'Error', 'Помилка'],
+	loading  : ['Загрузка…', 'Loading…', 'Завантаження…'],
+	sending  : ['Отправка…', 'Sending…', 'Надсилання…'],
+	checking : ['Проверка…', 'Checking…', 'Перевірка…'],
+	updating : ['Обновление…', 'Updating…', 'Оновлення…'],
+	deleting : ['Удаление…', 'Deleting…', 'Видалення…'],
+	deleted  : ['удалён', 'deleted', 'видалено'],
+	hide     : ['Скрыть: ', 'Hide: ', 'Сховати: '],
 
 	// Miscellaneous
 	hidePosts: [
@@ -1836,6 +1848,7 @@ function $script(mode) {
 
 function $css(text) {
 	return $bEnd(doc.head, `<style type="text/css">${
+		// XXX: Old Safari hack for unsupported style properties.
 		nav.isSafari && !('flex' in doc.body.style) ?
 			text.replace(/(transform|transition|flex|align-items)/g, ' -webkit-$1') : text
 	}</style>`);
@@ -2055,8 +2068,8 @@ const Logger = {
 		}
 	},
 
-	_finished : false,
-	_marks    : []
+	_finished: false,
+	_marks   : []
 };
 
 // Some async operations should be cancelable, to ignore all the chaining callbacks of promises.
@@ -2354,7 +2367,7 @@ class TarBuilder {
 class WebmParser {
 	constructor(data) {
 		let offset = 0;
-		const dv = nav.getUnsafeDataView(data);
+		const dv = nav.dataView(data);
 		const len = dv.byteLength;
 		const el = new WebmParser.Element(dv, len, 0);
 		const voids = [];
@@ -2408,7 +2421,7 @@ class WebmParser {
 		if(this.error) {
 			return null;
 		}
-		this.rv[0] = nav.getUnsafeUint8Array(this.data, 0, this.segment.endOffset);
+		this.rv[0] = nav.uint8Array(this.data, 0, this.segment.endOffset);
 		return this.rv;
 	}
 }
@@ -2475,14 +2488,11 @@ async function getStored(id) {
 				chrome.storage.sync.get(id, obj => resolve(obj[id]));
 			}
 		}));
-	} else if(nav.hasPrestoStorage) {
-		return prestoStorage.getItem(id);
 	}
 	return locStorage[id];
 }
 
 // Saves data into the global storage
-// FIXME: make async?
 function setStored(id, value) {
 	if(nav.hasNewGM) {
 		return GM.setValue(id, value);
@@ -2503,8 +2513,6 @@ function setStored(id, value) {
 				resolve();
 			});
 		});
-	} else if(nav.hasPrestoStorage) {
-		prestoStorage.setItem(id, value);
 	} else {
 		locStorage[id] = value;
 	}
@@ -2512,7 +2520,6 @@ function setStored(id, value) {
 }
 
 // Removes data from the global storage
-// FIXME: make async?
 function delStored(id) {
 	if(nav.hasNewGM) {
 		return GM.deleteValue(id);
@@ -2520,8 +2527,6 @@ function delStored(id) {
 		GM_deleteValue(id);
 	} else if(nav.hasWebStorage) {
 		chrome.storage.sync.remove(id, Function.prototype);
-	} else if(nav.hasPrestoStorage) {
-		prestoStorage.removeItem(id);
 	} else {
 		locStorage.removeItem(id);
 	}
@@ -2588,14 +2593,14 @@ const CfgSaver = {
 			delete val[domain];
 		}
 		const rv = setStored('DESU_Config', JSON.stringify(val));
-		// Violentmonkey bug: GM.setValue promise is not fulfilled.
+		// XXX: Violentmonkey bug. GM.setValue promise is not fulfilled.
 		if(rv && !nav.isViolentmonkey) {
 			await rv;
 		}
 	},
 
-	_isBusy : false,
-	_queue  : []
+	_isBusy: false,
+	_queue : []
 };
 
 // Toggles a particular config option (1|0)
@@ -2605,6 +2610,21 @@ async function toggleCfg(id) {
 
 // Config initialization, checking for Dollchan update.
 async function readCfg() {
+	// Detect built-in-page Dollchan copy and block it
+	if(!nav.isInPage) {
+		let locObj;
+		const locConfig = JSON.parse(locStorage.DESU_Config || '{}') || {};
+		if(aib.domain in locConfig && !$isEmpty(locObj = locConfig[aib.domain])) {
+			nav.hasInPageDE = true;
+			if(locObj.disabled !== 1) {
+				locObj.disabled = 1;
+				locConfig[aib.domain] = locObj;
+				locStorage.DESU_Config = JSON.stringify(locConfig);
+				deWindow.location.reload();
+			}
+		}
+	}
+
 	let obj;
 	const val = await getStoredObj('DESU_Config');
 	if(!(aib.domain in val) || $isEmpty(obj = val[aib.domain])) {
@@ -2615,7 +2635,6 @@ async function readCfg() {
 			delete obj.captchaLang;
 		}
 	}
-	defaultCfg.captchaLang = aib.captchaLang;
 	const browserLang = String(navigator.language).toLowerCase();
 	defaultCfg.language =
 		browserLang.startsWith('ru') ? 0 :
@@ -2637,15 +2656,7 @@ async function readCfg() {
 	if(!('Notification' in deWindow)) {
 		Cfg.desktNotif = 0;
 	}
-	if(nav.isPresto) {
-		Cfg.preLoadImgs = 0;
-		Cfg.findImgFile = 0;
-		if(!nav.hasOldGM) {
-			Cfg.updDollchan = 0;
-		}
-		Cfg.fileInputs = 0;
-	}
-	if(nav.scriptHandler === 'WebExtension') {
+	if(nav.isWebExtension) {
 		Cfg.updDollchan = 0;
 	}
 	if(Cfg.updThrDelay < 10) {
@@ -2786,7 +2797,8 @@ function readPostsData(firstPost, favObj) {
 		maybeSpells.value.endSpells();
 	}
 	if(aib.t && Cfg.panelCounter === 2) {
-		$id('de-panel-info-posts').textContent = Thread.first.postsCount - Thread.first.hiddenCount;
+		$q('#de-panel-info-posts', Panel.mainEl).textContent =
+			Thread.first.postsCount - Thread.first.hiddenCount;
 	}
 	if(updatedFav) {
 		saveFavorites(favObj);
@@ -2797,7 +2809,7 @@ function readPostsData(firstPost, favObj) {
 	// After following a link from Favorites, we need to open Favorites again.
 	const hasFavWinKey = sesStorage['de-fav-win'] === '1';
 	if(hasFavWinKey || Cfg.favWinOn) {
-		toggleWindow('fav', !!$q('#de-win-fav.de-win-active'), null, true);
+		toggleWindow('fav', !!$q('#de-win-fav.de-win-opened'), null, true);
 		if(hasFavWinKey) {
 			sesStorage.removeItem('de-fav-win');
 		}
@@ -2834,16 +2846,13 @@ function readViewedPosts() {
 	if(!Cfg.markViewed) {
 		return;
 	}
-	const data = sesStorage['de-viewed'];
-	if(data) {
-		data.split(',').forEach(pNum => {
-			const post = pByNum.get(+pNum);
-			if(post) {
-				post.el.classList.add('de-viewed');
-				post.isViewed = true;
-			}
-		});
-	}
+	sesStorage['de-viewed']?.split(',').forEach(pNum => {
+		const post = pByNum.get(+pNum);
+		if(post) {
+			post.el.classList.add('de-viewed');
+			post.isViewed = true;
+		}
+	});
 }
 
 class PostsStorage {
@@ -3105,13 +3114,15 @@ function initStorageEvent() {
 
 const Panel = Object.create({
 	isVidEnabled: false,
+	mainEl      : null,
 	async initPanel(formEl) {
 		const filesCount = $Q(aib.qPostImg, formEl).length;
 		const isThr = aib.t;
-		(postform?.pArea[0] || formEl).insertAdjacentHTML('beforebegin', `<div id="de-main">
+		this.mainEl = $bBegin(formEl, `<div id="de-main-container" class="de-runned-${
+			nav.isInPage ? 'inpage' : 'userscript' }">
 			<div id="de-panel">
-				<div id="de-panel-logo" title="${ Lng.panelBtn.attach[lang] }">
-					<svg id="de-panel-logo-svg">
+				<div id="de-panel-btn-logo" class="de-panel-btn" title="${ Lng.panelBtn.attach[lang] }">
+					<svg class="de-panel-svg">
 						<use xlink:href="#de-symbol-panel-logo"/>
 					</svg>
 				</div>
@@ -3126,8 +3137,9 @@ const Panel = Object.create({
 						(!isThr && aib.page !== aib.lastPage ? this._getButton('gonext') : '') : '') +
 					this._getButton('goup') +
 					this._getButton('godown') +
-					(filesCount ? this._getButton('expimg') + this._getButton('maskimg') : '') +
-					(!localData && !nav.isPresto ?
+					(filesCount ? this._getButton('expimg') +
+						this._getButton('maskimg', Cfg.maskImgs ? 'de-panel-btn-active' : '') : '') +
+					(!localData ?
 						(filesCount && !Cfg.preLoadImgs ? this._getButton('preimg') : '') +
 						(isThr ? this._getButton('savethr') : '') : '') +
 					(!localData && isThr ?
@@ -3146,14 +3158,14 @@ const Panel = Object.create({
 					</span>` : '') }
 				</span>
 			</div>
-			${ Cfg.disabled ? '' : '<div id="de-wrapper-popup"></div><hr style="clear: both;">' }
+			${ Cfg.disabled ? '' : '<div id="de-wrapper-popup"></div>' }
 		</div>`);
-		this._el = $id('de-panel');
+		this._el = $q('#de-panel', this.mainEl);
 		this._el.addEventListener('click', this, true);
 		if(!nav.isMobile) {
 			['mouseover', 'mouseout'].forEach(e => this._el.addEventListener(e, this));
 		}
-		this._buttons = $id('de-panel-buttons');
+		this._buttons = $q('#de-panel-buttons', this.mainEl);
 	},
 	removeMain() {
 		this._el.removeEventListener('click', this, true);
@@ -3163,13 +3175,22 @@ const Panel = Object.create({
 		delete this._postsCountEl;
 		delete this._filesCountEl;
 		delete this._postersCountEl;
-		$id('de-main').remove();
+		this.mainEl.remove();
 	},
 	async handleEvent(e) {
+		if(nav.isInPage) {
+			if(!Panel.mainEl) {
+				return;
+			}
+		} else if(nav.hasInPageDE) {
+			// Removing a Dollchan copy that may be already embedded on the page
+			$Q('#de-main, #de-main-container:not(.de-runned-userscript)').forEach(
+				el => el !== this.mainEl && el?.remove());
+		}
 		if('isTrusted' in e && !e.isTrusted) {
 			return;
 		}
-		let el = nav.fixEventEl(e.target);
+		let el = e.target;
 		el = el.tagName.toLowerCase() === 'svg' ? el.parentNode : el;
 		switch(e.type) {
 		case 'click':
@@ -3178,9 +3199,9 @@ const Panel = Object.create({
 			}
 			e.preventDefault();
 			switch(el.id) {
-			case 'de-panel-logo':
+			case 'de-panel-btn-logo':
 				if(Cfg.expandPanel) {
-					if(!$q('.de-win-active')) {
+					if(!$q('.de-win-opened', this.mainEl)) {
 						$hide(this._buttons);
 					}
 				} else {
@@ -3188,32 +3209,32 @@ const Panel = Object.create({
 				}
 				await toggleCfg('expandPanel');
 				return;
-			case 'de-panel-cfg': toggleWindow('cfg', false); return;
-			case 'de-panel-hid': toggleWindow('hid', false); return;
-			case 'de-panel-fav': toggleWindow('fav', false); return;
-			case 'de-panel-vid':
+			case 'de-panel-btn-cfg': toggleWindow('cfg', false); return;
+			case 'de-panel-btn-hid': toggleWindow('hid', false); return;
+			case 'de-panel-btn-fav': toggleWindow('fav', false); return;
+			case 'de-panel-btn-vid':
 				this.isVidEnabled = !this.isVidEnabled;
 				toggleWindow('vid', false);
 				return;
-			case 'de-panel-refresh':
+			case 'de-panel-btn-refresh':
 				if(nav.isMobile && !aib.t) {
 					this._menuToggleClickBtn(el);
 				} else {
 					deWindow.location.reload();
 				}
 				return;
-			case 'de-panel-goup': scrollTo(0, 0); return;
-			case 'de-panel-godown': scrollTo(0, doc.body.scrollHeight || doc.body.offsetHeight); return;
-			case 'de-panel-expimg':
-				el.classList.toggle('de-panel-button-active');
+			case 'de-panel-btn-goup': scrollTo(0, 0); return;
+			case 'de-panel-btn-godown': scrollTo(0, doc.body.scrollHeight || doc.body.offsetHeight); return;
+			case 'de-panel-btn-expimg':
+				el.classList.toggle('de-panel-btn-active');
 				isExpImg = !isExpImg;
 				$q('.de-fullimg-center')?.remove();
 				for(let post = Thread.first.op; post; post = post.next) {
 					post.toggleImages(isExpImg, false);
 				}
 				return;
-			case 'de-panel-preimg':
-				el.classList.toggle('de-panel-button-active');
+			case 'de-panel-btn-preimg':
+				el.classList.toggle('de-panel-btn-active');
 				isPreImg = !isPreImg;
 				if(!e.ctrlKey) {
 					for(const { el } of DelForm) {
@@ -3221,32 +3242,32 @@ const Panel = Object.create({
 					}
 				}
 				return;
-			case 'de-panel-maskimg':
-				el.classList.toggle('de-panel-button-active');
+			case 'de-panel-btn-maskimg':
+				el.classList.toggle('de-panel-btn-active');
 				await toggleCfg('maskImgs');
 				updateCSS();
 				return;
-			case 'de-panel-upd-on':
-			case 'de-panel-upd-warn':
-			case 'de-panel-upd-off':
+			case 'de-panel-btn-upd-on':
+			case 'de-panel-btn-upd-warn':
+			case 'de-panel-btn-upd-off':
 				updater.toggle();
 				return;
-			case 'de-panel-audio-on':
+			case 'de-panel-btn-audio-on':
 				if(nav.isMobile) {
 					updater.toggleAudio(0);
-					el.id = 'de-panel-audio-off';
+					el.id = 'de-panel-btn-audio-off';
 					return;
 				}
 				/* falls through */
-			case 'de-panel-audio-off': {
+			case 'de-panel-btn-audio-off': {
 				if(nav.isMobile) {
 					this._menuToggleClickBtn(el);
 					return;
 				} else if(updater.toggleAudio(0)) {
 					updater.enableUpdater();
-					el.id = 'de-panel-audio-on';
+					el.id = 'de-panel-btn-audio-on';
 				} else {
-					el.id = 'de-panel-audio-off';
+					el.id = 'de-panel-btn-audio-off';
 				}
 				if(this._menu) {
 					this._menu.removeMenu();
@@ -3254,12 +3275,12 @@ const Panel = Object.create({
 				}
 				return;
 			}
-			case 'de-panel-savethr':
+			case 'de-panel-btn-savethr':
 				if(nav.isMobile) {
 					this._menuToggleClickBtn(el);
 				}
 				return;
-			case 'de-panel-enable':
+			case 'de-panel-btn-enable':
 				await toggleCfg('disabled');
 				deWindow.location.reload();
 				return;
@@ -3271,20 +3292,20 @@ const Panel = Object.create({
 				$show(this._buttons);
 			}
 			switch(el.id) {
-			case 'de-panel-cfg': KeyEditListener.setTitle(el, 10); break;
-			case 'de-panel-hid': KeyEditListener.setTitle(el, 7); break;
-			case 'de-panel-fav': KeyEditListener.setTitle(el, 6); break;
-			case 'de-panel-vid': KeyEditListener.setTitle(el, 18); break;
-			case 'de-panel-goback': KeyEditListener.setTitle(el, 4); break;
-			case 'de-panel-gonext': KeyEditListener.setTitle(el, 17); break;
-			case 'de-panel-maskimg': KeyEditListener.setTitle(el, 9); break;
-			case 'de-panel-refresh':
+			case 'de-panel-btn-cfg': KeyEditListener.setTitle(el, 10); break;
+			case 'de-panel-btn-hid': KeyEditListener.setTitle(el, 7); break;
+			case 'de-panel-btn-fav': KeyEditListener.setTitle(el, 6); break;
+			case 'de-panel-btn-vid': KeyEditListener.setTitle(el, 18); break;
+			case 'de-panel-btn-goback': KeyEditListener.setTitle(el, 4); break;
+			case 'de-panel-btn-gonext': KeyEditListener.setTitle(el, 17); break;
+			case 'de-panel-btn-maskimg': KeyEditListener.setTitle(el, 9); break;
+			case 'de-panel-btn-refresh':
 				if(aib.t) {
 					return;
 				}
 				/* falls through */
-			case 'de-panel-savethr':
-			case 'de-panel-audio-off': {
+			case 'de-panel-btn-savethr':
+			case 'de-panel-btn-audio-off': {
 				if(this._menu?.parentEl === el) {
 					return;
 				}
@@ -3298,11 +3319,11 @@ const Panel = Object.create({
 			}
 			return;
 		default: // mouseout
-			this._setHideTimeout(nav.fixEventEl(e.relatedTarget));
+			this._setHideTimeout(e.relatedTarget);
 			switch(el.id) {
-			case 'de-panel-refresh':
-			case 'de-panel-savethr':
-			case 'de-panel-audio-off': clearTimeout(this._menuTO);
+			case 'de-panel-btn-refresh':
+			case 'de-panel-btn-savethr':
+			case 'de-panel-btn-audio-off': clearTimeout(this._menuTO);
 			}
 		}
 	},
@@ -3310,36 +3331,29 @@ const Panel = Object.create({
 		this._postsCountEl.textContent = postCount;
 		this._filesCountEl.textContent = filesCount;
 		this._postersCountEl.textContent = postersCount;
-		if(aib.makaba) {
-			$Q('.tn__item > span[title="Всего постов в треде"]').forEach(
-				el => el.innerHTML = el.innerHTML.replace(/\d+$/, postCount));
-			$Q('.tn__item > span[title="Всего файлов в треде"]').forEach(
-				el => el.innerHTML = el.innerHTML.replace(/\d+$/, filesCount));
-			$Q('.tn__item > span[title="Постеры"]').forEach(
-				el => el.innerHTML = el.innerHTML.replace(/\d+$/, postersCount));
-		}
+		aib.updateCounters?.(postCount, filesCount, postersCount);
 	},
 
-	_el     : null,
-	_hideTO : null,
-	_menu   : null,
-	_menuTO : null,
+	_el    : null,
+	_hideTO: null,
+	_menu  : null,
+	_menuTO: null,
 	get _filesCountEl() {
-		const value = $id('de-panel-info-files');
+		const value = $q('#de-panel-info-files', this.mainEl);
 		Object.defineProperty(this, '_filesCountEl', { value, configurable: true });
 		return value;
 	},
 	get _postersCountEl() {
-		const value = $id('de-panel-info-posters');
+		const value = $q('#de-panel-info-posters', this.mainEl);
 		Object.defineProperty(this, '_postersCountEl', { value, configurable: true });
 		return value;
 	},
 	get _postsCountEl() {
-		const value = $id('de-panel-info-posts');
+		const value = $q('#de-panel-info-posts', this.mainEl);
 		Object.defineProperty(this, '_postsCountEl', { value, configurable: true });
 		return value;
 	},
-	_getButton(id) {
+	_getButton(id, className) {
 		let page, href, title, useId;
 		let tag = 'button';
 		switch(id) {
@@ -3370,8 +3384,9 @@ const Panel = Object.create({
 			tag = 'a';
 			href = aib.catalogUrl;
 		}
-		return `<${ tag } id="de-panel-${ id }" class="de-abtn de-panel-button"
-			title="${ title || Lng.panelBtn[id][lang] }" ${ href ? 'href="' + href + '"': '' }>
+		return `<${ tag } id="de-panel-btn-${ id }" class="de-abtn de-panel-btn${
+			className ? ' ' + className : '' }" title="${ title || Lng.panelBtn[id][lang] }" ${
+			href ? 'href="' + href + '"' : '' }>
 			<svg class="de-panel-svg">
 			${ id !== 'audio-off' ? `
 				<use xlink:href="#de-symbol-panel-${ useId || id }"/>` : `
@@ -3389,7 +3404,7 @@ const Panel = Object.create({
 		this._menu = Menu.addMenu(buttonEl);
 	},
 	_setHideTimeout(targetEl) {
-		if(!Cfg.expandPanel && !$q('.de-win-active') && !$contains(this._el, targetEl)) {
+		if(!Cfg.expandPanel && !$q('.de-win-opened', this.mainEl) && !$contains(this._el, targetEl)) {
 			this._hideTO = setTimeout(() => $hide(this._buttons), 500);
 		}
 	}
@@ -3408,13 +3423,13 @@ function updateWinZ(winEl) {
 
 function makeDraggable(name, winEl, headEl) {
 	headEl.addEventListener('mousedown', {
-		_oldX   : 0,
-		_oldY   : 0,
-		_win    : winEl,
-		_wStyle : winEl.style,
-		_X      : 0,
-		_Y      : 0,
-		_Z      : 0,
+		_oldX  : 0,
+		_oldY  : 0,
+		_win   : winEl,
+		_wStyle: winEl.style,
+		_X     : 0,
+		_Y     : 0,
+		_Z     : 0,
 		async handleEvent(e) {
 			if(!Cfg[name + 'WinDrag']) {
 				return;
@@ -3534,7 +3549,7 @@ class WinResizer {
 function toggleWindow(name, isUpdate, data, noAnim) {
 	let el;
 	let winEl = $id('de-win-' + name);
-	const isActive = winEl?.classList.contains('de-win-active');
+	const isActive = winEl?.classList.contains('de-win-opened');
 	if(isUpdate && !isActive) {
 		return;
 	}
@@ -3543,7 +3558,7 @@ function toggleWindow(name, isUpdate, data, noAnim) {
 			`de-win" style="${ Cfg[name + 'WinX'] }; ${ Cfg[name + 'WinY'] }` :
 			'de-win-fixed" style="right: 0; bottom: 25px'
 		) + (name !== 'fav' ? '' : `; width: ${ Cfg.favWinWidth }px; `);
-		winEl = $aBegin($id('de-main'), `<div id="de-win-${ name }" class="${ winAttr }; display: none;">
+		winEl = $aBegin(Panel.mainEl, `<div id="de-win-${ name }" class="${ winAttr }; display: none;">
 			<div class="de-win-head">
 				<span class="de-win-title">
 					${ name === 'cfg' ? 'Dollchan Extension Tools' : Lng.panelBtn[name][lang] }
@@ -3573,12 +3588,11 @@ function toggleWindow(name, isUpdate, data, noAnim) {
 		}
 		el = $q('.de-win-buttons', winEl);
 		el.onmouseover = e => {
-			const el = nav.fixEventEl(e.target);
-			const parent = el.parentNode;
+			const el = e.target;
 			switch(el.classList[0]) {
-			case 'de-win-btn-close': parent.title = Lng.closeWindow[lang]; break;
+			case 'de-win-btn-close': el.parentNode.title = Lng.closeWindow[lang]; break;
 			case 'de-win-btn-toggle':
-				parent.title = Cfg[name + 'WinDrag'] ? Lng.toPanel[lang] : Lng.makeDrag[lang];
+				el.parentNode.title = Cfg[name + 'WinDrag'] ? Lng.toPanel[lang] : Lng.makeDrag[lang];
 			}
 		};
 		el.lastElementChild.onclick = () => toggleWindow(name, false);
@@ -3586,7 +3600,7 @@ function toggleWindow(name, isUpdate, data, noAnim) {
 			await toggleCfg(name + 'WinDrag');
 			const isDrag = Cfg[name + 'WinDrag'];
 			if(!isDrag) {
-				const temp = $q('.de-win-active.de-win-fixed', winEl.parentNode);
+				const temp = $q('.de-win-opened.de-win-fixed', winEl.parentNode);
 				if(temp) {
 					toggleWindow(temp.id.substr(7), false);
 				}
@@ -3603,7 +3617,7 @@ function toggleWindow(name, isUpdate, data, noAnim) {
 	updateWinZ(winEl);
 	let isRemove = !isUpdate && isActive;
 	if(!isRemove && !winEl.classList.contains('de-win') &&
-		(el = $q(`.de-win-active.de-win-fixed:not(#de-win-${ name })`, winEl.parentNode))
+		(el = $q(`.de-win-opened.de-win-fixed:not(#de-win-${ name })`, winEl.parentNode))
 	) {
 		toggleWindow(el.id.substr(7), false);
 	}
@@ -3615,8 +3629,8 @@ function toggleWindow(name, isUpdate, data, noAnim) {
 			showWindow(winEl, winBody, name, isRemove, data, Cfg.animation);
 			winEl = winBody = name = isRemove = data = null;
 		});
-		winEl.classList.remove('de-win-open');
-		winEl.classList.add('de-win-close');
+		winEl.classList.remove('de-win-anim-open');
+		winEl.classList.add('de-win-anim-close');
 	} else {
 		showWindow(winEl, winBody, name, isRemove, data, isAnim);
 	}
@@ -3624,17 +3638,17 @@ function toggleWindow(name, isUpdate, data, noAnim) {
 
 function showWindow(winEl, winBody, name, isRemove, data, isAnim) {
 	winBody.innerHTML = '';
-	winEl.classList.toggle('de-win-active', !isRemove);
+	winEl.classList.toggle('de-win-opened', !isRemove);
 	if(isRemove) {
-		winEl.classList.remove('de-win-close');
+		winEl.classList.remove('de-win-anim-close');
 		$hide(winEl);
-		if(!Cfg.expandPanel && !$q('.de-win-active')) {
-			$hide($id('de-panel-buttons'));
+		if(!Cfg.expandPanel && !$q('.de-win-opened')) {
+			$hide($q('#de-panel-buttons', Panel.mainEl));
 		}
 		return;
 	}
 	if(!Cfg.expandPanel) {
-		$show($id('de-panel-buttons'));
+		$show($q('#de-panel-buttons', Panel.mainEl));
 	}
 	switch(name) {
 	case 'fav':
@@ -3646,7 +3660,7 @@ function showWindow(winEl, winBody, name, isRemove, data, isAnim) {
 			showFavoritesWindow(winBody, favObj);
 			$show(winEl);
 			if(isAnim) {
-				winEl.classList.add('de-win-open');
+				winEl.classList.add('de-win-anim-open');
 			}
 		});
 		return;
@@ -3656,7 +3670,7 @@ function showWindow(winEl, winBody, name, isRemove, data, isAnim) {
 	}
 	$show(winEl);
 	if(isAnim) {
-		winEl.classList.add('de-win-open');
+		winEl.classList.add('de-win-anim-open');
 	}
 }
 
@@ -3684,13 +3698,14 @@ function showVideosWindow(winBody) {
 	// Events for control buttons
 	winBody.addEventListener('click', {
 		linkList,
-		currentLink : null,
-		listHidden  : false,
-		player      : winBody.firstElementChild,
-		playerInfo  : null,
+		currentLink: null,
+		listHidden : false,
+		player     : winBody.firstElementChild,
+		playerInfo : null,
 		handleEvent(e) {
 			const el = e.target;
-			if(el.classList.contains('de-abtn')) {
+			const { classList } = el;
+			if(classList.contains('de-abtn')) {
 				let node;
 				switch(el.id) {
 				case 'de-video-btn-hide': { // Fold/unfold list of links
@@ -3719,7 +3734,7 @@ function showVideosWindow(winBody) {
 				}
 				e.preventDefault();
 				return;
-			} else if(!el.classList.contains('de-video-link')) { // Clicking on ">" before link
+			} else if(!classList.contains('de-video-link')) { // Clicking on ">" before link
 				// Go to post that contains this link
 				pByNum.get(+el.getAttribute('de-num')).selectAndScrollTo();
 				return;
@@ -3731,8 +3746,8 @@ function showVideosWindow(winBody) {
 					this.currentLink.classList.remove('de-current');
 				}
 				this.currentLink = el;
-				el.classList.add('de-current');
-				Videos.addPlayer(this, info, el.classList.contains('de-ytube'), true);
+				classList.add('de-current');
+				Videos.addPlayer(this, info, classList.contains('de-ytube'), true);
 			}
 			e.preventDefault();
 		}
@@ -3965,7 +3980,7 @@ async function remove404Favorites(favObj) {
 function isPostRefToYou(post, myPosts) {
 	if(Cfg.markMyPosts && (myPosts || MyPosts)) {
 		const isMatch = myPosts ? num => myPosts[num] : num => MyPosts.has(num);
-		const links = $Q(aib.qPostMsg.split(', ').join(' a, ') + ' a', post);
+		const links = $Q(aib.qPostMsg + ' a', post);
 		for(let a = 0, linksLen = links.length; a < linksLen; ++a) {
 			const tc = links[a].textContent;
 			if(tc[0] === '>' && tc[1] === '>' && isMatch(parseInt(tc.substr(2), 10))) {
@@ -4204,7 +4219,7 @@ function showFavoritesWindow(winBody, favObj) {
 	// Appending DOM and events
 	if(html) {
 		$bEnd(winBody, `<div class="de-fav-table">${ html }</div>`).addEventListener('click', e => {
-			let el = nav.fixEventEl(e.target);
+			let el = e.target;
 			let parentEl = el.parentNode;
 			if(el.tagName.toLowerCase() === 'svg') {
 				el = parentEl;
@@ -4276,12 +4291,12 @@ function showFavoritesWindow(winBody, favObj) {
 				const iconEl = $q('.de-fav-inf-icon', el);
 				const titleEl = iconEl.parentNode;
 				thrInfo.push({
-					found     : false,
-					num       : +el.getAttribute('de-num'),
-					pageEl    : $q('.de-fav-inf-page', el),
-					iconClass : iconEl.getAttribute('class'),
+					found    : false,
+					num      : +el.getAttribute('de-num'),
+					pageEl   : $q('.de-fav-inf-page', el),
+					iconClass: iconEl.getAttribute('class'),
 					iconEl,
-					iconTitle : titleEl.getAttribute('title'),
+					iconTitle: titleEl.getAttribute('title'),
 					titleEl
 				});
 				iconEl.setAttribute('class', 'de-fav-inf-icon de-fav-wait');
@@ -4289,7 +4304,7 @@ function showFavoritesWindow(winBody, favObj) {
 			}
 			// Sequentially load pages and search for favorites threads
 			// We cannot know a count of pages while in the thread
-			const endPage = (aib.lastPage || 10) + 1; // Check up to 10 page, if we donʼt know
+			const endPage = (aib.lastPage || 10) + 1; // Check up to 10 page, if we don't know
 			let infoLoaded = 0;
 			const updateInf = (inf, page) => {
 				inf.iconEl.setAttribute('class', inf.iconClass);
@@ -4303,8 +4318,7 @@ function showFavoritesWindow(winBody, favObj) {
 			for(let page = 0; page < endPage; ++page) {
 				const tNums = new Set();
 				try {
-					const form = await ajaxLoad(aib.getPageUrl(aib.b, page));
-					const els = DelForm.getThreads(form);
+					const els = DelForm.getThreads(await ajaxLoad(aib.getPageUrl(aib.b, page)));
 					for(let i = 0, len = els.length; i < len; ++i) {
 						tNums.add(aib.getTNum(els[i]));
 					}
@@ -4336,19 +4350,18 @@ function showFavoritesWindow(winBody, favObj) {
 	);
 
 	// Deletion of confirm/cancel buttons
-	const delBtns = $bEnd(winBody, '<div id="de-fav-del-confirm" style="display: none;"></div>');
-	delBtns.append(
+	$bEnd(winBody, '<div id="de-fav-del-confirm" style="display: none;"></div>').append(
 		$button(Lng.remove[lang], Lng.delEntries[lang], () => {
 			$Q('.de-entry > .de-fav-del-btn[de-checked]', winBody).forEach(
 				el => el.parentNode.setAttribute('de-removed', ''));
 			remove404Favorites();
 			$show(btns);
-			$hide(delBtns);
+			$hide($id('de-fav-del-confirm'));
 		}),
 		$button(Lng.cancel[lang], '', () => {
 			$Q('.de-fav-del-btn', winBody).forEach(el => el.removeAttribute('de-checked'));
 			$show(btns);
-			$hide(delBtns);
+			$hide($id('de-fav-del-confirm'));
 		})
 	);
 }
@@ -4363,7 +4376,7 @@ const CfgWindow = {
 			e => winBody.addEventListener(e, this));
 
 		// Create tab bar and bottom buttons
-		let div = $bEnd(winBody, `<div id="de-cfg-bar">${
+		const div = $bEnd(winBody, `<div id="de-cfg-bar">${
 			this._getTab('filters') +
 			this._getTab('posts') +
 			this._getTab('images') +
@@ -4399,7 +4412,7 @@ const CfgWindow = {
 					}
 				};
 				// "Save" button. Copies the domain settings into global.
-				div = $bEnd(el, `<div id="de-list"><input type="button" value="${
+				$bEnd(el, `<div id="de-list"><input type="button" value="${
 					Lng.save[lang] }"> ${ Lng.saveGlobal[lang] }</div>`
 				).firstElementChild.onclick = async () => {
 					const data = await getStoredObj('DESU_Config');
@@ -4420,7 +4433,7 @@ const CfgWindow = {
 			}) : '',
 
 			// "File" button. Allows to save and load settings/favorites/hidden/etc from file.
-			!nav.isPresto ? $button(Lng.file[lang], Lng.fileImpExp[lang], () => {
+			$button(Lng.file[lang], Lng.fileImpExp[lang], () => {
 				const list = this._getList([
 					Lng.panelBtn.cfg[lang] + ' ' + Lng.allDomains[lang],
 					Lng.panelBtn.fav[lang],
@@ -4525,7 +4538,7 @@ const CfgWindow = {
 					}
 					e.preventDefault();
 				}, true);
-			}) : '',
+			}),
 
 			// "Clear" button. Allows to clear settings/favorites/hidden/etc optionally.
 			$button(Lng.reset[lang] + '…', Lng.resetCfg[lang], () => $popup(
@@ -4573,8 +4586,8 @@ const CfgWindow = {
 	// Event handler for Setting window and its controls.
 	async handleEvent(e) {
 		const { type, target: el } = e;
-		const tag = el.tagName.toLowerCase();
 		const { classList } = el;
+		const tag = el.tagName.toLowerCase();
 		if(type === 'mouseover' && classList.contains('de-cfg-needreload') && !el.title) {
 			el.title = Lng.cfgNeedReload[lang];
 		}
@@ -4615,12 +4628,6 @@ const CfgWindow = {
 				break;
 			}
 			case 'postBtnsCSS':
-				updateCSS();
-				if(nav.isPresto) {
-					$q('.de-svg-icons').remove();
-					addSVGIcons();
-				}
-				break;
 			case 'thrBtns':
 			case 'noSpoilers':
 			case 'resizeImgs': updateCSS(); break;
@@ -4740,7 +4747,6 @@ const CfgWindow = {
 				setTimeout(() => postform.toggleSage(), 0);
 				updateCSS();
 				break;
-			case 'altCaptcha': postform.cap.initCapPromise(); break;
 			case 'txtBtnsLoc':
 				postform.addMarkupPanel();
 				updateCSS();
@@ -4795,12 +4801,12 @@ const CfgWindow = {
 				$popup('cfg-debug',
 					Lng.infoDebug[lang] + ':<textarea readonly class="de-editor"></textarea>'
 				).lastChild.value = JSON.stringify({
-					version  : version + '.' + commit,
-					location : String(deWindow.location),
+					version : version + '.' + commit,
+					location: String(deWindow.location),
 					nav,
 					Cfg,
-					sSpells  : Spells.list.split('\n'),
-					oSpells  : sesStorage[`de-spells-${ aib.b }${ aib.t || '' }`],
+					sSpells : Spells.list.split('\n'),
+					oSpells : sesStorage[`de-spells-${ aib.b }${ aib.t || '' }`],
 					perf
 				}, (key, value) => {
 					switch(key) {
@@ -4824,11 +4830,6 @@ const CfgWindow = {
 					isValidColor = true;
 				} else if(color && color !== 'inherit' && color !== 'currentColor') {
 					const image = doc.createElement('img');
-					image.style.color = 'rgb(0, 0, 0)';
-					image.style.color = color;
-					if(image.style.color !== 'rgb(0, 0, 0)') {
-						isValidColor = true;
-					}
 					image.style.color = 'rgb(255, 255, 255)';
 					image.style.color = color;
 					isValidColor = image.style.color !== 'rgb(255, 255, 255)';
@@ -4847,7 +4848,9 @@ const CfgWindow = {
 			case 'minImgSize':
 				await CfgSaver.save('minImgSize', Math.min(Math.max(+el.value, 1)), Cfg.maxImgSize);
 				break;
-			case 'maxImgSize': await CfgSaver.save('maxImgSize', Math.max(+el.value, Cfg.minImgSize)); break;
+			case 'maxImgSize':
+				await CfgSaver.save('maxImgSize', Math.max(+el.value, Cfg.minImgSize));
+				break;
 			case 'zoomFactor':
 				await CfgSaver.save('zoomFactor', Math.min(Math.max(+el.value, 1), 100));
 				break;
@@ -4933,7 +4936,7 @@ const CfgWindow = {
 				this._updateRowMeter($id('de-spell-txt'));
 			}
 			if(id === 'common') {
-				// XXX: remove and make insertion in this._getCfgCommon()
+				// TODO: remove and make insertion in this._getCfgCommon()
 				$q('input[info="userCSS"]').parentNode.after(getEditButton(
 					'css',
 					fn => fn(Cfg.userCSSTxt, false, async inputEl => {
@@ -5039,10 +5042,8 @@ const CfgWindow = {
 				${ this._getInp('webmVolume') }<br>
 				${ this._getInp('minWebmWidth') }
 			</div>
-			${ nav.isPresto ? '' : this._getSel('preLoadImgs', true) + '<br>' }
-			${ nav.isPresto || aib._4chan ? '' : `<div class="de-depend">
-				${ this._getBox('findImgFile', true) }
-			</div>` }
+			${ this._getSel('preLoadImgs', true) + '<br>' }
+			${ aib._4chan ? '' : `<div class="de-depend">${ this._getBox('findImgFile', true) }</div>` }
 			${ this._getSel('openImgs', true) }<br>
 			${ this._getBox('imgSrcBtns') }<br>
 			${ this._getSel('imgNames') }<br>
@@ -5093,7 +5094,7 @@ const CfgWindow = {
 				${ this._getSel('removeFName') }<br>
 				${ this._getBox('sendErrNotif') }<br>
 				${ this._getBox('scrAfterRep') }<br>
-				${ postform.files && !nav.isPresto ? this._getSel('fileInputs') : '' }
+				${ postform.files ? this._getSel('fileInputs') : '' }
 			</div>` : '' }
 			${ postform.form ? this._getSel('addPostForm') + '<br>' : '' }
 			${ postform.txta ? this._getBox('spacedQuote') + '<br>' : '' }
@@ -5101,10 +5102,9 @@ const CfgWindow = {
 			${ postform.subj ? this._getBox('warnSubjTrip') + '<br>' : '' }
 			${ postform.mail ? `${ this._getBox('addSageBtn') }
 				${ this._getBox('saveSage') }<br>` : '' }
-			${ postform.cap ? `${ aib.hasAltCaptcha ? `${ this._getBox('altCaptcha') }<br>` : '' }
-				${ !aib.makaba ? `${ this._getInp('capUpdTime') }<br>` : '' }
-				${ this._getSel('captchaLang') }<br>` : '' }
-			${ postform.txta ? `${ this._getSel('addTextBtns') }
+			${ postform.captcha ? `${ !aib.noCapUpdTime ? this._getInp('capUpdTime', true, 4) + '<br>' : '' }
+				${ postform.captcha.textEl ? `${ this._getSel('captchaLang') }<br>` : '' }` : '' }
+			${ !aib.noMarkupBtns && postform.txta ? `${ this._getSel('addTextBtns') }
 				${ !aib._4chan ? this._getBox('txtBtnsLoc') : '' }<br>` : '' }
 			${ postform.passw ? `${ this._getInp('passwValue', false, 9) }
 				${ this._getBox('userPassw') }<input type="button"` +
@@ -5163,7 +5163,7 @@ const CfgWindow = {
 				<div id="de-info-stats">${ statsTable }</div>
 				<div id="de-info-log">${ this._getInfoTable(Logger.getLogData(false), true) }</div>
 			</div>
-			${ !nav.hasWebStorage && !nav.isPresto && !localData || nav.hasGMXHR ? `
+			${ !nav.hasWebStorage && !localData || nav.hasGMXHR ? `
 				${ this._getSel('updDollchan') }
 				<div style="margin-top: 3px; text-align: center;">&gt;&gt;
 					<input type="button" id="de-cfg-button-updnow" value="${ Lng.checkNow[lang] }">
@@ -5182,7 +5182,7 @@ const CfgWindow = {
 		<span class="de-info-name">${ val[0] }</span>
 		<span>${ val[1] + (needMs ? 'ms' : '') }</span></div>`).join(''),
 	// Creates a text input for text option values
-	_getInp(id, addText = true, size = 2) {
+	_getInp(id, addText = true, size = 3) {
 		const el = doc.createElement('div');
 		el.append(Cfg[id]); // Escape HTML
 		return `<label class="de-cfg-label">
@@ -5190,9 +5190,9 @@ const CfgWindow = {
 		el.innerHTML }">${ addText && Lng.cfg[id] ? Lng.cfg[id][lang] : '' }</label>`;
 	},
 	// Creates a menu with a list of checkboxes. Uses for popup window.
-	_getList : arr => arrTags(arr, '<label class="de-block"><input type="checkbox"> ', '</label>'),
+	_getList: arr => arrTags(arr, '<label class="de-block"><input type="checkbox"> ', '</label>'),
 	// Creates a select for multiple option values
-	_getSel  : (id, needReload) => `<label class="de-cfg-label${ needReload ? ' de-cfg-needreload' : '' }">
+	_getSel : (id, needReload) => `<label class="de-cfg-label${ needReload ? ' de-cfg-needreload' : '' }">
 		<select class="de-cfg-select" info="${ id }">${ Lng.cfg[id].sel[lang].map((val, i) =>
 		`<option value="${ i }">${ val }</option>`).join('') }</select> ${ Lng.cfg[id].txt[lang] }</label>`,
 	// Creates a tab for tab bar
@@ -5292,7 +5292,7 @@ function $popup(id, txt, isWait = false) {
 		el = $bEnd($id('de-wrapper-popup'),
 			`<div class="${ aib.cReply } de-popup" id="de-popup-${ id }">${ html }</div>`);
 		el.onclick = e => {
-			let el = nav.fixEventEl(e.target);
+			let el = e.target;
 			el = el.tagName.toLowerCase() === 'svg' ? el.parentNode : el;
 			if(el.className === 'de-popup-btn') {
 				closePopup(el.parentNode);
@@ -5366,10 +5366,10 @@ class Menu {
 			({ textContent: s }) => insertText($id('de-spell-txt'), s +
 				(!aib.t || s === '#op' || s === '#rep' || s === '#outrep' ? '' : `[${ aib.b },${ aib.t }]`) +
 				(Spells.needArg[Spells.names.indexOf(s.substr(1))] ? '(' : '')));
-		case 'de-panel-refresh':
+		case 'de-panel-btn-refresh':
 			return new Menu(el, tags(Lng.selAjaxPages[lang]),
 				el => Pages.loadPages(Array.prototype.indexOf.call(el.parentNode.children, el) + 1));
-		case 'de-panel-savethr':
+		case 'de-panel-btn-savethr':
 			return new Menu(el, tags($q(aib.qPostImg, DelForm.first.el) ?
 				Lng.selSaveThr[lang] : [Lng.selSaveThr[lang][0]]),
 			el => {
@@ -5385,12 +5385,12 @@ class Menu {
 					ContentLoader.downloadThread(imgOnly);
 				}
 			});
-		case 'de-panel-audio-off':
+		case 'de-panel-btn-audio-off':
 			return new Menu(el, tags(Lng.selAudioNotif[lang]), el => {
 				updater.enableUpdater();
 				updater.toggleAudio(
 					[3e4, 6e4, 12e4, 3e5][Array.prototype.indexOf.call(el.parentNode.children, el)]);
-				$id('de-panel-audio-off').id = 'de-panel-audio-on';
+				$q('#de-panel-btn-audio-off', Panel.mainEl).id = 'de-panel-btn-audio-on';
 			});
 		}
 	}
@@ -5456,8 +5456,8 @@ class Menu {
 			if(e.target.classList.contains('de-menu-item')) {
 				this.removeMenu();
 				this._clickFn(e.target, e);
-				if(!Cfg.expandPanel && !$q('.de-win-active')) {
-					$hide($id('de-panel-buttons'));
+				if(!Cfg.expandPanel && !$q('.de-win-opened')) {
+					$hide($q('#de-panel-buttons', Panel.mainEl));
 				}
 			}
 			break;
@@ -5465,7 +5465,7 @@ class Menu {
 			/* falls through */
 		case 'mouseout': {
 			clearTimeout(this._closeTO);
-			const targetEl = nav.fixEventEl(e.relatedTarget);
+			const targetEl = e.relatedTarget;
 			if(!$contains(this.el, targetEl)) {
 				if(isOverEvent) {
 					this.onover?.();
@@ -5495,13 +5495,13 @@ class Menu {
 =========================================================================================================== */
 
 const HotKeys = {
-	cPost          : null,
-	enabled        : false,
-	gKeys          : null,
-	lastPageOffset : 0,
-	ntKeys         : null,
-	tKeys          : null,
-	version        : 7,
+	cPost         : null,
+	enabled       : false,
+	gKeys         : null,
+	lastPageOffset: 0,
+	ntKeys        : null,
+	tKeys         : null,
+	version       : 7,
 	clearCPost() {
 		this.cPost = null;
 		this.lastPageOffset = 0;
@@ -5618,7 +5618,7 @@ const HotKeys = {
 				}
 				break;
 			case 5: // Send post (txt)
-				if(el !== postform.txta && el !== postform.cap.textEl) {
+				if(el !== postform.txta && el !== postform.captcha.textEl) {
 					return;
 				}
 				postform.subm.click();
@@ -5630,7 +5630,7 @@ const HotKeys = {
 				toggleWindow('hid', false);
 				break;
 			case 8: // Open/close panel
-				$toggle($id('de-panel-buttons'));
+				$toggle($q('#de-panel-buttons', Panel.mainEl));
 				break;
 			case 9: // Mask/unmask images
 				toggleCfg('maskImgs').then(() => updateCSS());
@@ -6053,8 +6053,8 @@ class KeyEditListener {
 	}
 }
 // Browsers have different codes for these keys (see HotKeys.readKeys):
-//    Firefox - '-' - 173, '=' - 61, ';' - 59
-//    Chrome/Opera: '-' - 189, '=' - 187, ';' - 186
+// Firefox: '-' - 173, '=' - 61, ';' - 59
+// Chrome: '-' - 189, '=' - 187, ';' - 186
 /* eslint-disable comma-spacing, no-sparse-arrays */
 KeyEditListener.keyCodes = [
 	'',,,,,,,,'Backspace','Tab',,,,'Enter',,,'Shift','Ctrl','Alt',/* Pause/Break */,/* Caps Lock */,,,,,,,
@@ -6074,9 +6074,9 @@ KeyEditListener.keyCodes = [
 =========================================================================================================== */
 
 const ContentLoader = {
-	afterFn   : null,
-	isLoading : false,
-	popupId   : null,
+	afterFn  : null,
+	isLoading: false,
+	popupId  : null,
 	downloadThread(imgOnly) {
 		let progress, counter;
 		let current = 1;
@@ -6087,7 +6087,7 @@ const ContentLoader = {
 		let count = els.length;
 		const delSymbols = (str, r = '') => str.replace(/[\\/:*?"<>|]/g, r);
 		this._thrPool = new TasksPool(4, (num, data) => this.loadFileData(data[0]).then(fileData => {
-			const [url, fName, el, parentLink] = data;
+			const [url, fName, img, parentLink] = data;
 			let safeName = delSymbols(fName, '_');
 			progress.value = counter.innerHTML = current++;
 			if(parentLink) {
@@ -6097,38 +6097,36 @@ const ContentLoader = {
 				} else {
 					thumbName = 'thumbs/' + thumbName;
 					safeName = fileData ? 'images/' + safeName : thumbName;
-					parentLink.href = getImgNameLink(el).href = safeName;
+					parentLink.href = aib.getImgNameLink(img).href = safeName;
 				}
 				if(fileData) {
 					tar.addFile(safeName, fileData);
 				} else {
-					warnings += `<br>${ Lng.cantLoad[lang] } <a href="${ url }">${ url }</a>` +
-						`<br>${ Lng.willSavePview[lang] }`;
+					warnings += `<br>${ Lng.cantLoad[lang] } <a href="${ url }">${ url }</a><br>${
+						Lng.willSavePview[lang] }`;
 					$popup('err-files', Lng.loadErrors[lang] + warnings);
 					if(imgOnly) {
-						return this.getDataFromImg(el).then(data =>
+						return this.getDataFromImg(img).then(data =>
 							tar.addFile(thumbName, data), Function.prototype);
 					}
 				}
-				return imgOnly ? null : this.getDataFromImg(el).then(
-					data => tar.addFile(el.src = thumbName, data),
-					() => (el.src = safeName));
+				return imgOnly ? null : this.getDataFromImg(img)
+					.then(data => tar.addFile(img.src = thumbName, data), () => (img.src = safeName));
 			} else if(fileData?.length) {
-				tar.addFile(el.href = el.src = 'data/' + safeName, fileData);
+				tar.addFile(img.href = img.src = 'data/' + safeName, fileData);
 			} else {
-				el.remove();
+				img.remove();
 			}
 		}), async () => {
 			const docName = `${ aib.domain }-${ delSymbols(aib.b) }-${ aib.t }`;
 			if(!imgOnly) {
 				$q('head', dc).insertAdjacentHTML('beforeend',
 					'<script type="text/javascript" src="data/dollscript.js" charset="utf-8"></script>');
-				const dcBody = $q('body', dc);
-				dcBody.classList.remove('de-runned');
-				dcBody.classList.add('de-mode-local');
+				const docBody = $q('body', dc);
+				docBody.classList.add('de-runned-local');
 				$delAll('#de-css, #de-css-dynamic, #de-css-user', dc);
 				tar.addString('data/dollscript.js', `${ nav.isESNext ?
-					`(${ String(deMainFuncInner) })(window, null, null, (x, y) => window.scrollTo(x, y), ` :
+					`(${ String(deMainFuncInner) })(window, null, (x, y) => window.scrollTo(x, y), ` :
 					`(${ String(/* global deMainFuncOuter */ deMainFuncOuter) })(`
 				}${ JSON.stringify({ domain: aib.domain, b: aib.b, t: aib.t }) });`);
 				const dt = doc.doctype;
@@ -6164,8 +6162,9 @@ const ContentLoader = {
 			}
 		});
 		if(!imgOnly) {
-			$delAll('.de-btn-img, #de-main, .de-parea, .de-post-btns, .de-refmap, .de-thr-buttons, ' +
-				'.de-video-obj, #de-win-reply, link[rel="alternate stylesheet"], script, ' + aib.qForm, dc);
+			$delAll('.de-btn-img, #de-main-container, .de-parea, .de-post-btns, .de-refmap, ' +
+				'.de-thr-buttons, .de-video-obj, #de-win-reply, link[rel="alternate stylesheet"], script, ' +
+				aib.qForm, dc);
 			$Q('a', dc).forEach(el => {
 				let num;
 				const tc = el.textContent;
@@ -6237,7 +6236,7 @@ const ContentLoader = {
 		$ajax(url, { responseType: 'arraybuffer' }, !url.startsWith('blob')).then(xhr => {
 			if('response' in xhr) {
 				try {
-					return nav.getUnsafeUint8Array(xhr.response);
+					return nav.uint8Array(xhr.response);
 				} catch(err) {}
 			}
 			const txt = xhr.responseText;
@@ -6257,10 +6256,10 @@ const ContentLoader = {
 			const rarJpgFinder = (isPreImg || Cfg.findImgFile) && new WorkerPool(mReqs, this._detectImgFile,
 				err => console.error('File detector error:', `line: ${ err.lineno } - ${ err.message }`));
 			preloadPool = new TasksPool(mReqs, (num, data) => this.loadFileData(data[0]).then(fileData => {
-				const [url, parentLink, iType, isRepToOrig, el, isVideo] = data;
+				const [url, parentLink, iType, isRepToOrig, img, isVideo] = data;
 				if(fileData) {
 					const fName = decodeURIComponent(getFileName(url));
-					const nameLink = getImgNameLink(el);
+					const nameLink = aib.getImgNameLink(img);
 					parentLink.setAttribute('download', fName);
 					if(!Cfg.imgNames) {
 						nameLink.setAttribute('download', fName);
@@ -6269,10 +6268,10 @@ const ContentLoader = {
 					parentLink.href = nameLink.href =
 						deWindow.URL.createObjectURL(new Blob([fileData], { type: iType }));
 					if(isVideo) {
-						el.setAttribute('de-video', '');
+						img.setAttribute('de-video', '');
 					}
 					if(isRepToOrig) {
-						el.src = parentLink.href;
+						img.src = parentLink.href;
 					}
 					if(rarJpgFinder) {
 						rarJpgFinder.runWorker(fileData.buffer, [fileData.buffer],
@@ -6329,8 +6328,8 @@ const ContentLoader = {
 		}
 	},
 
-	_canvas  : null,
-	_thrPool : null,
+	_canvas : null,
+	_thrPool: null,
 	_addImgFileIcon(nameLink, fName, info) {
 		const { type } = info;
 		if(typeof type === 'undefined') {
@@ -6338,7 +6337,7 @@ const ContentLoader = {
 		}
 		const ext = ['7z', 'zip', 'rar', 'ogg', 'mp3'][type];
 		nameLink.insertAdjacentHTML('afterend', `<a href="${ deWindow.URL.createObjectURL(
-			new Blob([nav.getUnsafeUint8Array(info.data, info.idx)], {
+			new Blob([nav.uint8Array(info.data, info.idx)], {
 				type: [
 					'application/x-7z-compressed',
 					'application/zip',
@@ -6590,7 +6589,7 @@ class Videos {
 		if(loader && (dataObj = Videos._global.vData[+!isYtube][m[1]])) {
 			this.vData[+!isYtube].push(dataObj);
 		}
-		let time = '';
+		let time;
 		[time, m[2], m[3], m[4]] = Videos._fixTime(m[4], m[3], m[2]);
 		if(link) {
 			link.href = link.href.replace(/^http:/, 'https:');
@@ -6626,21 +6625,23 @@ class Videos {
 		if(this.playerInfo !== m) {
 			this.currentLink.classList.remove('de-current');
 			this.currentLink = el;
+			const isYTube = el.classList.contains('de-ytube');
 			if(mode === 1) {
-				this._addThumb(m, el.classList.contains('de-ytube'));
+				this._addThumb(m, isYTube);
 			} else {
 				el.classList.add('de-current');
-				this.setPlayer(m, el.classList.contains('de-ytube'));
+				this.setPlayer(m, isYTube);
 			}
 			return;
 		}
 		if(mode === 1) {
+			const isYTube = el.classList.contains('de-ytube');
 			if($q('.de-video-thumb', this.player)) {
 				el.classList.add('de-current');
-				this.setPlayer(m, el.classList.contains('de-ytube'));
+				this.setPlayer(m, isYTube);
 			} else {
 				el.classList.remove('de-current');
-				this._addThumb(m, el.classList.contains('de-ytube'));
+				this._addThumb(m, isYTube);
 			}
 		} else {
 			el.classList.remove('de-current');
@@ -6794,7 +6795,7 @@ class Videos {
 	}
 }
 Videos.ytReg =
-	/^https?:\/\/(?:www\.|m\.)?youtu(?:be\.com\/(?:watch\?.*?v=|v\/|embed\/)|\.be\/)([a-zA-Z0-9-_]+).*?(?:t(?:ime)?=(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s?)?)?$/;
+	/^https?:\/\/(?:www\.|m\.)?youtu(?:be\.com\/(?:watch\?.*?v=|v\/|embed\/|shorts\/)|\.be\/)([a-zA-Z0-9-_]+).*?(?:t(?:ime)?=(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s?)?)?$/;
 Videos.vimReg =
 	/^https?:\/\/(?:www\.)?vimeo\.com\/(?:[^?]+\?clip_id=|.*?\/)?(\d+).*?(#t=\d+)?$/;
 Videos._global = {
@@ -6953,14 +6954,14 @@ function $ajax(url, params = null, isCORS = false) {
 		};
 		let loadTO = needTO && setTimeout(timeoutFn, WAITING_TIME);
 		const newParams = {
-			method : params?.method || 'GET',
-			url    : nav.isSafari ? aib.getAbsLink(url) : url,
+			method: params?.method || 'GET',
+			url   : nav.isSafari ? aib.getAbsLink(url) : url,
 			onreadystatechange(e) {
 				if(needTO) {
 					clearTimeout(loadTO);
 				}
 				if(e.readyState === 4 && !(
-					// Violentmonkey gives extra stage with undefined responseText and 200 status
+					// XXX: Violentmonkey gives extra stage with undefined responseText and 200 status
 					nav.isViolentmonkey && e.status === 200 &&
 					typeof e.responseText === 'undefined' && typeof e.response === 'undefined'
 				)) {
@@ -7051,7 +7052,7 @@ function $ajax(url, params = null, isCORS = false) {
 			return $ajax(url, params);
 		}
 	} else {
-		reject(new AjaxError(0, 'Ajax error: Canʼt send any type of request.'));
+		reject(new AjaxError(0, 'Ajax error: Can\'t send any type of request.'));
 	}
 	return new CancelablePromise((res, rej) => {
 		resolve = res;
@@ -7140,17 +7141,15 @@ const AjaxCache = {
 };
 
 function getAjaxResponseEl(text, needForm) {
-	return !text.includes('</html>') ? null :
+	return aib.hasHtmlTag && !text.includes('</html>') ? null :
 		needForm ? $q(aib.qDelForm, $createDoc(text)) : $createDoc(text);
 }
 
 function ajaxLoad(url, needForm = true, useCache = false, checkArch = false) {
 	return AjaxCache.runCachedAjax(url, useCache).then(xhr => {
-		const fnResult = el => !el ? CancelablePromise.reject(new AjaxError(0, Lng.errCorruptData[lang])) :
+		const el = getAjaxResponseEl(xhr.responseText, needForm);
+		return !el ? CancelablePromise.reject(new AjaxError(0, Lng.errCorruptData[lang])) :
 			checkArch ? [el, (xhr.responseURL || '').includes('/arch/')] : el;
-		const text = xhr.responseText;
-		const el = getAjaxResponseEl(text, needForm);
-		return aib.stormWallFixAjax ? aib.stormWallFixAjax(url, text, el, needForm, fnResult) : fnResult(el);
 	}, err => err.code === 304 ? null : CancelablePromise.reject(err));
 }
 
@@ -7169,11 +7168,9 @@ function ajaxPostsLoad(board, tNum, useCache, useJson = true) {
 			}
 		}, err => err.code === 304 ? null : CancelablePromise.reject(err));
 	}
-	return aib.hasArchive ?
-		ajaxLoad(aib.getThrUrl(board, tNum), true, useCache, true)
-			.then(data => data?.[0] ? new DOMPostsBuilder(data[0], data[1]) : null) :
-		ajaxLoad(aib.getThrUrl(board, tNum), true, useCache)
-			.then(form => form ? new DOMPostsBuilder(form) : null);
+	return ajaxLoad(aib.getThrUrl(board, tNum), true, useCache, aib.hasArchive).then(aib.hasArchive ?
+		data => data?.[0] ? new DOMPostsBuilder(data[0], data[1]) : null :
+		formEl => formEl ? new DOMPostsBuilder(formEl) : null);
 }
 
 function infoLoadErrors(err, showError = true) {
@@ -7318,9 +7315,9 @@ const Pages = {
 		}
 	},
 
-	_addingPromise : null,
-	_isAdding      : false,
-	_scrollY       : 0,
+	_addingPromise: null,
+	_isAdding     : false,
+	_scrollY      : 0,
 	_addForm(formEl, pageNum) {
 		formEl = doc.adoptNode(formEl);
 		$hide(formEl = aib.fixHTML(formEl));
@@ -7516,13 +7513,13 @@ const Spells = Object.create({
 			const [msgBit, msgData] = wipeMsg || [];
 			const names = [];
 			const bits = {
-				1  : 'samelines',
-				2  : 'samewords',
-				4  : 'longwords',
-				8  : 'symbols',
-				16 : 'capslock',
-				32 : 'numbers',
-				64 : 'whitespace'
+				1 : 'samelines',
+				2 : 'samewords',
+				4 : 'longwords',
+				8 : 'symbols',
+				16: 'capslock',
+				32: 'numbers',
+				64: 'whitespace'
 			};
 			for(const bit in bits) {
 				if(+bit !== msgBit && (val & +bit)) {
@@ -7566,9 +7563,9 @@ const Spells = Object.create({
 		const value = null;
 		const configurable = true;
 		Object.defineProperties(this, {
-			hiders  : { configurable, value },
-			outreps : { configurable, value },
-			reps    : { configurable, value }
+			hiders : { configurable, value },
+			outreps: { configurable, value },
+			reps   : { configurable, value }
 		});
 		await CfgSaver.save('hideBySpell', 0);
 	},
@@ -7683,9 +7680,9 @@ const Spells = Object.create({
 			const value = null;
 			const configurable = true;
 			Object.defineProperties(this, {
-				hiders  : { configurable, value },
-				outreps : { configurable, value },
-				reps    : { configurable, value }
+				hiders : { configurable, value },
+				outreps: { configurable, value },
+				reps   : { configurable, value }
 			});
 			return;
 		}
@@ -7808,9 +7805,9 @@ const Spells = Object.create({
 	_setData(hiders, reps, outreps) {
 		const configurable = true;
 		Object.defineProperties(this, {
-			hiders  : { configurable, value: this._initHiders(hiders) },
-			outreps : { configurable, value: this._initReps(outreps) },
-			reps    : { configurable, value: this._initReps(reps) }
+			hiders : { configurable, value: this._initHiders(hiders) },
+			outreps: { configurable, value: this._initReps(outreps) },
+			reps   : { configurable, value: this._initReps(reps) }
 		});
 	},
 	_sort(sp) {
@@ -8229,14 +8226,14 @@ class SpellsCodegen {
 			m = str.match(/^\(([\d-, ]+)\)/);
 			if(m) {
 				let val;
-				m[1].split(/, */).forEach(function(v) {
+				m[1].split(/, */).forEach(v => {
 					if(v.includes('-')) {
 						const nums = v.split('-');
 						nums[0] = +nums[0];
 						nums[1] = +nums[1];
-						this[1].push(nums);
+						val[1].push(nums);
 					} else {
-						this[0].push(+v);
+						val[0].push(+v);
 					}
 				}, val = [[], []]);
 				return [i + m[0].length, [spellType, val, scope]];
@@ -8330,9 +8327,9 @@ class SpellsRunner {
 					}
 				}
 				sesStorage['de-hidden-' + aib.b + aib.t] = !data ? null : JSON.stringify({
-					hash      : Cfg.hideBySpell ? Spells.hash : 0,
-					lastCount : lPost.count,
-					lastNum   : lPost.num,
+					hash     : Cfg.hideBySpell ? Spells.hash : 0,
+					lastCount: lPost.count,
+					lastNum  : lPost.num,
 					data
 				});
 			}
@@ -8378,7 +8375,8 @@ class SpellsInterpreter {
 				}
 				const val = this._runSpell(type, scope[i][1]);
 				if(val instanceof Promise) {
-					this._ctx.push(len, scope, ++i, isNegScope);
+					i++;
+					this._ctx.push(len, scope, i, isNegScope);
 					return val.then(v => this._asyncContinue(v));
 				}
 				[rv, stopCheck] = this._checkRes(scope[i], val, isNegScope);
@@ -8859,9 +8857,12 @@ class PostForm {
 		return this.pForm.getBoundingClientRect().top;
 	}
 	addMarkupPanel() {
+		if(aib.noMarkupBtns) {
+			return;
+		}
 		let el = $id('de-txt-panel');
 		if(!Cfg.addTextBtns) {
-			aib.removeMarkupButtons(el);
+			el?.remove();
 			return;
 		}
 		if(!el) {
@@ -8869,7 +8870,7 @@ class PostForm {
 			['click', 'mouseover'].forEach(e => el.addEventListener(e, this));
 		}
 		el.style.cssFloat = Cfg.txtBtnsLoc ? 'none' : 'right';
-		aib.insertMarkupButtons(this, el);
+		(Cfg.txtBtnsLoc ? $id('de-resizer-text') || this.txta : this.subm).after(el);
 		const id = ['bold', 'italic', 'under', 'strike', 'spoil', 'code', 'sup', 'sub'];
 		const val = ['B', 'i', 'U', 'S', '%', 'C', 'x\u00b2', 'x\u2082'];
 		const mode = Cfg.addTextBtns;
@@ -8961,8 +8962,8 @@ class PostForm {
 		e.preventDefault();
 		e.stopPropagation();
 	}
-	refreshCap(isError = false) {
-		this.cap?.refreshCaptcha(isError, isError, this.tNum);
+	refreshCaptchaTNum(isError = false) {
+		this.captcha?.refreshCaptcha(isError, isError, this.tNum);
 	}
 	setPlaceholders() {
 		if(aib.formHeaders || !aib.multiFile && Cfg.fileInputs === 2) {
@@ -8972,8 +8973,8 @@ class PostForm {
 		this._setPlaceholder('subj');
 		this._setPlaceholder('mail');
 		this._setPlaceholder('video');
-		if(this.cap) {
-			this._setPlaceholder('cap');
+		if(this.captcha) {
+			this._setPlaceholder('captcha');
 		}
 	}
 	setReply(isQuick, needToHide) {
@@ -8992,7 +8993,7 @@ class PostForm {
 		this.closeReply();
 		if(!aib.t) {
 			this.tNum = false;
-			this.refreshCap();
+			this.refreshCaptchaTNum();
 		}
 		if(this.isBottom === isBottom) {
 			$toggle(this.pForm, this.isHidden);
@@ -9011,7 +9012,7 @@ class PostForm {
 			this.isQuick = true;
 			this.setReply(true, false);
 			$q('a', this._pBtn[+this.isBottom]).className =
-				`de-abtn de-parea-btn-${ aib.t ? 'reply' : 'thr' }`;
+				`link-button de-parea-btn-${ aib.t ? 'reply' : 'thr' }`;
 		} else if(isCloseReply && !this.quotedText && post.wrap.nextElementSibling === this.qArea) {
 			this.closeReply();
 			return;
@@ -9029,7 +9030,7 @@ class PostForm {
 		}
 		if(!aib.t && this.tNum !== qNum) {
 			this.tNum = qNum;
-			this.refreshCap();
+			this.refreshCaptchaTNum();
 		}
 		this.tNum = qNum;
 		const txt = this.txta.value;
@@ -9060,7 +9061,7 @@ class PostForm {
 		}
 	}
 	updatePAreaBtns() {
-		const txt = 'de-abtn de-parea-btn-';
+		const txt = 'link-button de-parea-btn-';
 		const rep = aib.t ? 'reply' : 'thr';
 		$q('a', this._pBtn[+this.isBottom]).className = txt + (!this.pForm.style.display ? 'close' : rep);
 		$q('a', this._pBtn[+!this.isBottom]).className = txt + rep;
@@ -9111,31 +9112,28 @@ class PostForm {
 		};
 	}
 	_initCaptcha() {
-		const capEl =
-			$q('input[type="text"][name*="aptcha"], *[id*="captcha"], *[class*="captcha"]', this.form);
+		const capEl = aib.getCaptchaEl(this.form);
 		if(!capEl) {
-			this.cap = null;
+			this.captcha = null;
 			return;
 		}
-		this.cap = new Captcha(capEl, this.tNum);
-		const updCapFn = () => {
-			this.cap.addCaptcha();
-			this.cap.updateOutdated().then();
+		this.captcha = new Captcha(capEl, this.tNum);
+		const updCaptchaFn = () => {
+			this.captcha.addCaptcha();
+			this.captcha.updateOutdated().then();
 		};
-		this.txta.addEventListener('focus', updCapFn);
+		this.txta.addEventListener('focus', updCaptchaFn);
 		if(this.files) {
-			this.files.onchange = updCapFn;
+			this.files.onchange = updCaptchaFn;
 		}
-		this.form.addEventListener('click', () => this.cap.addCaptcha(), true);
+		this.form.addEventListener('click', () => this.captcha.addCaptcha(), true);
 	}
 	_initFileInputs() {
 		const fileEl = $q(aib.qFormFile, this.form);
 		if(!fileEl) {
 			return;
 		}
-		if(aib.fixFileInputs) {
-			aib.fixFileInputs(fileEl.closest(aib.qFormTd));
-		}
+		aib.fixFileInputs?.(fileEl.closest(aib.qFormTd));
 		this.files = new Files(this, $q(aib.qFormFile, this.form));
 		// We need to clear file inputs in case if session was restored.
 		deWindow.addEventListener('load',
@@ -9154,7 +9152,7 @@ class PostForm {
 			}
 			if(this.tNum && pByNum.get(this.tNum).subj === 'Dollchan Extension Tools') {
 				const temp = `\n\n${ PostForm._wrapText(aib.markupTags[5],
-					`${ '-'.repeat(50) }\n${ nav.ua }\nv${ version }.${ commit }${
+					`${ '-'.repeat(50) }\n${ nav.userAgent }\nv${ version }.${ commit }${
 						nav.isESNext ? '.es6' : '' } [${ nav.scriptHandler }]`
 				)[1] }`;
 				if(!val.includes(temp)) {
@@ -9194,7 +9192,7 @@ class PostForm {
 		// Add image from clipboard to file inputs on Ctrl+V
 		el.addEventListener('paste', async e => {
 			const files = e?.clipboardData?.files;
-			for(const file of files) {
+			for(const file of files || []) {
 				const inputs = this.files._inputs;
 				for(let i = 0, len = inputs.length; i < len; ++i) {
 					const input = inputs[i];
@@ -9205,7 +9203,7 @@ class PostForm {
 				}
 			}
 		});
-		// Make textarea resizer
+		// Saving the textarea size when resizing.
 		if(nav.isFirefox || nav.isWebkit) {
 			el.addEventListener('mouseup', ({ target }) => {
 				const s = target.style;
@@ -9217,9 +9215,10 @@ class PostForm {
 			});
 			return;
 		}
+		// Creating a resizer in browsers that don't have one.
 		$aEnd(el, '<div id="de-resizer-text"></div>').addEventListener('mousedown', {
-			_el      : el,
-			_elStyle : style,
+			_el     : el,
+			_elStyle: style,
 			handleEvent(e) {
 				switch(e.type) {
 				case 'mousedown':
@@ -9243,11 +9242,8 @@ class PostForm {
 	_makeHideableContainer() {
 		(this.pForm = $add('<div id="de-pform" class="de-win-body"></div>'))
 			.append(this.form || '', this.oeForm || '');
-		const html = '<div class="de-parea"><div>[<a href="#"></a>]</div><hr></div>';
-		this.pArea = [
-			$bBegin(DelForm.first.el, html),
-			$aEnd(aib._4chan ? $q('.board', DelForm.first.el) : DelForm.first.el, html)
-		];
+		const html = '<div class="de-parea"><div><a href="#"></a></div><hr></div>';
+		this.pArea = [$bBegin(DelForm.first.el, html), $aEnd(DelForm.first.el, html)];
 		this._pBtn = [this.pArea[0].firstChild, this.pArea[1].firstChild];
 		this._pBtn[0].firstElementChild.onclick = e => this.showMainReply(false, e);
 		this._pBtn[1].firstElementChild.onclick = e => this.showMainReply(true, e);
@@ -9273,7 +9269,7 @@ class PostForm {
 		const buttons = $q('.de-win-buttons', this.qArea);
 		buttons.onmouseover = ({ target }) => {
 			const el = target.parentNode;
-			switch(nav.fixEventEl(target).classList[0]) {
+			switch(target.classList[0]) {
 			case 'de-win-btn-clear': el.title = Lng.clearForm[lang]; break;
 			case 'de-win-btn-close': el.title = Lng.closeReply[lang]; break;
 			case 'de-win-btn-toggle': el.title = Cfg.replyWinDrag ? Lng.underPost[lang] : Lng.makeDrag[lang];
@@ -9284,8 +9280,8 @@ class PostForm {
 			await CfgSaver.save('sageReply', 0);
 			this.toggleSage();
 			this.files.clearInputs();
-			[this.txta, this.name, this.mail, this.subj, this.video, this.cap && this.cap.textEl].forEach(
-				el => el && (el.value = ''));
+			[this.txta, this.name, this.mail, this.subj, this.video, this.captcha && this.captcha.textEl]
+				.forEach(el => el && (el.value = ''));
 		};
 		toggleBtn.onclick = async () => {
 			await toggleCfg('replyWinDrag');
@@ -9300,7 +9296,7 @@ class PostForm {
 		closeBtn.onclick = () => this.closeReply();
 	}
 	_setPlaceholder(val) {
-		const el = val === 'cap' ? this.cap.textEl : this[val];
+		const el = val === 'captcha' ? this.captcha.textEl : this[val];
 		if(el) {
 			if(aib.multiFile || Cfg.fileInputs !== 2) {
 				el.placeholder = Lng[val][lang];
@@ -9349,7 +9345,7 @@ function showSubmitError(error) {
 		postform.setReply(true, false);
 	}
 	if(/[cf]aptch|капч|подтвер|verifi/i.test(error)) {
-		postform.refreshCap(true);
+		postform.refreshCaptchaTNum(true);
 	}
 	$popup('upload', error.toString());
 	updater.sendErrNotif();
@@ -9430,7 +9426,7 @@ async function checkSubmit(data) {
 		pByNum.get(tNum).thr.loadPosts('new', false, false).then(() => closePopup('upload'));
 	}
 	postform.closeReply();
-	postform.refreshCap();
+	postform.refreshCaptchaTNum();
 }
 
 async function checkDelete(data) {
@@ -9471,7 +9467,7 @@ function isFormElDisabled(el) {
 		}
 		/* falls through */
 	default:
-		if(nav.matchesSelector(el, 'fieldset[disabled] > :not(legend):not(:first-of-type) *')) {
+		if(el.matches('fieldset[disabled] > :not(legend):not(:first-of-type) *')) {
 			return true;
 		}
 	}
@@ -9529,8 +9525,8 @@ function* getFormElements(form, submitter) {
 					yield {
 						name,
 						type,
-						el    : field,
-						value : new File([img.data], img.name, { type: img.type })
+						el   : field,
+						value: new File([img.data], img.name, { type: img.type })
 					};
 				} else {
 					yield aib.getEmptyFile(field, fixName(name));
@@ -9547,10 +9543,10 @@ function* getFormElements(form, submitter) {
 		const dirname = field.getAttribute('dirname');
 		if(dirname) {
 			yield {
-				el    : field,
-				name  : fixName(dirname),
-				type  : 'direction',
-				value : nav.matchesSelector(field, ':dir(rtl)') ? 'rtl' : 'ltr'
+				el   : field,
+				name : fixName(dirname),
+				type : 'direction',
+				value: field.matches(':dir(rtl)') ? 'rtl' : 'ltr'
 			};
 		}
 	}
@@ -9621,14 +9617,13 @@ async function html5Submit(form, submitter, needProgress = false) {
 	if(needProgress && hasFiles) {
 		ajaxParams.onprogress = getUploadFunc();
 	}
-	const url = form.action;
-	return $ajax(url, ajaxParams).then(({ responseText: text }) => aib.jsonSubmit ? text :
-		aib.stormWallFixSubmit ? aib.stormWallFixSubmit(url, text, ajaxParams) : $createDoc(text)
-	).catch(err => Promise.reject(err));
+	return $ajax(form.action, ajaxParams)
+		.then(({ responseText: text }) => aib.jsonSubmit ? text : $createDoc(text))
+		.catch(err => Promise.reject(err));
 }
 
 function cleanFile(data, extraData) {
-	const img = nav.getUnsafeUint8Array(data);
+	const img = nav.uint8Array(data);
 	const rand = Cfg.postSameImg && String(Math.round(Math.random() * 1e6));
 	const rv = extraData ?
 		rand ? [img, extraData, rand] : [img, extraData] :
@@ -9638,7 +9633,7 @@ function cleanFile(data, extraData) {
 		return rv;
 	}
 	let i, len, val, lIdx, jpgDat;
-	const subarray = (begin, end) => nav.getUnsafeUint8Array(data, begin, end - begin);
+	const subarray = (begin, end) => nav.uint8Array(data, begin, end - begin);
 	// JPG
 	if(img[0] === 0xFF && img[1] === 0xD8) {
 		let deep = 1;
@@ -9681,7 +9676,7 @@ function cleanFile(data, extraData) {
 		if(lIdx === 2) {
 			// Remove data after the end marker
 			if(i < len) {
-				rv[0] = nav.getUnsafeUint8Array(data, 0, i);
+				rv[0] = nav.uint8Array(data, 0, i);
 			}
 			return rv;
 		}
@@ -9708,7 +9703,7 @@ function cleanFile(data, extraData) {
 		i += 8;
 		// Remove data after the end marker
 		if(i !== len && (extraData || len - i <= 75)) {
-			rv[0] = nav.getUnsafeUint8Array(data, 0, i);
+			rv[0] = nav.uint8Array(data, 0, i);
 		}
 		return rv;
 	}
@@ -9719,7 +9714,7 @@ function cleanFile(data, extraData) {
 		while(i && img[--i - 1] !== 0x00 && img[i] !== 0x3B) /* empty */;
 		// Remove data after the end marker
 		if(++i !== len) {
-			rv[0] = nav.getUnsafeUint8Array(data, 0, i);
+			rv[0] = nav.uint8Array(data, 0, i);
 		}
 		return rv;
 	}
@@ -9730,11 +9725,11 @@ function cleanFile(data, extraData) {
 	return null;
 }
 
-function readExif(data, off, len) {
+function readExif(data, offset, len) {
 	let xRes = 0;
 	let yRes = 0;
 	let resT = 0;
-	const dv = nav.getUnsafeDataView(data, off);
+	const dv = nav.dataView(data, offset);
 	const le = String.fromCharCode(dv.getUint8(0), dv.getUint8(1)) !== 'MM';
 	if(dv.getUint16(2, le) !== 0x2A) {
 		return null;
@@ -9813,9 +9808,7 @@ class Files {
 			inp.clearInp();
 		}
 		this.hideEmpty();
-		if(aib.clearFileInputs) {
-			aib.clearFileInputs();
-		}
+		aib.clearFileInputs?.();
 	}
 	hideEmpty() {
 		for(let els = this._inputs, i = els.length - 1; i > 0; --i) {
@@ -10238,7 +10231,7 @@ class FileInput {
 			this._txtInput.placeholder = Lng.dropFileHere[lang];
 		}
 		this._parent.hideEmpty();
-		if(!nav.isPresto && !aib._4chan &&
+		if(!aib._4chan &&
 			/^image\/(?:png|jpeg)$/.test(hasImgFile ? this.imgFile.type : this._input.files[0].type)
 		) {
 			this._rarMsg?.remove();
@@ -10297,7 +10290,7 @@ class Captcha {
 		this.hasCaptcha = true;
 		this.textEl = null;
 		this.tNum = initNum;
-		this.parentEl = nav.matchesSelector(el, aib.qFormTr) ? el : aib.getCapParent(el);
+		this.parentEl = el.closest(aib.qFormTr) || aib.getCaptchaParent(el);
 		this.isAdded = false;
 		this._isHcap = !!$q('.h-captcha', this.parentEl);
 		this._isRecap = this._isHcap || !!$q('[id*="recaptcha"], [class*="recaptcha"]', this.parentEl);
@@ -10324,7 +10317,18 @@ class Captcha {
 			this.parentEl.innerHTML = this.originHTML;
 			this.textEl = $q('input[type="text"][name*="aptcha"]', this.parentEl);
 		}
-		this.initCapPromise();
+		const initPromise = aib.captchaInit?.(this);
+		if(initPromise) {
+			initPromise.then(() => this.showCaptcha(), err => {
+				if(err instanceof AjaxError) {
+					this._setUpdateError(err);
+				} else {
+					this.hasCaptcha = false;
+				}
+			});
+		} else if(this.hasCaptcha) {
+			this.showCaptcha(true);
+		}
 	}
 	handleEvent(e) {
 		switch(e.type) {
@@ -10379,7 +10383,7 @@ class Captcha {
 	initTextEl() {
 		this.textEl.autocomplete = 'off';
 		if(!aib.formHeaders && (aib.multiFile || Cfg.fileInputs !== 2)) {
-			this.textEl.placeholder = Lng.cap[lang];
+			this.textEl.placeholder = Lng.captcha[lang];
 		}
 		['keypress', 'focus'].forEach(e => this.textEl.addEventListener(e, this));
 		this.textEl.onkeypress = null;
@@ -10391,7 +10395,7 @@ class Captcha {
 			if(aib.needCallUpdateCaptchaAsync) {
 				await aib.updateCaptchaAsync(this, false);
 			} else if(this._isRecap) {
-				this._updateRecap();
+				this._updateRecaptcha();
 			}
 			return;
 		}
@@ -10435,7 +10439,7 @@ class Captcha {
 				this._setUpdateError(err);
 			}
 		} else if(this._isRecap) {
-			this._updateRecap();
+			this._updateRecaptcha();
 		} else if(this.textEl) {
 			this._updateTextEl(isFocus);
 			const img = $q('img', this.parentEl);
@@ -10453,15 +10457,10 @@ class Captcha {
 			const newSrc = aib.getCaptchaSrc(src, tNum);
 			img.src = '';
 			img.src = newSrc;
-			if(aib.stormWallFixCaptcha) {
-				aib.stormWallFixCaptcha(newSrc, img);
-			}
 		}
 	}
 	updateHelper(url, fn) {
-		if(aib.captchaUpdPromise) {
-			aib.captchaUpdPromise.cancelPromise();
-		}
+		aib.captchaUpdPromise?.cancelPromise();
 		return (aib.captchaUpdPromise = $ajax(url).then(xhr => {
 			aib.captchaUpdPromise = null;
 			fn(xhr);
@@ -10473,7 +10472,7 @@ class Captcha {
 		}));
 	}
 	async updateOutdated() {
-		if(!aib.makaba && this._lastUpdate && (Date.now() - this._lastUpdate > Cfg.capUpdTime * 1e3)) {
+		if(!aib.noCapUpdTime && this._lastUpdate && (Date.now() - this._lastUpdate > Cfg.capUpdTime * 1e3)) {
 			await this.refreshCaptcha(false);
 		}
 	}
@@ -10489,7 +10488,7 @@ class Captcha {
 			$show(this.parentEl);
 		}
 	}
-	_updateRecap() {
+	_updateRecaptcha() {
 	}
 	_updateTextEl(isFocus) {
 		if(this.textEl) {
@@ -10573,25 +10572,24 @@ class AbstractPost {
 	}
 	handleEvent(e) {
 		let temp;
-		let el = nav.fixEventEl(e.target);
+		let el = e.target;
+		let { classList } = el;
 		const { type } = e;
 		const isOutEvent = type === 'mouseout';
 		const isPview = this instanceof Pview;
 
 		// Click event
 		if(type === 'click') {
-			if(aib.handlePostClick) {
-				aib.handlePostClick(this, el, e);
-			}
+			aib.handlePostClick?.(this, el, e);
 			// Skip the click by wheel button
 			switch(e.button) {
-			case 0: break;
-			case 1: e.stopPropagation();
+			case 0: break; // Primary button
+			case 1: e.stopPropagation(); // Wheel button
 				/* falls through */
 			default: return;
 			}
 			// Hide the dropdown menu after the click on its option
-			if(this._menu && el.classList.contains('de-menu-item')) {
+			if(this._menu && classList.contains('de-menu-item')) {
 				this._menu.removeMenu();
 				this._menu = null;
 			}
@@ -10599,7 +10597,7 @@ class AbstractPost {
 			switch(el.tagName.toLowerCase()) {
 			case 'a':
 				// Click on YouTube link - show/hide player or thumbnail
-				if(el.classList.contains('de-video-link')) {
+				if(classList.contains('de-video-link')) {
 					this.videos.clickLink(el, Cfg.embedYTube);
 					e.preventDefault();
 					return;
@@ -10642,13 +10640,14 @@ class AbstractPost {
 					return;
 				}
 				el = temp; // The link is an image container
+				({ classList } = el);
 				/* falls through */
 			case 'img': // Click on attached image - expand/collapse
-				if(el.classList.contains('de-video-thumb')) {
+				if(classList.contains('de-video-thumb')) {
 					if(Cfg.embedYTube === 1) {
 						const { videos } = this;
 						videos.currentLink.classList.add('de-current');
-						videos.setPlayer(videos.playerInfo, el.classList.contains('de-ytube'));
+						videos.setPlayer(videos.playerInfo, classList.contains('de-ytube'));
 						e.preventDefault();
 					}
 				} else if(Cfg.expandImgs !== 0) {
@@ -10663,7 +10662,7 @@ class AbstractPost {
 				return;
 			}
 			// Click on post buttons
-			switch(el.classList[0]) {
+			switch(classList[0]) {
 			case 'de-btn-expthr':
 				if(nav.isMobile) {
 					this._menuToggleClickBtn(el, arrTags(Lng.selExpandThr[lang],
@@ -10714,7 +10713,7 @@ class AbstractPost {
 					el.isNotRefLink = true;
 					return;
 				}
-				// Donʼt use classList here, 'de-link-postref ' should be first
+				// Don't use classList here, 'de-link-postref ' should be first
 				el.className = 'de-link-postref ' + el.className;
 				/* falls through */
 			case 'de-link-backref':
@@ -10741,18 +10740,18 @@ class AbstractPost {
 			['click', 'mouseout'].forEach(e => this.el.addEventListener(e, this, true));
 		}
 		// Mouseover/mouseout on YouTube links
-		if(Cfg.embedYTube === 2 && el.classList.contains('de-video-link')) {
+		if(Cfg.embedYTube === 2 && classList.contains('de-video-link')) {
 			this.videos.toggleFloatedThumb(el, isOutEvent);
 		}
 		// Mouseover/mouseout on attached images/videos - update title
 		if(!isOutEvent && Cfg.expandImgs &&
-			el.tagName.toLowerCase() === 'img' && !el.classList.contains('de-fullimg') &&
+			el.tagName.toLowerCase() === 'img' && !classList.contains('de-fullimg') &&
 			(temp = this.images.getImageByEl(el)) && (temp.isImage || temp.isVideo)
 		) {
 			el.title = Cfg.expandImgs === 1 ? Lng.expImgInline[lang] : Lng.expImgFull[lang];
 		}
 		// Mouseover/mouseout on post buttons - update title, add/delete dropdown menu
-		switch(el.classList[0]) {
+		switch(classList[0]) {
 		case 'de-btn-expthr':
 			this.btns.title = Lng.expandThr[lang];
 			if(!nav.isMobile) {
@@ -10799,7 +10798,7 @@ class AbstractPost {
 				el.isNotRefLink = true;
 				return;
 			}
-			// Donʼt use classList here, 'de-link-postref ' should be first
+			// Don't use classList here, 'de-link-postref ' should be first
 			el.className = 'de-link-postref ' + el.className;
 			/* falls through */
 		case 'de-link-backref':
@@ -10809,7 +10808,7 @@ class AbstractPost {
 			}
 			if(isOutEvent) { // Mouseout - We need to delete previews
 				clearTimeout(this._linkTO);
-				if(!(aib.getPostOfEl(nav.fixEventEl(e.relatedTarget)) instanceof Pview) && Pview.top) {
+				if(!(aib.getPostOfEl(e.relatedTarget) instanceof Pview) && Pview.top) {
 					Pview.top.markToDel(); // If cursor is not over one of previews - delete all previews
 				} else if(this.kid) {
 					this.kid.markToDel(); // If cursor is over any preview - delete its kids
@@ -10837,10 +10836,10 @@ class AbstractPost {
 		}
 		this.msg.replaceWith(newMsg);
 		Object.defineProperties(this, {
-			msg   : { configurable: true, value: newMsg },
-			trunc : { configurable: true, value: null }
+			msg  : { configurable: true, value: newMsg },
+			trunc: { configurable: true, value: null }
 		});
-		Post.Сontent.removeTempData(this);
+		Post.Content.removeTempData(this);
 		if(Cfg.embedYTube) {
 			this.videos.updatePost(videoLinks, $Q('a[href*="youtu"], a[href*="vimeo.com"]', newMsg), false);
 			if(videoExt) {
@@ -10865,17 +10864,7 @@ class AbstractPost {
 			}
 		});
 	}
-
-	_clickImage(el, e) {
-		const image = this.images.getImageByEl(el);
-		if(!image || (!image.isImage && !image.isVideo)) {
-			return;
-		}
-		image.expandImg((Cfg.expandImgs === 1) ^ e.ctrlKey, e);
-		e.preventDefault();
-		e.stopPropagation();
-	}
-	async _downloadImageByLink(el, e) {
+	async downloadImageByLink(el, e) {
 		e.preventDefault();
 		$popup('file-loading', Lng.loading[lang], true);
 		const url = el.href;
@@ -10887,6 +10876,16 @@ class AbstractPost {
 		closePopup('file-loading');
 		downloadBlob(new Blob([data], { type: getFileMime(url) }), el.getAttribute('download'));
 	}
+
+	_clickImage(el, e) {
+		const image = this.images.getImageByEl(el);
+		if(!image || (!image.isImage && !image.isVideo)) {
+			return;
+		}
+		image.expandImg((Cfg.expandImgs === 1) ^ e.ctrlKey, e);
+		e.preventDefault();
+		e.stopPropagation();
+	}
 	_getFullMsg(truncEl, isInit) {
 		if(aib.deleteTruncMsg) {
 			aib.deleteTruncMsg(this, truncEl, isInit);
@@ -10895,13 +10894,13 @@ class AbstractPost {
 		if(!isInit) {
 			$popup('load-fullmsg', Lng.loading[lang], true);
 		}
-		ajaxLoad(aib.getThrUrl(aib.b, this.tNum)).then(form => {
+		ajaxLoad(aib.getThrUrl(aib.b, this.tNum)).then(formEl => {
 			let sourceEl;
 			const maybeSpells = new Maybe(SpellsRunner);
 			if(this.isOp) {
-				sourceEl = form;
+				sourceEl = formEl;
 			} else {
-				const posts = $Q(aib.qPost, form);
+				const posts = $Q(aib.qPost, formEl);
 				for(let i = 0, len = posts.length; i < len; ++i) {
 					const post = posts[i];
 					if(this.num === aib.getPNum(post)) {
@@ -10936,10 +10935,9 @@ class AbstractPost {
 				end = end.parentNode;
 			}
 			const inMsgSel = `${ aib.qPostMsg }, ${ aib.qPostMsg } *`;
-			if((nav.matchesSelector(start, inMsgSel) && nav.matchesSelector(end, inMsgSel)) || (
-				nav.matchesSelector(start, aib.qPostSubj) &&
-				nav.matchesSelector(end, aib.qPostSubj)
-			)) {
+			if((start.matches(inMsgSel) && end.matches(inMsgSel)) ||
+				(start.matches(aib.qPostSubj) && end.matches(aib.qPostSubj))
+			) {
 				if(this._selText.includes('\n')) {
 					await Spells.addSpell(1 /* #exp */,
 						`/${ escapeRegExp(this._selText).replace(/\r?\n/g, '\\n') }/`, false);
@@ -10987,7 +10985,7 @@ class AbstractPost {
 			this.setUserVisib(isHide);
 			return;
 		case 'hide-refsonly': await Spells.addSpell(0 /* #words */, '>>' + num, false); return;
-		case 'img-load': this._downloadImageByLink(el, e); return;
+		case 'img-load': this.downloadImageByLink(el, e); return;
 		case 'post-markmy': {
 			const isAdd = !MyPosts.has(num);
 			if(isAdd) {
@@ -11170,10 +11168,10 @@ class Post extends AbstractPost {
 			.getBoundingClientRect().bottom;
 	}
 	get headerEl() {
-		return new Post.Сontent(this).headerEl;
+		return new Post.Content(this).headerEl;
 	}
 	get html() {
-		return new Post.Сontent(this).html;
+		return new Post.Content(this).html;
 	}
 	get nextInThread() {
 		const post = this.next;
@@ -11192,13 +11190,13 @@ class Post extends AbstractPost {
 		return value;
 	}
 	get posterName() {
-		return new Post.Сontent(this).posterName;
+		return new Post.Content(this).posterName;
 	}
 	get posterTrip() {
-		return new Post.Сontent(this).posterTrip;
+		return new Post.Content(this).posterTrip;
 	}
 	get posterUid() {
-		return new Post.Сontent(this).posterUid;
+		return new Post.Content(this).posterUid;
 	}
 	get sage() {
 		const value = aib.getSage(this.el);
@@ -11206,13 +11204,13 @@ class Post extends AbstractPost {
 		return value;
 	}
 	get subj() {
-		return new Post.Сontent(this).subj;
+		return new Post.Content(this).subj;
 	}
 	get text() {
-		return new Post.Сontent(this).text;
+		return new Post.Content(this).text;
 	}
 	get title() {
-		return new Post.Сontent(this).title;
+		return new Post.Content(this).title;
 	}
 	get tNum() {
 		return this.thr.num;
@@ -11222,7 +11220,7 @@ class Post extends AbstractPost {
 			.getBoundingClientRect().top;
 	}
 	get wrap() {
-		return new Post.Сontent(this).wrap;
+		return new Post.Content(this).wrap;
 	}
 	addFuncs() {
 		super.addFuncs();
@@ -11322,11 +11320,11 @@ class Post extends AbstractPost {
 				}
 			}
 			sendStorageEvent('__de-post', {
-				hide   : isHide,
-				brd    : aib.b,
+				hide  : isHide,
+				brd   : aib.b,
 				num,
-				thrNum : this.thr.num,
-				title  : this.isOp ? this.title : ''
+				thrNum: this.thr.num,
+				title : this.isOp ? this.title : ''
 			});
 		}
 		this.ref.toggleRef(isHide, false);
@@ -11398,15 +11396,15 @@ class Post extends AbstractPost {
 	_getMenuHide() {
 		const item = name => `<span info="hide-${ name }" class="de-menu-item">${
 			Lng.selHiderMenu[name][lang] }</span>`;
-		const sel = deWindow.getSelection();
-		const ssel = sel.toString().trim();
-		if(ssel) {
-			this._selText = ssel;
-			this._selRange = sel.getRangeAt(0);
+		const selection = deWindow.getSelection();
+		const selText = selection.rangeCount > 0 ? selection.toString().trim() : '';
+		if(selText) {
+			this._selText = selText;
+			this._selRange = selection.getRangeAt(0);
 		}
 		return `${ nav.isMobile ? `<span info="hide-post" class="de-menu-item">${
 			this.isOp ? Lng.toggleThr[lang] : Lng.togglePost[lang] }</span>` : '' }${
-			ssel ? item('sel') : '' }${
+			selText ? item('sel') : '' }${
 			this.posterName ? item('name') : '' }${
 			this.posterTrip ? item('trip') : '' }${
 			this.posterUid ? item('uid') : '' }${
@@ -11449,7 +11447,7 @@ class Post extends AbstractPost {
 }
 Post.hasNew = false;
 Post.hiddenNums = new Set();
-Post.Сontent = class PostContent extends TemporaryContent {
+Post.Content = class PostContent extends TemporaryContent {
 	constructor(post) {
 		super(post);
 		if(this._isInited) {
@@ -11577,8 +11575,8 @@ Post.sizing = {
 			this._enabled = true;
 		}
 		Object.defineProperties(this, {
-			wHeight : { writable: true, configurable: true, value },
-			wWidth  : { writable: true, configurable: true, value: nav.viewportWidth() }
+			wHeight: { writable: true, configurable: true, value },
+			wWidth : { writable: true, configurable: true, value: nav.viewportWidth() }
 		});
 		return value;
 	},
@@ -11589,8 +11587,8 @@ Post.sizing = {
 			this._enabled = true;
 		}
 		Object.defineProperties(this, {
-			wHeight : { writable: true, configurable: true, value: nav.viewportHeight() },
-			wWidth  : { writable: true, configurable: true, value }
+			wHeight: { writable: true, configurable: true, value: nav.viewportHeight() },
+			wWidth : { writable: true, configurable: true, value }
 		});
 		return value;
 	},
@@ -11648,7 +11646,7 @@ class Pview extends AbstractPost {
 		return Pview.top ? Pview.top.parent : null;
 	}
 	static showPview(parent, link) {
-		const tNum = +link.pathname.match(/.+?\/[^\d]*(\d+)/)?.[1] || aib.getPostOfEl(link).tNum;
+		const tNum = +link.pathname.match(/.+?\/[^\d]*(\d+)[^\d]/)?.[1] || aib.getPostOfEl(link).tNum;
 		const pNum = +link.textContent.match(/\d+/g)?.[0] || tNum;
 		const isTop = !(parent instanceof Pview);
 		let pv = isTop ? Pview.top : parent.kid;
@@ -11780,7 +11778,7 @@ class Pview extends AbstractPost {
 			case 'mouseout': break;
 			default: break checkMouse;
 			}
-			const el = nav.fixEventEl(e.relatedTarget);
+			const el = e.relatedTarget;
 			if(!el ||
 				isOverEvent && (el.tagName.toLowerCase() !== 'a' || el.isNotRefLink) ||
 				el !== this.el && !this.el.contains(el)
@@ -11880,7 +11878,7 @@ class Pview extends AbstractPost {
 				post.userToggled ? '-user' : '' } de-btn-pview-hide" de-num="${ num }"><!--
 				--><use class="de-btn-hide-use" xlink:href="#de-symbol-post-hide"/><!--
 				--><use class="de-btn-unhide-use" xlink:href="#de-symbol-post-unhide"/></svg>${ pText }`;
-			$delAll(`${ !aib.t && isOp ? aib.qOmitted + ', ' : '' }.de-fullimg-wrap, .de-fullimg-after`, pv);
+			$delAll(`${ !aib.t && isOp ? aib.qOmitted + ', ' : '' }.de-fullimg-wrap`, pv);
 			$Q(aib.qPostImg, pv).forEach(el => $show(el.parentNode));
 			const link = $q('.de-link-parent', pv);
 			if(link) {
@@ -12018,7 +12016,7 @@ class CacheItem {
 		return value;
 	}
 	get title() {
-		return new Post.Сontent(this).title;
+		return new Post.Content(this).title;
 	}
 	get el() {
 		const value = this.isOp ? this._pBuilder.getOpEl() : this._pBuilder.getPostEl(this.count - 1);
@@ -12194,18 +12192,21 @@ class ImagesViewer {
 	handleEvent(e) {
 		switch(e.type) {
 		case 'click': {
-			const el = e.target;
-			const tag = el.tagName.toLowerCase();
-			if(this.data.isVideo && ExpandableImage.isControlClick(e) ||
-				tag !== 'img' && tag !== 'video' &&
-				!el.classList.contains('de-fullimg-wrap') &&
-				!el.classList.contains('de-fullimg-wrap-link') &&
-				!el.classList.contains('de-fullimg-video-hack') &&
-				el.className !== 'de-fullimg-load'
-			) {
+			// Close ImagesViewer when clicking on image/video.
+			// NOTE: There is a close button in Chrome Mobile, don't need to check the controls area.
+			if(this.data.isVideo && !(nav.isMobile && nav.isWebkit) && ExpandableImage.isControlClick(e)) {
 				return;
 			}
-			if(e.button === 0) {
+			const tag = e.target.tagName.toLowerCase();
+			if(tag !== 'img' && tag !== 'video') {
+				const { classList } = e.target;
+				if(['de-fullimg-load', 'de-fullimg-video-hack', 'de-fullimg-wrap', 'de-fullimg-wrap-link']
+					.every(c => !classList.contains(c))
+				) {
+					return;
+				}
+			}
+			if(e.button === 0) { // Primary button
 				if(this._moved && !nav.isMobile) {
 					this._moved = false;
 				} else {
@@ -12225,11 +12226,12 @@ class ImagesViewer {
 			this._oldY = e.clientY;
 			['mousemove', 'mouseup'].forEach(e => doc.body.addEventListener(e, this, true));
 			break;
-		case 'mousemove': this._moveFullImg(e.clientX, e.clientY); return;
+		case 'mousemove':
+			this._moveFullImg(e.clientX, e.clientY);
+			return;
 		case 'mouseup':
 			['mousemove', 'mouseup'].forEach(e => doc.body.removeEventListener(e, this, true));
 			return;
-
 		case 'mousewheel':
 			this._handleZoom(e.clientX, e.clientY,
 				-1 / 40 * ('wheelDeltaY' in e ? e.wheelDeltaY : e.wheelDelta));
@@ -12239,7 +12241,7 @@ class ImagesViewer {
 				this._zoomed = false;
 				return;
 			}
-		/* falls through */
+			/* falls through */
 		case 'touchmove': {
 			const touchesLen = e.targetTouches.length;
 			if(touchesLen === 1 && !this._zoomed) {
@@ -12291,17 +12293,24 @@ class ImagesViewer {
 		if(isNextAngle) {
 			this.data.rotate += this.data.rotate === 270 ? -270 : 90;
 		}
+		const { isVideo } = this.data;
 		const angle = this.data.rotate;
-		const isVert = angle === 90 || angle === 270;
+		const isRotated = angle === 90 || angle === 270;
 		const img = $q('img, video', this._fullEl);
+		const ratio = this._height / this._width;
+		const ratio1 = 1 / ratio;
+		img.style.height = `${ (isRotated ? ratio : 1) * 100 }%`;
+		img.style.width = `${ (isRotated ? ratio1 : 1) * 100 }%`;
 		img.style.transform = `rotate(${ angle }deg)${
-			angle === 90 ? ' translateY(-100%)' : angle === 270 ? ' translateX(-100%)' : '' }`;
-		img.classList.toggle('de-fullimg-rotated', isVert);
-		img.style.height = `${ (isVert ? this._height / this._width : 1) * 100 }%`;
-		if(this.data.isVideo && nav.firefoxVer >= 59) {
-			img.previousElementSibling.style =
-				(isVert ? 'width: calc(100% - 40px); height: 100%; ' : '') +
-				(angle === 90 ? 'right: 0; ' : '') +
+			angle === 90 ? ` translate(${ (1 - ratio) * 50 }%, ${
+				isVideo ? 0 : (ratio1 - 1) * 50 }%)` :
+			angle === 270 ? ` translate(${ (ratio - 1) * 50 }%, ${
+				isVideo ? 0 : (1 - ratio1) * 50 }%)` : '' }`;
+		img.classList.toggle('de-fullimg-rotated', isRotated);
+		if(isVideo && nav.firefoxVer >= 59) {
+			img.previousElementSibling.style = // .de-fullimg-video-hack
+				(isRotated ? 'width: calc(100% - 40px); height: 100%; ' : '') +
+				(angle === 90 ? 'right: 0; ' : angle === 270 ? 'left: 0; ' : '') +
 				(angle === 180 ? 'bottom: 0;' : '');
 		}
 		if(isNextAngle || angle !== 180) {
@@ -12439,9 +12448,9 @@ class ImagesViewer {
 		this._oldL = (Post.sizing.wWidth - width) / 2 - 1;
 		this._oldT = (Post.sizing.wHeight - height) / 2 - 1;
 		const el = $add(`<div class="de-fullimg-center${
-			data.isVideo ? ' de-fullimg-center-video' : '' }" style="top:${ this._oldT -
-			(Cfg.imgInfoLink ? 11 : 0) - (nav.firefoxVer >= 59 && data.isVideo ? 10 : 0) }px; left:${
-			this._oldL }px; width:${ width }px; height:${ height }px; display: block"></div>`);
+			data.isVideo ? ' de-fullimg-center-video' : '' }" style="top:${
+			this._oldT - (Cfg.imgInfoLink ? 18 : 0) }px; left:${ this._oldL }px; width:${
+			width }px; height:${ height }px; display: block;"></div>`);
 		el.append(this._fullEl);
 		const scale = 100 * width / data.width;
 		$q('.de-fullimg-scale', this._fullEl).textContent = scale === 100 ? '' : `${ parseInt(scale, 10) }%`;
@@ -12542,7 +12551,7 @@ class ExpandableImage {
 			this.redirected = true;
 			Object.defineProperty(this, 'src', { value: newSrc });
 			$q('img, video', fullEl).src = this.el.src =
-				this.el.parentNode.href = getImgNameLink(this.el).href = newSrc;
+				this.el.parentNode.href = aib.getImgNameLink(this.el).href = newSrc;
 			if(!this.isVideo) {
 				$q('a', fullEl).href = newSrc;
 			}
@@ -12561,7 +12570,6 @@ class ExpandableImage {
 		this._fullEl.remove();
 		this._fullEl = null;
 		$show(this.el.parentNode);
-		(aib.hasPicWrap ? this._getImageParent : this.el.parentNode).nextSibling.remove();
 		if(e) {
 			e.preventDefault();
 			if(this.inPview) {
@@ -12605,8 +12613,7 @@ class ExpandableImage {
 			}
 		}
 		const maxWidth = Math.min(Post.sizing.wWidth - 2, Cfg.maxImgSize);
-		const maxHeight = Math.min(Post.sizing.wHeight -
-			(Cfg.imgInfoLink ? 24 : 2) - (nav.firefoxVer >= 59 && this.isVideo ? 19 : 0), Cfg.maxImgSize);
+		const maxHeight = Math.min(Post.sizing.wHeight - 2, Cfg.maxImgSize);
 		if(width > maxWidth || height > maxHeight) {
 			const ar = width / height;
 			if(ar > maxWidth / maxHeight) {
@@ -12645,8 +12652,6 @@ class ExpandableImage {
 			origImgTop = e.target.getBoundingClientRect().top;
 		}
 		this.expanded = true;
-		(aib.hasPicWrap ? this._getImageParent : this.el.parentNode).insertAdjacentHTML('afterend',
-			'<div class="de-fullimg-after"></div>');
 		const fullEl = this._fullEl = this.getFullImg(true, null, null);
 		fullEl.addEventListener('click', e => this.collapseImg(e), true);
 		this.srcBtnEvents(this);
@@ -12765,6 +12770,7 @@ class ExpandableImage {
 		const title = hasTitle ? this.el.getAttribute('de-metatitle') : '';
 		wrapEl = $add(`<div class="de-fullimg-wrap${ wrapClass }"${ inPostSize }>${
 			nav.firefoxVer >= 59 || nav.isMobile ? `<div class="de-fullimg-video-hack">${
+				// XXX: Videos won't close in Chrome Mobile. Create a close button.
 				nav.isMobile && nav.isWebkit ? '\u00D7' : ''
 			}</div>` : '' }
 			<video src="${ src }" ` +
@@ -12982,14 +12988,14 @@ class AttachedImage extends ExpandableImage {
 	}
 	_getImageSize() {
 		if(this.info) {
-			const size = this.info.match(/(?:[\s(]|^)(\d+)\s?[x\u00D7]\s?(\d+)(?:[)\s,]|$)/);
+			const size = this.info.match(/(?:[\s(,]|^)(\d+)\s?[x\u00D7]\s?(\d+)(?:[)\s,]|$)/);
 			return size ? [size[1], size[2]] : null;
 		}
 		return null;
 	}
 	_getImageSrc() {
-		// Donʼt use aib.getImgSrcLink(this.el).href
-		// If #ihash spells enabled, Chrome reads href in ajaxed posts as empty -> image canʼt be expanded!
+		// Don't use aib.getImgSrcLink(this.el).href
+		// If #ihash spells enabled, Chrome reads href in ajaxed posts as empty -> image can't be expanded!
 		return aib.getImgSrcLink(this.el).getAttribute('href');
 	}
 }
@@ -13159,10 +13165,6 @@ const ImagesHashStorage = Object.create({
 	}
 });
 
-function getImgNameLink(el) {
-	return $q(aib.qPostImgNameLink, aib.getImgWrap(el));
-}
-
 function addImgButtons(link) {
 	link.insertAdjacentHTML('beforebegin', '<svg class="de-btn-img">' +
 		'<use xlink:href="#de-symbol-post-img"/></svg>');
@@ -13300,8 +13302,8 @@ class _4chanPostsBuilder {
 		const decodedName = name.replaceAll('&amp;', '&').replaceAll('&quot;', '"').replaceAll('&#039;', '\'')
 			.replaceAll('&lt;', '<').replaceAll('&gt;', '>');
 		return decodedName.length <= maxLength ? { isFixed: false, name } : {
-			isFixed : true,
-			name    : decodedName.slice(0, 25).replaceAll('&', '&amp;').replaceAll('"', '&quot;')
+			isFixed: true,
+			name   : decodedName.slice(0, 25).replaceAll('&', '&amp;').replaceAll('"', '&quot;')
 				.replaceAll('\'', '&#039;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
 		};
 	}
@@ -13384,12 +13386,11 @@ class _4chanPostsBuilder {
 		case 'manager': ccBy = 'Managers'; break;
 		case 'founder': ccBy = 'Founder';
 		}
-		let ccName = '';
 		let ccText = '';
 		let ccImg = '';
 		let ccClass = '';
 		if(cc) {
-			ccName = cc[0].toUpperCase() + cc.slice(1);
+			const ccName = cc[0].toUpperCase() + cc.slice(1);
 			ccText = `<strong class="capcode hand id_${ cc === 'founder' ? 'admin' : cc }` +
 				`" title="Highlight posts by ${ ccBy }">## ${ ccName }</strong>`;
 			ccImg = `<img src="${ _icon(cc + 'icon') }" alt="${
@@ -13507,25 +13508,31 @@ class MakabaPostsBuilder {
 			filesHTML = `<div class="post__images post__images_type_${
 				files.length === 1 ? 'single' : 'multi' }">`;
 			for(const file of files) {
-				const imgId = num + '-' + file.md5;
 				const { fullname = file.name, displayname: dispName = file.name, type } = file;
 				const isVideo = type === 6 || type === 10;
-				const imgClass = `post__file-preview${ isVideo ? ' post__file-webm' : '' }${
-					data.nsfw ? ' post__file-nsfw' : '' }`;
+				let imgHTML = `<img class="post__file-preview${ isVideo ? ' post__file-webm' : '' }" src="${
+					file.thumbnail }" alt="${ file.width }x${ file.height }" width="${
+					file.tn_width }" height="${ file.tn_height }">`;
+				if(file.nsfw) {
+					imgHTML = `<div class="post__file-nsfw">
+						<div class="file__nsfw">
+							<span class="file__nsfw-title">NSFW</span>
+							<span class="file__nsfw-description">[ Нажмите, чтобы открыть ]</span>
+						</div>
+						${ imgHTML }
+					</div>`;
+				}
 				filesHTML += `<figure class="post__image">
 					<figcaption class="post__file-attr">
-						<a id="title-${ imgId }" class="desktop" target="_blank" href="` +
+						<a id="title-${ num + '-' + file.md5 }" class="desktop" target="_blank" href="` +
 							`${ type === 100 /* is sticker */ ? file.install : file.path }"` +
 							`${ dispName === fullname ? '' : ` title="${ fullname }"` }>${ dispName }</a>
 						<span class="post__filezise">(${ file.size }Кб, ` +
 							`${ file.width }x${ file.height }${ isVideo ? ', ' + file.duration : '' })</span>
 					</figcaption>
-					<div id="exlink-${ imgId }">
-						<a class="post__image-link" href="${ file.path }">
-							<img class="${ imgClass }" src="${ file.thumbnail }" alt="${ file.width }x` +
-								`${ file.height }" width="${ file.tn_width }" height="${ file.tn_height }">
-						</a>
-					</div>
+					<a class="post__image-link" href="${ file.path }" onclick="return false;">
+						${ imgHTML }
+					</a>
 				</figure>`;
 			}
 			filesHTML += '</div>';
@@ -13536,12 +13543,12 @@ class MakabaPostsBuilder {
 			`<a href="${ data.email }" class="post__email">${ data.name }</a>` :
 			`<span class="post__anon">${ data.name }</span>`;
 		const tripEl = !data.trip ? '' : `<span class="${ _switch(data.trip, {
-			'!!%adm%!!'        : 'post__adm">## Abu ##',
-			'!!%mod%!!'        : 'post__mod">## Mod ##',
-			'!!%Inquisitor%!!' : 'post__inquisitor">## Applejack ##',
-			'!!%coder%!!'      : 'post__mod">## Кодер ##',
-			'!!%curunir%!!'    : 'post__mod">## Curunir ##',
-			'@@default'        : `${ data.trip_style ? data.trip_style : 'post__trip' }">` + data.trip
+			'!!%adm%!!'       : 'post__adm">## Abu ##',
+			'!!%mod%!!'       : 'post__mod">## Mod ##',
+			'!!%Inquisitor%!!': 'post__inquisitor">## Applejack ##',
+			'!!%coder%!!'     : 'post__mod">## Кодер ##',
+			'!!%curunir%!!'   : 'post__mod">## Curunir ##',
+			'@@default'       : `${ data.trip_style ? data.trip_style : 'post__trip' }">` + data.trip
 		}) }</span>`;
 		const refHref = `/${ board }/res/${ parseInt(data.parent) || num }.html#${ num }`;
 		let rate = '';
@@ -13605,9 +13612,9 @@ class MakabaPostsBuilder {
 			.replace(/<\/script>/ig, '</textarea>-->');
 		return `<article id="m${ data.num }" class="post__message">` +
 			`${ comment }${ _switch(data.banned, {
-				1           : '<br><span class="post__pomyanem">(Автор этого поста был забанен.)</span>',
-				2           : '<br><span class="post__pomyanem">(Автор этого поста был предупрежден.)</span>',
-				'@@default' : ''
+				1          : '<br><span class="post__pomyanem">(Автор этого поста был забанен.)</span>',
+				2          : '<br><span class="post__pomyanem">(Автор этого поста был предупрежден.)</span>',
+				'@@default': ''
 			}) }</article>`;
 	}
 }
@@ -13689,7 +13696,7 @@ class RefMap {
 			}
 			const lPost = pByNum.get(lNum);
 			if(!aib.t) {
-				link.href = `#${ aib._4chan ? 'p' : '' }${ lNum }`;
+				link.href = aib.anchor + lNum;
 			}
 			if(!isAdd) {
 				lPost.ref.removeLink(pNum);
@@ -13846,7 +13853,10 @@ class Thread {
 			prev.next = this;
 		}
 		let lastPost = this.op = new Post(aib.getOp(el), this, num, 0, true, prev ? prev.last : null);
-		pByEl.set(el, lastPost);
+		pByEl.set(el, this.op);
+		if(!aib.t) {
+			Thread._updateReplyBtn(this.op.el);
+		}
 		for(let i = 0; i < len; ++i) {
 			const pEl = els[i];
 			lastPost = new Post(pEl, this, aib.getPNum(pEl), omitted + i, false, lastPost);
@@ -13857,15 +13867,15 @@ class Thread {
 		if(localData) {
 			return;
 		}
-		this.btns = $bEnd(el, `<div class="de-thr-buttons">${ Post.getPostBtns(true, true) }
-			<span class="de-thr-updater">[<a class="de-thr-updater-link de-abtn" href="#"></a>` +
-			(!aib.t ? ']</span>' : '<span id="de-updater-count" style="display: none;"></span>]</span>') +
+		this.btns = $bEnd(el, '<div class="de-thr-buttons">' + Post.getPostBtns(true, true) +
+			'<span class="de-thr-updater"><a class="de-thr-updater-link link-button" href="#"></a>' +
+			(!aib.t ? '</span>' : '<span id="de-updater-count" style="display: none;"></span></span>') +
 			'</div>');
 		['click', 'mouseover'].forEach(e => this.btns.addEventListener(e, this));
 		[this.btnHide,, this.btnFav, this.btnUpd] = [...this.btns.children];
 		if(!aib.t && Cfg.hideReplies) {
 			this.btnReplies = $bEnd(this.btns,
-				' <span class="de-btn-replies">[<a class="de-abtn" href="#"></a>]</span>');
+				' <span class="de-btn-replies"><a class="link-button" href="#"></a></span>');
 			this._toggleReplies();
 		}
 	}
@@ -13928,12 +13938,11 @@ class Thread {
 	}
 	handleEvent(e) {
 		e.preventDefault();
-		const el = nav.fixEventEl(e.target);
-		const elClass = el.classList[0];
+		const el = e.target;
 		const nextThr = this.next;
 		let oldCoord = false;
 		if(e.type === 'click') {
-			switch(elClass) {
+			switch(el.classList[0]) {
 			case 'de-btn-fav': this.toggleFavState(true); break;
 			case 'de-btn-fav-sel': this.toggleFavState(false); break;
 			case 'de-btn-hide':
@@ -14065,11 +14074,29 @@ class Thread {
 		} while((thr = thr.next));
 	}
 
-	_addPost(parent, el, i, prev, maybeVParser) {
+	static _updateReplyBtn(postEl) {
+		const el = $q(aib.qReplyBtn, postEl);
+		if(!el) {
+			return;
+		}
+		const prevEl = el.previousSibling;
+		if(prevEl?.nodeType === Node.TEXT_NODE) {
+			prevEl.nodeValue = prevEl.nodeValue.replace(/\s*\[$/, '');
+		}
+		const nextEl = el.nextSibling;
+		if(nextEl?.nodeType === Node.TEXT_NODE) {
+			nextEl.nodeValue = nextEl.nodeValue.replace(/^\]/, '');
+		}
+		el.className = 'link-button de-gotothr-button';
+	}
+	_addPost(fragment, el, i, prev, maybeVParser) {
 		const num = aib.getPNum(el);
 		const wrap = doc.adoptNode(aib.getPostWrap(el, false));
 		const post = new Post(el, this, num, i, false, prev);
-		parent.append(wrap);
+		fragment.append(wrap);
+		if(aib.hasPostsBreak) {
+			fragment.append(doc.createElement('br'));
+		}
 		if(aib.t && !doc.hidden && Cfg.animation) {
 			$animate(el, 'de-post-new');
 		}
@@ -14110,7 +14137,7 @@ class Thread {
 		const nums = [];
 		const newCount = end - begin;
 		let newVisCount = newCount;
-		let fragm;
+		let fragment;
 		if(aib.JsonBuilder && nav.hasTemplate) {
 			const html = [];
 			for(let i = begin; i < end; ++i) {
@@ -14119,23 +14146,23 @@ class Thread {
 			}
 			const temp = doc.createElement('template');
 			temp.innerHTML = aib.fixHTML(html.join(''));
-			fragm = temp.content;
-			const posts = $Q(aib.qPost, fragm);
+			fragment = temp.content;
+			const posts = $Q(aib.qPost, fragment);
 			for(let i = 0, len = posts.length; i < len; ++i) {
-				last = this._addPost(fragm, posts[i], begin + i + 1, last, maybeVParser);
+				last = this._addPost(fragment, posts[i], begin + i + 1, last, maybeVParser);
 				newVisCount -= maybeSpells.value.runSpells(last);
 				embedPostMsgImages(last.el);
 			}
 		} else {
-			fragm = doc.createDocumentFragment();
+			fragment = doc.createDocumentFragment();
 			for(; begin < end; ++begin) {
-				last = this._addPost(fragm, pBuilder.getPostEl(begin), begin + 1, last, maybeVParser);
+				last = this._addPost(fragment, pBuilder.getPostEl(begin), begin + 1, last, maybeVParser);
 				nums.push(last.num);
 				newVisCount -= maybeSpells.value.runSpells(last);
 				embedPostMsgImages(last.el);
 			}
 		}
-		return [newCount, newVisCount, fragm, last, nums];
+		return [newCount, newVisCount, fragment, last, nums];
 	}
 	_loadFromBuilder(last, smartScroll, pBuilder) {
 		let nextCoord;
@@ -14147,8 +14174,8 @@ class Thread {
 				smartScroll = false;
 			}
 		}
-		const { op, el: thrEl } = this;
-		$q(aib.qOmitted + ', .de-omitted', thrEl)?.remove();
+		const { op, el: threadEl } = this;
+		$q(aib.qOmitted + ', .de-omitted', threadEl)?.remove();
 		if(this.loadCount === 0) {
 			if(op.trunc) {
 				op.updateMsg(pBuilder.getOpMessage(), maybeSpells.value);
@@ -14164,7 +14191,7 @@ class Thread {
 		let existed = hasPosts ? this.postsCount - post.count : 0;
 		switch(last) {
 		case 'new': // get new posts
-			needToHide = $Q('.de-hidden', thrEl).length;
+			needToHide = $Q('.de-hidden', threadEl).length;
 			needToOmit = hasPosts ? needToHide + post.count - 1 : 0;
 			needToShow = pBuilder.length - needToOmit;
 			break;
@@ -14173,7 +14200,7 @@ class Thread {
 			needToShow = pBuilder.length;
 			break;
 		case 'more': // show 10 omitted posts + get new posts
-			needToHide = $Q('.de-hidden', thrEl).length - 10;
+			needToHide = $Q('.de-hidden', threadEl).length - 10;
 			needToOmit = Math.max(hasPosts ? needToHide + post.count - 1 : 0, 0);
 			needToHide = Math.max(needToHide, 0);
 			needToShow = pBuilder.length - needToOmit;
@@ -14192,7 +14219,7 @@ class Thread {
 		} else {
 			const nonExisted = pBuilder.length - existed;
 			const maybeVParser = new Maybe(Cfg.embedYTube ? VideosParser : null);
-			const [,, fragm, last, nums] = this._importPosts(
+			const [,, fragment, last, nums] = this._importPosts(
 				op, pBuilder,
 				Math.max(0, nonExisted + existed - needToShow),
 				nonExisted,
@@ -14201,7 +14228,7 @@ class Thread {
 			if(maybeVParser.hasValue) {
 				maybeVParser.value.endParser();
 			}
-			op.wrap.after(fragm);
+			op.wrap.after(fragment);
 			DollchanAPI.notify('newpost', nums);
 			last.next = post;
 			if(post) {
@@ -14230,8 +14257,8 @@ class Thread {
 		const btns = this._moveBtnsToEnd();
 		if(!$q('.de-thr-collapse', btns)) {
 			btns.insertAdjacentHTML('beforeend',
-				`<span class="de-thr-collapse"> [<a class="de-thr-collapse-link de-abtn" href="${
-					aib.getThrUrl(aib.b, this.num) }"></a>]</span>`);
+				`<span class="de-thr-collapse">&nbsp;<a class="de-thr-collapse-link link-button" href="${
+					aib.getThrUrl(aib.b, this.num) }"></a></span>`);
 		}
 		if(needToShow > Thread.visPosts) {
 			thrNavPanel.addThr(this);
@@ -14248,7 +14275,7 @@ class Thread {
 		}
 		Pview.updatePosition(false);
 		if(Cfg.hideReplies) {
-			this.btnReplies.firstElementChild.className = 'de-replies-hide de-abtn';
+			this.btnReplies.firstElementChild.className = 'de-replies-hide link-button';
 			if(Cfg.updThrBtns) {
 				$show(this.btnUpd);
 			}
@@ -14373,7 +14400,7 @@ class Thread {
 			post.wrap.classList.toggle('de-hidden', isHide);
 		}
 		this.btnReplies.firstElementChild.className =
-			`${ isHide ? 'de-replies-show' : 'de-replies-hide' } de-abtn`;
+			`${ isHide ? 'de-replies-show' : 'de-replies-hide' } link-button`;
 		[...this.btns.children].forEach(el => el !== this.btnReplies && $toggle(el, !isHide));
 		$q(aib.qOmitted + ', .de-omitted', this.el)?.remove();
 		i = this.postsCount - 1 - (isHide ? 0 : i);
@@ -14397,8 +14424,8 @@ const thrNavPanel = {
 	handleEvent(e) {
 		switch(e.type) {
 		case 'scroll': deWindow.requestAnimationFrame(() => this._checkThreads()); break;
-		case 'mouseover': this._expandCollapse(true, nav.fixEventEl(e.relatedTarget)); break;
-		case 'mouseout': this._expandCollapse(false, nav.fixEventEl(e.relatedTarget)); break;
+		case 'mouseover': this._expandCollapse(true, e.relatedTarget); break;
+		case 'mouseout': this._expandCollapse(false, e.relatedTarget); break;
 		case 'click': this._handleClick(e); break;
 		}
 	},
@@ -14427,11 +14454,11 @@ const thrNavPanel = {
 		}
 	},
 
-	_currentThr : null,
-	_el         : null,
-	_toggleTO   : null,
-	_thrs       : null,
-	_visible    : false,
+	_currentThr: null,
+	_el        : null,
+	_toggleTO  : null,
+	_thrs      : null,
+	_visible   : false,
 	_checkThreads() {
 		const el = this._findCurrentThread();
 		if(el) {
@@ -14446,7 +14473,7 @@ const thrNavPanel = {
 	_expandCollapse(isExpand, targetEl) {
 		if(!$contains(this._el, targetEl)) {
 			clearTimeout(this._toggleTO);
-			this._toggleTO =setTimeout(() => this._el.classList.toggle('de-thr-navpanel-hidden', !isExpand),
+			this._toggleTO = setTimeout(() => this._el.classList.toggle('de-thr-navpanel-hidden', !isExpand),
 				Cfg.linksOver);
 		}
 	},
@@ -14469,7 +14496,7 @@ const thrNavPanel = {
 		return this._findCurrentThread();
 	},
 	_handleClick(e) {
-		const el = nav.fixEventEl(e.target);
+		const el = e.target;
 		switch((el.tagName.toLowerCase() === 'svg' ? el.parentNode : el).id) {
 		case 'de-thr-navup':
 			scrollTo(deWindow.pageXOffset, deWindow.pageYOffset +
@@ -14503,14 +14530,14 @@ function initThreadUpdater(title, enableUpdate) {
 	const storageName = `de-last-postscount-${ aib.b }-${ aib.t }`;
 
 	const audio = {
-		enabled  : false,
-		repeatMS : 0,
+		enabled : false,
+		repeatMS: 0,
 		disableAudio() {
 			this.stopAudio();
 			this.enabled = false;
-			const btn = $id('de-panel-audio-on');
+			const btn = $q('#de-panel-btn-audio-on', Panel.mainEl);
 			if(btn) {
-				btn.id = 'de-panel-audio-off';
+				btn.id = 'de-panel-btn-audio-off';
 			}
 		},
 		playAudio() {
@@ -14574,9 +14601,9 @@ function initThreadUpdater(title, enableUpdate) {
 			}
 		},
 
-		_countingTO : null,
-		_countingIV : null,
-		_enabled    : false,
+		_countingTO: null,
+		_countingIV: null,
+		_enabled   : false,
 		get _el() {
 			const value = $id('de-updater-count');
 			Object.defineProperty(this, '_el', { value });
@@ -14662,24 +14689,24 @@ function initThreadUpdater(title, enableUpdate) {
 			}
 		},
 
-		_blinkInterv : null,
-		_blinkMS     : 800,
-		_currentIcon : null,
-		_emptyIcon   : 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==',
-		_getIconNew  : () => null,
-		_getIconYou  : () => null,
-		_hasIcons    : false,
-		_iconError   : null,
-		_iconsNew    : [],
-		_iconsYou    : [],
-		_isInited    : false,
-		_isOrigIcon  : true,
+		_blinkInterv: null,
+		_blinkMS    : 800,
+		_currentIcon: null,
+		_emptyIcon  : 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==',
+		_getIconNew : () => null,
+		_getIconYou : () => null,
+		_hasIcons   : false,
+		_iconError  : null,
+		_iconsNew   : [],
+		_iconsYou   : [],
+		_isInited   : false,
+		_isOrigIcon : true,
 		get _iconEl() {
 			const el = $q('link[rel="shortcut icon"]', doc.head) ||
 				$bEnd(doc.head, '<link href="/favicon.ico" rel="shortcut icon"/>');
 			Object.defineProperties(this, {
-				_iconEl      : { value: el, writable: true },
-				originalIcon : { value: el.href }
+				_iconEl     : { value: el, writable: true },
+				originalIcon: { value: el.href }
 			});
 			return el;
 		},
@@ -14784,9 +14811,9 @@ function initThreadUpdater(title, enableUpdate) {
 				Lng.newPost[lang][lngQuantity(newPosts)] }. ${
 				toYou ? `${ toYou } ${ Lng.youReplies[lang][lngQuantity(toYou)] }.` : '' }`,
 			{
-				body : Lng.latestPost[lang] + ':\n' + post.text.substring(0, 250).replace(/\s+/g, ' '),
-				icon : post.images.firstAttach ? post.images.firstAttach.src : favicon.originalIcon,
-				tag  : aib.domain + aib.b + aib.t
+				body: Lng.latestPost[lang] + ':\n' + post.text.substring(0, 250).replace(/\s+/g, ' '),
+				icon: post.images.firstAttach ? post.images.firstAttach.src : favicon.originalIcon,
+				tag : aib.domain + aib.b + aib.t
 			});
 			notif.onshow = () => setTimeout(() => notif === this._notifEl && this.closeNotif(), 12e3);
 			notif.onclick = () => deWindow.focus();
@@ -14797,8 +14824,8 @@ function initThreadUpdater(title, enableUpdate) {
 			this._notifEl = notif;
 		},
 
-		_granted : true,
-		_notifEl : null,
+		_granted: true,
+		_notifEl: null,
 		_requestPermission() {
 			this._granted = false;
 			Notification.requestPermission(async state => {
@@ -14838,14 +14865,14 @@ function initThreadUpdater(title, enableUpdate) {
 			}
 		},
 
-		_delay       : 0,
-		_initDelay   : 0,
-		_loadOnce    : false,
-		_loadPromise : null,
-		_seconds     : 0,
-		_state       : -1,
+		_delay      : 0,
+		_initDelay  : 0,
+		_loadOnce   : false,
+		_loadPromise: null,
+		_seconds    : 0,
+		_state      : -1,
 		get _panelButton() {
-			const value = $q('button[id^="de-panel-upd"]');
+			const value = $q('button[id^="de-panel-btn-upd"]');
 			if(value) {
 				Object.defineProperty(this, '_panelButton', { value });
 			}
@@ -14937,12 +14964,8 @@ function initThreadUpdater(title, enableUpdate) {
 		},
 		_setUpdateStatus(status) {
 			if(this._panelButton) {
-				this._panelButton.id = 'de-panel-upd-' + status;
+				this._panelButton.id = 'de-panel-btn-upd-' + status;
 				this._panelButton.title = Lng.panelBtn[`upd-${ status === 'off' ? 'off' : 'on' }`][lang];
-				if(nav.isPresto) {
-					this._panelButton.innerHTML =
-						'<svg class="de-panel-svg"><use xlink:href="#de-symbol-panel-upd"/></svg>';
-				}
 			}
 		}
 	};
@@ -15242,65 +15265,51 @@ DelForm.tNums = new Set();
                                       BROWSER DETECTORS AND DEPENDENCIES
 =========================================================================================================== */
 
-function checkStorage() {
-	try {
-		locStorage = deWindow.localStorage;
-		sesStorage = deWindow.sessionStorage;
-		sesStorage['de-test'] = 1;
-	} catch(err) {
-		if(typeof unsafeWindow !== 'undefined') {
-			locStorage = unsafeWindow.localStorage;
-			sesStorage = unsafeWindow.sessionStorage;
-		}
-	}
-	if(!(locStorage && (typeof locStorage === 'object') && sesStorage)) {
-		console.error('Webstorage error: please, enable webstorage!');
-		return false;
-	}
-	return true;
-}
-
 // Browser identification and browser-specific hacks
-function initNavFuncs() {
-	const ua = navigator.userAgent;
-	const isFirefox = ua.includes('Gecko/');
-	const isWebkit = ua.includes('WebKit/');
-	const isChrome = isWebkit && ua.includes('Chrome/');
+function initBrowser() {
+	locStorage = deWindow.localStorage;
+	sesStorage = deWindow.sessionStorage;
+	const { userAgent } = navigator;
+	const isFirefox = userAgent.includes('Gecko/');
+	const isWebkit = userAgent.includes('WebKit/');
+	const isChrome = isWebkit && userAgent.includes('Chrome/');
 	const isSafari = isWebkit && !isChrome;
-	const hasPrestoStorage = !!prestoStorage && !ua.includes('Opera Mobi');
-	const canUseFetch = 'AbortController' in deWindow; // Firefox 57+, Chrome 66+, Safari 11.1+
-	const hasNewGM = typeof GM !== 'undefined' && typeof GM.xmlHttpRequest === 'function';
-	let hasGMXHR, hasOldGM, hasWebStorage, scriptHandler;
+
+	// Dollchan installation detection (userscript manager / webextension / in-page)
+	let scriptHandler;
+	let isInPage = false;
+	let isWebExtension = false;
+	let hasGMXHR = false;
+	let hasOldGM = false;
+	let hasWebStorage = false;
+	const hasNewGM = typeof GM !== 'undefined';
 	if(hasNewGM) {
-		const inf = GM.info;
-		const handlerName = inf ? inf.scriptHandler : '';
+		const handlerName = GM.info?.scriptHandler;
 		if(handlerName === 'FireMonkey') {
-			hasGMXHR = false;
 			hasOldGM = true;
 		} else {
 			hasGMXHR = typeof GM.xmlHttpRequest === 'function';
-			hasOldGM = false;
 		}
-		hasWebStorage = false;
-		scriptHandler = inf ? handlerName + ' ' + inf.version : 'Greasemonkey';
-	} else {
-		hasGMXHR = typeof GM_xmlhttpRequest === 'function';
-		try {
-			hasOldGM = (typeof GM_setValue === 'function') &&
-				(!isChrome || !GM_setValue.toString().includes('not supported'));
-		} catch(err) {
-			hasOldGM = err.message === 'Permission denied to access property "toString"'; // Chrome
-		}
-		hasWebStorage = !hasOldGM && (isFirefox || ('chrome' in deWindow)) &&
-			(typeof chrome === 'object') && !!chrome && !!chrome.storage;
-		scriptHandler = hasWebStorage ? 'WebExtension' :
-			typeof GM_info === 'undefined' ? isFirefox ? 'Scriptish' : 'Unknown' :
-			GM_info.scriptHandler ? `${ GM_info.scriptHandler } ${ GM_info.version }` :
+		scriptHandler = handlerName ? handlerName + ' ' + GM.info.version :
 			isFirefox ? 'Greasemonkey' : 'Unknown';
+	} else if(typeof GM_info !== 'undefined') {
+		const handlerName = GM_info?.scriptHandler;
+		hasGMXHR = typeof GM_xmlhttpRequest === 'function';
+		scriptHandler = handlerName ? handlerName + ' ' + GM_info.version :
+			isFirefox ? 'Greasemonkey' : 'Unknown';
+	} else {
+		hasWebStorage = (isFirefox || ('chrome' in deWindow)) &&
+			(typeof chrome === 'object') && !!chrome && !!chrome.storage;
+		if(hasWebStorage) {
+			isWebExtension = true;
+			scriptHandler = 'WebExtension';
+		} else {
+			isInPage = true;
+			scriptHandler = 'In-page';
+		}
 	}
-	if(!('requestAnimationFrame' in deWindow)) { // XXX: Opera Presto
-		deWindow.requestAnimationFrame = fn => setTimeout(fn, 0);
-	}
+
+	// XXX: Firefox < 39, Chrome < 50, Safari < 11 - FormData hack
 	let needFileHack = false;
 	try {
 		new File([''], '');
@@ -15310,7 +15319,7 @@ function initNavFuncs() {
 	} catch(err) {
 		needFileHack = true;
 	}
-	if(needFileHack && FormData) { // XXX: Firefox < 39, Chrome < 50, Safari < 11 - FormData hack
+	if(needFileHack && FormData) {
 		const OrigFormData = FormData;
 		const origAppend = FormData.prototype.append;
 		FormData = function FormData(form) {
@@ -15329,27 +15338,29 @@ function initNavFuncs() {
 			return rv;
 		};
 	}
-	nav = {
-		canUseFetch,
-		canUseNativeXHR  : true,
-		firefoxVer       : isFirefox ? +(ua.match(/Firefox\/(\d+)/) || [0, 0])[1] : 0,
-		hasGlobalStorage : hasOldGM || hasNewGM || hasWebStorage || hasPrestoStorage,
+
+	return {
+		canUseFetch     : 'AbortController' in deWindow, // Firefox 57+, Chrome 66+, Safari 11.1+,
+		canUseNativeXHR : true,
+		firefoxVer      : isFirefox ? +(userAgent.match(/Firefox\/(\d+)/) || [0, 0])[1] : 0,
+		hasGlobalStorage: hasOldGM || hasNewGM || hasWebStorage,
 		hasGMXHR,
+		hasInPageDE     : false,
 		hasNewGM,
 		hasOldGM,
-		hasPrestoStorage,
 		hasWebStorage,
-		isESNext         : typeof deMainFuncOuter === 'undefined',
+		isESNext        : typeof deMainFuncOuter === 'undefined',
 		isFirefox,
-		isMsEdge         : ua.includes('Edge/'),
-		isMobile         : /Android|iPhone/i.test(ua),
-		isPresto         : !!deWindow.opera,
+		isInPage,
+		isMsEdge        : userAgent.includes('Edge/'),
+		isMobile        : /Android|iPhone/i.test(userAgent),
 		isSafari,
-		isTampermonkey   : scriptHandler.startsWith('Tampermonkey'),
-		isViolentmonkey  : scriptHandler.startsWith('Violentmonkey'),
+		isTampermonkey  : scriptHandler.startsWith('Tampermonkey'),
+		isViolentmonkey : scriptHandler.startsWith('Violentmonkey'),
+		isWebExtension,
 		isWebkit,
 		scriptHandler,
-		ua               : ua + (isFirefox ? ` [${ navigator.buildID }]` : ''),
+		userAgent       : userAgent + (isFirefox ? ` [${ navigator.buildID }]` : ''),
 
 		get canPlayMP3() {
 			const value = !!new Audio().canPlayType('audio/mpeg;');
@@ -15372,14 +15383,6 @@ function initNavFuncs() {
 			Object.defineProperty(this, 'hasWorker', { value });
 			return value;
 		},
-		get matchesSelector() {
-			const dE = doc.documentElement;
-			const func = dE.matches || dE.mozMatchesSelector ||
-				dE.webkitMatchesSelector || dE.oMatchesSelector;
-			const value = (el, sel) => func.call(el, sel);
-			Object.defineProperty(this, 'matchesSelector', { value });
-			return value;
-		},
 		get viewportHeight() {
 			const value = doc.compatMode && doc.compatMode === 'CSS1Compat' ?
 				() => doc.documentElement.clientHeight : () => doc.body.clientHeight;
@@ -15392,16 +15395,9 @@ function initNavFuncs() {
 			Object.defineProperty(this, 'viewportWidth', { value });
 			return value;
 		},
-		// XXX: Opera Presto - hack for SVG events
-		get fixEventEl() {
-			const value = !this.isPresto ? el => el :
-				el => el?.correspondingUseElement?.ownerSVGElement || el;
-			Object.defineProperty(this, 'fixEventEl', { value });
-			return value;
-		},
-		// XXX: Firefox + old Greasemonkey - hack to prevent
-		//    'Accessing TypedArray data over Xrays is slow, and forbidden' errors
-		getUnsafeUint8Array(data, i, len) {
+		// XXX: Firefox + old Greasemonkey
+		// Hack to prevent 'Accessing TypedArray data over Xrays is slow, and forbidden' errors
+		uint8Array(data, i, len) {
 			let Ctor = Uint8Array;
 			if(this.isFirefox && (this.hasOldGM || this.isTampermonkey)) {
 				try {
@@ -15419,10 +15415,11 @@ function initNavFuncs() {
 			}
 			throw new Error();
 		},
-		getUnsafeDataView(data, offset) { // XXX: Firefox + old Greasemonkey
-			const value = new DataView(data, offset || 0);
+		// XXX: Firefox + old Greasemonkey
+		dataView(data, offset = 0) {
+			const value = new DataView(data, offset);
 			return this.isFirefox && this.hasOldGM && !(value instanceof DataView) ?
-				new unsafeWindow.DataView(data, offset || 0) : value;
+				new unsafeWindow.DataView(data, offset) : value;
 		}
 	};
 }
@@ -15436,7 +15433,6 @@ class BaseBoard {
 		// Imageboard-specific booleans
 		this._4chan = false;
 		this.kohlchan = false;
-		this.makaba = false;
 
 		// Query paths
 		this.cReply = 'reply';
@@ -15466,29 +15462,30 @@ class BaseBoard {
 		this.qPostImgInfo = '.filesize';
 		this.qPostMsg = 'blockquote';
 		this.qPostName = '.postername, .commentpostername';
-		this.qPostUid = null;
+		this.qPostRef = '.reflink';
 		this.qPostSubj = '.filetitle';
 		this.qPostTrip = '.postertrip';
-		this.qPostRef = '.reflink';
+		this.qPostUid = null;
 		this.qPostsParent = null;
+		this.qReplyBtn = '.de-post-btns ~ a';
 		this.qTrunc = '.abbrev, .abbr, .shortened';
 
-		// Other propertioes
+		// Other properties
 		let { port } = deWindow.location;
 		port = port ? ':' + port : '';
 		this.anchor = '#';
 		this.b = '';
-		this.captchaRu = false;
-		this.domain = domain + port;
+		this.captchaUpdPromise = null;
 		this.docExt = null;
+		this.domain = domain + port;
 		this.firstPage = 0;
 		this.formHeaders = false;
 		this.formParent = 'parent';
-		this.hasAltCaptcha = false;
 		this.hasArchive = false;
 		this.hasCatalog = false;
+		this.hasHtmlTag = true;
 		this.hasOPNum = false;
-		this.hasPicWrap = false;
+		this.hasPostsBreak = false;
 		this.hasRefererErr = false;
 		this.hasTextLinks = false;
 		this.host = deWindow.location.hostname + port;
@@ -15496,43 +15493,13 @@ class BaseBoard {
 		this.jsonSubmit = false;
 		this.markupBB = false;
 		this.multiFile = false;
+		this.noCapUpdTime = false;
+		this.noMarkupBtns = false;
 		this.page = 0;
 		this.protocol = protocol;
 		this.res = 'res/';
 		this.t = false;
 		this.timePattern = 'w+dd+m+yyyy+hh+ii+ss';
-	}
-	get qFormMail() {
-		return $match('tr:not([style*="none"]) input:not([type="hidden"]):not([style*="none"])',
-			'[name="email"]', '[name="em"]', '[name="field2"]', '[name="sage"]');
-	}
-	get qFormName() {
-		return $match('tr:not([style*="none"]) input:not([type="hidden"]):not([style*="none"])',
-			'[name="name"]', '[name="field1"]');
-	}
-	get qFormSubj() {
-		return $match('tr:not([style*="none"]) input:not([type="hidden"]):not([style*="none"])',
-			'[name="subject"]', '[name="field3"]');
-	}
-	get qMsgImgLink() {
-		const value = $match(this.qPostMsg.split(', ').join(' a, ') + ' a',
-			'[href$=".jfif"]', '[href$=".jpg"]', '[href$=".jpeg"]', '[href$=".png"]', '[href$=".gif"]',
-			'[href$=".avif"]', '[href$=".webp"]');
-		Object.defineProperty(this, 'qMsgImgLink', { value });
-		return value;
-	}
-	get qPostImgNameLink() {
-		const value = $match(this.qPostImgInfo.split(', ').join(' a, ') + ' a',
-			'[href$=".jfif"]', '[href$=".jpg"]', '[href$=".jpeg"]', '[href$=".png"]', '[href$=".gif"]',
-			'[href$=".avif"]', '[href$=".webm"]', '[href$=".webp"]', '[href$=".mov"]', '[href$=".mp4"]',
-			'[href$=".m4v"]', '[href$=".ogv"]', '[href$=".apng"]', ', [href^="blob:"]');
-		Object.defineProperty(this, 'qPostImgNameLink', { value });
-		return value;
-	}
-	get qThread() {
-		const value = $q('.thread') ? '.thread' : '[id^="thread"]';
-		Object.defineProperty(this, 'qThread', { value });
-		return value;
 	}
 	get captchaAfterSubmit() {
 		return null;
@@ -15582,6 +15549,9 @@ class BaseBoard {
 	get getSubmitData() {
 		return null;
 	}
+	get handlePostClick() {
+		return null;
+	}
 	get isArchived() {
 		return false;
 	}
@@ -15609,6 +15579,38 @@ class BaseBoard {
 	getPostersCountAsync() {
 		return Promise.resolve('');
 	}
+	get qFormMail() {
+		return $match('tr:not([style*="none"]) input:not([type="hidden"]):not([style*="none"])',
+			'[name="email"]', '[name="em"]', '[name="field2"]', '[name="sage"]');
+	}
+	get qFormName() {
+		return $match('tr:not([style*="none"]) input:not([type="hidden"]):not([style*="none"])',
+			'[name="name"]', '[name="field1"]');
+	}
+	get qFormSubj() {
+		return $match('tr:not([style*="none"]) input:not([type="hidden"]):not([style*="none"])',
+			'[name="subject"]', '[name="field3"]');
+	}
+	get qMsgImgLink() {
+		const value = $match(this.qPostMsg + ' a',
+			'[href$=".jfif"]', '[href$=".jpg"]', '[href$=".jpeg"]', '[href$=".png"]', '[href$=".gif"]',
+			'[href$=".avif"]', '[href$=".webp"]');
+		Object.defineProperty(this, 'qMsgImgLink', { value });
+		return value;
+	}
+	get qPostImgNameLink() {
+		const value = $match(this.qPostImgInfo + ' a',
+			'[href$=".jfif"]', '[href$=".jpg"]', '[href$=".jpeg"]', '[href$=".png"]', '[href$=".gif"]',
+			'[href$=".avif"]', '[href$=".webm"]', '[href$=".webp"]', '[href$=".mov"]', '[href$=".mp4"]',
+			'[href$=".m4v"]', '[href$=".ogv"]', '[href$=".apng"]', '[href^="blob:"]');
+		Object.defineProperty(this, 'qPostImgNameLink', { value });
+		return value;
+	}
+	get qThread() {
+		const value = $q('.thread') ? '.thread' : '[id^="thread"]';
+		Object.defineProperty(this, 'qThread', { value });
+		return value;
+	}
 	get reCrossLinks() {
 		const value = new RegExp(`>https?:\\/\\/[^\\/]*${ this.domain }\\/([a-z0-9]+)\\/${
 			escapeRegExp(this.res) }(\\d+)(?:[^#<]+)?(?:#i?(\\d+))?<`, 'g');
@@ -15621,16 +15623,7 @@ class BaseBoard {
 	get sendHTML5Post() {
 		return null;
 	}
-	get stormWallFixAjax() {
-		return null;
-	}
-	get stormWallFixCaptcha() {
-		return null;
-	}
-	get stormWallFixSubmit() {
-		return null;
-	}
-	get stormWallHelper() {
+	get updateCounters() {
 		return null;
 	}
 	fixHTML(data, isForm = false) {
@@ -15682,7 +15675,7 @@ class BaseBoard {
 		if(isForm) {
 			const newForm = $bBegin(data, str);
 			$hide(data);
-			deWindow.addEventListener('load', () => $id('de-dform-old').remove());
+			deWindow.addEventListener('load', () => $id('de-dform-old')?.remove());
 			return newForm;
 		}
 		data.innerHTML = str;
@@ -15715,7 +15708,10 @@ class BaseBoard {
 	getBanId(postEl) {
 		return this.qBan && $q(this.qBan, postEl) ? 1 : 0;
 	}
-	getCapParent(el) {
+	getCaptchaEl(form) {
+		return $q('input[type="text"][name*="aptcha"], *[id*="captcha"], *[class*="captcha"]', form);
+	}
+	getCaptchaParent(el) {
 		return el.closest(this.qFormTr);
 	}
 	getCaptchaSrc(src, tNum) {
@@ -15724,16 +15720,13 @@ class BaseBoard {
 		return tNum ? temp.replace(/mainpage|res\d+/, 'res' + tNum) : temp.replace(/res\d+/, 'mainpage');
 	}
 	getEmptyFile(field, name) {
-		return {
-			el    : field,
-			name,
-			type  : 'application/octet-stream',
-			value : new File([''], '')
-		};
+		return { el: field, name, type: 'application/octet-stream', value: new File([''], '') };
 	}
 	getImgInfo(wrap) {
-		const el = $q(this.qPostImgInfo, wrap);
-		return el ? el.textContent : '';
+		return $q(this.qPostImgInfo, wrap)?.textContent || '';
+	}
+	getImgNameLink(img) {
+		return $q(this.qPostImgNameLink, this.getImgWrap(img));
 	}
 	getImgRealName(wrap) {
 		const el = $q(this.qPostImgNameLink, wrap);
@@ -15768,11 +15761,7 @@ class BaseBoard {
 		return +post.id.match(/\d+/);
 	}
 	getPostElOfEl(el) {
-		const sel = this.qPost + ', [de-thread], .de-pview';
-		while(el && !nav.matchesSelector(el, sel)) {
-			el = el.parentElement;
-		}
-		return el;
+		return el.closest(this.qPost + ', [de-thread], .de-pview');
 	}
 	getPostOfEl(el) {
 		return pByEl.get(this.getPostElOfEl(el));
@@ -15801,14 +15790,11 @@ class BaseBoard {
 	getTNum(thr) {
 		return +$q('input[type="checkbox"]', thr).value;
 	}
-	insertMarkupButtons(postForm, el) {
-		(Cfg.txtBtnsLoc ? $id('de-resizer-text') || postForm.txta : postForm.subm).after(el);
-	}
 	isAjaxStatusOK(status) {
 		return status === 200 || status === 206;
 	}
 	isIgnoreError(txt) {
-		return /successful|uploaded|updating|post deleted|post created|обновл|удален[о.]/i.test(txt);
+		return /successful|updating|post deleted|post created|обновл|удален[о.]/i.test(txt);
 	}
 	parseURL() {
 		const url = (deWindow.location.pathname || '').replace(/^[/]+/, '').replace(/[/]+/g, '/');
@@ -15825,9 +15811,6 @@ class BaseBoard {
 		if(this.docExt === null) {
 			this.docExt = (url.match(/\.[a-z]+$/) || ['.html'])[0];
 		}
-	}
-	removeMarkupButtons(el) {
-		el?.remove();
 	}
 	updateSubmitBtn(el) {
 		el.value = Lng.reply[lang];
@@ -15848,13 +15831,11 @@ function getImageBoard(checkDomains, checkEngines) {
 	class Kusaba extends BaseBoard {
 		constructor(...args) {
 			super(...args);
-
-			this.qError = 'h1, h2, div[style*="1.25em"]';
-			this.qFormRedir = 'input[name="redirecttothread"][value="1"]';
-
 			this.formHeaders = true;
 			this.formParent = 'replythread';
 			this.markupBB = true;
+			this.qError = 'h1, h2, div[style*="1.25em"]';
+			this.qFormRedir = 'input[name="redirecttothread"][value="1"]';
 		}
 		get css() {
 			return `.extrabtns > a, .extrabtns > span, #newposts_get, .replymode, .ui-resizable-handle,
@@ -15890,8 +15871,13 @@ function getImageBoard(checkDomains, checkEngines) {
 	class Tinyboard extends BaseBoard {
 		constructor(...args) {
 			super(...args);
-
 			this.cReply = 'post reply';
+			this.firstPage = 1;
+			this.formParent = 'thread';
+			this.hasCatalog = true;
+			this.hasPostsBreak = true;
+			this.hasRefererErr = true;
+			this.jsonSubmit = true;
 			this.qClosed = '.fa-lock';
 			this.qDelForm = 'form[name*="postcontrols"]';
 			this.qForm = 'form[name="post"]';
@@ -15908,41 +15894,23 @@ function getImageBoard(checkDomains, checkEngines) {
 			this.qPostSubj = '.subject';
 			this.qPostTrip = '.trip';
 			this.qTrunc = '.toolong';
-
-			this.firstPage = 1;
-			this.formParent = 'thread';
-			this.hasCatalog = true;
-			this.hasRefererErr = true;
-			this.jsonSubmit = true;
 			this.timePattern = 'nn+dd+yy++w++hh+ii+ss';
 			this._origInputs = null;
 		}
-		get qPostImgNameLink() {
-			return 'p.fileinfo > a:first-of-type';
-		}
 		get css() {
-			return `.banner, .hide-thread-link, .mentioned,
+			return `.banner, .de-win-reply + br, .hide-thread-link, .mentioned,
 					.post-hover { display: none !important; }
-				div.post.reply:not(.de-entry):not(.de-cfg-tab):not(.de-win-body) {
-					float: left !important; clear: left; display: block; }
+				#de-win-reply.de-win-inpost { display: block; width: fit-content !important; }
 				${ Cfg.imgNames ? `.postfilename, .unimportant > a[download] { display: none }
 					.fileinfo > .unimportant { white-space: nowrap; }` : '' }`;
 		}
 		get markupTags() {
 			return ['\'\'\'', '\'\'', '__', '~~', '**', '[code'];
 		}
+		get qPostImgNameLink() {
+			return 'p.fileinfo > a:first-of-type';
+		}
 		async changeReplyMode(form, tNum) {
-			if(!this._origInputs && !$q('input[name="hash"]', form)) {
-				// Board without antibot protection
-				postform.subm.value = Lng.reply[lang];
-				const pageInp = $q('input[name="page"]', form);
-				if(tNum) {
-					pageInp?.remove();
-				} else if(!pageInp) {
-					form.insertAdjacentHTML('beforeend', '<input name="page" value="1" type="hidden">');
-				}
-				return;
-			}
 			const query = 'div[style="display:none"], input[style="display:none"], ' +
 				'span[style="display:none"], textarea[style="display:none"], ' +
 				'input[type="hidden"]:not(.de-input-hidden)';
@@ -15996,9 +15964,9 @@ function getImageBoard(checkDomains, checkEngines) {
 			});
 		}
 		getImgRealName(wrap) {
-			const el = $q('.postfilename', wrap) ||
-				$q('.unimportant > a[download]', wrap) || $q(this.qPostImgNameLink, wrap);
-			return el.title || el.textContent;
+			return $q('.postfilename', wrap)?.textContent ||
+				$q('.unimportant > a[download]', wrap)?.download ||
+				$q(this.qPostImgNameLink, wrap)?.textContent || '';
 		}
 		getPageUrl(board, page) {
 			return page > 1 ? fixBoardName(board) + page + this.docExt : fixBoardName(board);
@@ -16028,20 +15996,22 @@ function getImageBoard(checkDomains, checkEngines) {
 	class Vichan extends Tinyboard {
 		constructor(...args) {
 			super(...args);
-
+			this.multiFile = true;
 			this.qDelPassw = '#password';
 			this.qPostImg = '.post-image[alt]:not(.deleted)';
-
-			this.multiFile = true;
 		}
 		get css() {
 			return `${ super.css }
-				#expand-all-images, #expand-all-images + .unimportant, .fileinfo > span[style*="nowrap;"],
-					.post-btn, small, .watchThread { display: none !important; }
-				body { padding: 0 5px !important; }
+				.add_image, .de-ref-op + small, #expand-all-images, .fileinfo small, .format-text, .post-btn,
+					.watchThread, .fileinfo > span[style*="white-space:"]
+					${ Cfg.fileInputs === 2 ? ', #upload' : '' } { display: none !important; }
 				.boardlist { z-index: 1 !important; }
-				.fileinfo { width: 240px; }
-				.multifile { width: auto !important; }`;
+				.de-file-input { margin-left: 0; }
+				.multifile { width: auto !important; }
+				.multifile > .fileinfo { width: 275px; padding-right: 0 !important; }`;
+		}
+		get qPostImgNameLink() {
+			return 'p.fileinfo a:first-of-type:not(.hide-image-link)';
 		}
 		fixFileInputs(el) {
 			el.innerHTML = Array.from({ length: 5 }, (val, i) =>
@@ -16051,6 +16021,9 @@ function getImageBoard(checkDomains, checkEngines) {
 		}
 		fixHTMLHelper(str) {
 			return str.replace(/"(?:\/vichan)?\/player\.php\?v=([^&]+)&[^"]+"/g, '"$1"');
+		}
+		getImgWrap(img) {
+			return img.closest('div.file');
 		}
 		async initAsync() {
 			await super.initAsync();
@@ -16070,13 +16043,11 @@ function getImageBoard(checkDomains, checkEngines) {
 	class TinyIB extends BaseBoard {
 		constructor(...args) {
 			super(...args);
-
+			this.hasCatalog = true;
 			this.qDelForm = $id('posts') ? '#posts' : '#delform';
 			this.qError = 'body[align=center] div, div[style="margin-top: 50px;"]';
 			this.qPostImg = 'img.thumb, video.thumb';
 			this.qPostMsg = '.message';
-
-			this.hasCatalog = true;
 		}
 		get css() {
 			return '.backlinks, .replymode { display: none; }';
@@ -16087,9 +16058,6 @@ function getImageBoard(checkDomains, checkEngines) {
 		getCaptchaSrc(src) {
 			return src.replace(/\?[^?]+$|$/, '?' + Math.random());
 		}
-		getImgWrap(img) {
-			return img.parentNode.parentNode.parentNode;
-		}
 		getImgRealName(wrap) {
 			const el = $q('.filesize', wrap);
 			if(el) {
@@ -16099,6 +16067,9 @@ function getImageBoard(checkDomains, checkEngines) {
 				}
 			}
 			return super.getImgRealName(wrap);
+		}
+		getImgWrap(img) {
+			return img.parentNode.parentNode.parentNode;
 		}
 		async initAsync() {
 			$Q('.message > .omittedposts').forEach(el => {
@@ -16114,8 +16085,12 @@ function getImageBoard(checkDomains, checkEngines) {
 	class Lynxchan extends BaseBoard {
 		constructor(...args) {
 			super(...args);
-
 			this.cReply = 'innerPost';
+			this.firstPage = 1;
+			this.formParent = 'threadId';
+			this.hasCatalog = true;
+			this.jsonSubmit = true;
+			this.multiFile = true;
 			this.qDelBtn = '#deleteFormButton';
 			this.qDelForm = 'form[action$="contentActions.js"]';
 			this.qError = '#errorLabel, #labelMessage';
@@ -16136,20 +16111,7 @@ function getImageBoard(checkDomains, checkEngines) {
 			this.qPostSubj = '.labelSubject';
 			this.qPostsParent = '.divPosts';
 			this.qTrunc = '.contentOmissionIndicator';
-
-			this.firstPage = 1;
-			this.formParent = 'threadId';
-			this.hasCatalog = true;
-			this.jsonSubmit = true;
-			this.multiFile = true;
-
 			this._hasNewAPI = false;
-		}
-		get qPostImgNameLink() {
-			return '.originalNameLink';
-		}
-		get qThread() {
-			return '.opCell';
 		}
 		get css() {
 			return `.de-video-link + div[style="display: inline;"] > .embedButton, .de-parea > hr,
@@ -16165,6 +16127,16 @@ function getImageBoard(checkDomains, checkEngines) {
 		updateCaptchaAsync() {
 			return $script('injection3');
 		}
+		get qPostImgNameLink() {
+			return '.originalNameLink';
+		}
+		get qThread() {
+			return '.opCell';
+		}
+		captchaUpdate() {
+			$script('reloadCaptcha();');
+			return null;
+		}
 		changeReplyMode(form, tNum) {
 			const action = form.getAttribute('action');
 			form.setAttribute('action', tNum ? action.replace('newThread', 'replyThread') :
@@ -16175,7 +16147,7 @@ function getImageBoard(checkDomains, checkEngines) {
 			el.innerHTML = '<div' + str +
 				('<div style="display: none;"' + str).repeat((+$id('labelMaxFiles')?.textContent || 3) - 1);
 		}
-		getCapParent() {
+		getCaptchaParent() {
 			return $id('captchaDiv');
 		}
 		getImgRealName(wrap) {
@@ -16198,8 +16170,8 @@ function getImageBoard(checkDomains, checkEngines) {
 		}
 		getSubmitData({ status, data }) {
 			return {
-				error   : status === 'error' ? data : null,
-				postNum : status === 'ok' ? +data : null
+				error  : status === 'error' ? data : null,
+				postNum: status === 'ok' ? +data : null
 			};
 		}
 		getTNum(thr) {
@@ -16263,21 +16235,21 @@ function getImageBoard(checkDomains, checkEngines) {
 						dataObj.files.push({
 							content: `data:${ file.type };base64,${
 								await getBase64(file).then(data => data.split(',')[1]) }`,
-							name    : file.name,
-							spoiler : false
+							name   : file.name,
+							spoiler: false
 						});
 					}
 				}
 				const cookieObj = getCookies();
 				ajaxParams = {
 					data: JSON.stringify({
-						captchaId  : cookieObj.captchaid,
-						bypassId   : cookieObj.bypass,
-						parameters : dataObj,
-						auth       : { login: cookieObj.login, hash: cookieObj.hash }
+						captchaId : cookieObj.captchaid,
+						bypassId  : cookieObj.bypass,
+						parameters: dataObj,
+						auth      : { login: cookieObj.login, hash: cookieObj.hash }
 					}),
-					headers : { 'Content-Type': 'application/x-www-form-urlencoded' },
-					method  : 'POST'
+					headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+					method : 'POST'
 				};
 			}
 			if(needProgress && hasFiles) {
@@ -16296,8 +16268,9 @@ function getImageBoard(checkDomains, checkEngines) {
 	class FoolFuuka extends BaseBoard {
 		constructor(...args) {
 			super(...args);
-
 			this.cReply = 'post_wrapper';
+			this.docExt = '';
+			this.firstPage = 1;
 			this.qDelForm = '#main';
 			this.qOmitted = '.omitted_text';
 			this.qOPostEnd = '.posts';
@@ -16310,24 +16283,21 @@ function getImageBoard(checkDomains, checkEngines) {
 			this.qPostRef = '.post_data > a[data-function="quote"]';
 			this.qPostSubj = '.post_title';
 			this.qPostsParent = '.posts';
-
-			this.docExt = '';
-			this.firstPage = 1;
 			this.res = 'thread/';
+		}
+		get css() {
+			return `.backlink_list { display: none !important; }
+				.de-oppost > .thread_image_box { margin: 0 20px 10px 15px; float: left; text-align: center;
+					color: #bfbfbf; font-size: .8em; line-height: 150%; }`;
+		}
+		get isArchived() {
+			return true;
 		}
 		get qPostImgNameLink() {
 			return '.post_file_filename';
 		}
 		get qThread() {
 			return '.thread[id]';
-		}
-		get css() {
-			return `.backlink_list { display: none !important; }
-				.de-oppost > .thread_image_box { float: left; margin: 0 20px 10px 15px; text-align: center;
-					color: #bfbfbf; font-size: .8em; line-height: 150%; }`;
-		}
-		get isArchived() {
-			return true;
 		}
 		fixHTMLHelper(str) {
 			return str.replace(/\/#(\d+)"/g, '#$1"').replace(/\/post\/(\d+)\/"/g, '/#$1"');
@@ -16406,15 +16376,23 @@ function getImageBoard(checkDomains, checkEngines) {
 	class /* _2ch */ Makaba extends BaseBoard {
 		constructor(...args) {
 			super(...args);
-			this.makaba = true;
-
 			this.cReply = 'de-reply-class';
+			this.formParent = 'thread';
+			this.hasArchive = true;
+			this.hasCatalog = true;
+			this.hasOPNum = true;
+			this.JsonBuilder = MakabaPostsBuilder;
+			this.jsonSubmit = true;
+			this.multiFile = true;
+			this.noCapUpdTime = true;
+			this.noMarkupBtns = true;
 			this.qBan = '.post__pomyanem';
 			this.qClosed = 'use[*|href="#icon__closed"]';
 			this.qDelForm = '#posts-form, #js-posts';
 			this.qFormFile = '.postform__raw.filer input[type="file"]';
 			this.qFormRedir = null;
 			this.qFormRules = '.rules';
+			this.qFormSpoiler = '.nsfw-input';
 			this.qFormSubm = '#submit';
 			this.qFormTd = '.postform__raw';
 			this.qFormTr = '.postform__raw';
@@ -16430,19 +16408,48 @@ function getImageBoard(checkDomains, checkEngines) {
 			this.qPostRef = '.post__reflink:nth-child(2)';
 			this.qPostSubj = '.post__title';
 			this.qPostUid = 'span[id^="id_tag_"]';
+			this.qReplyBtn = '.post__detailpart.desktop > a';
 			this.qTrunc = null;
-
-			this.formParent = 'thread';
-			this.hasArchive = true;
-			this.hasCatalog = true;
-			this.hasOPNum = true;
-			this.hasPicWrap = true;
-			this.JsonBuilder = MakabaPostsBuilder;
-			this.jsonSubmit = true;
-			this.markupBB = true;
-			this.multiFile = true;
 			this.timePattern = 'dd+nn+yy+w+hh+ii+ss';
-			this._isBeta = false;
+		}
+		get css() {
+			return `._captcha-keyboard-selected-stub, .js-post-findimg, .js-post-saveimg,
+					.media-expand-button, .media-thumbnail, .newpost, .post__btn:not(.icon_type_active),
+					.post__number, .post__refmap { display: none !important; }
+				._captcha-container { margin: 0 !important; }
+				._captcha-keyboard-button { width: 35px !important; height: 35px !important;
+					padding: 0 !important; }
+				.de-pview > .post__details { margin-left: 4px; }
+				.de-refmap { margin-top: 0; }
+				.de-reply-class { background: var(--theme_default_postbg); border-radius: 3px; }
+				#down-nav-arrow, #up-nav-arrow { z-index: 0; }
+				.header__opts_sticky { z-index: 10; }
+				.post__message { padding-left: 0px; margin-left: 16px; min-width: 15%; word-wrap: normal;
+					word-break: normal; }
+				.post_type_hidden { opacity: unset; cursor: default; }
+				.post_type_hidden .post__message:not(.de-post-hiddencontent),
+					.post_type_hidden .post__images:not(.de-post-hiddencontent) { display: block !important; }
+				.postarea { display: initial !important; }
+				.postform { width: auto; }
+				${ Cfg.addSageBtn ? '.options__box:first-of-type { display: none !important; }' : '' }
+				${ Cfg.expandTrunc ? `.expand-large-comment,
+					div[id^="shrinked-post"] { display: none !important; }
+					div[id^="original-post"] { display: block !important; }` : '' }
+				${ Cfg.imgNames === 2 ? `.post__filezise { display: inline !important; }
+					.post__file-attr { margin-bottom: 1px; }` : '' }
+				${ Cfg.widePosts ? '.post__message { max-width: 98vw; }' : '' }`;
+		}
+		get isArchived() {
+			return this.b.includes('/arch');
+		}
+		get lastPage() {
+			const els = $Q('.pager > a:not([class])');
+			const value = els ? els.length : 1;
+			Object.defineProperty(this, 'lastPage', { value });
+			return value;
+		}
+		get postersCount() {
+			return $q('span[title="Постеры"]')?.innerHTML.match(/\d+$/)[0] || '';
 		}
 		get qFormMail() {
 			return 'input[name="email"]';
@@ -16530,11 +16537,11 @@ function getImageBoard(checkDomains, checkEngines) {
 				closePopup('edit-report');
 				$popup('report', Lng.sending[lang], true);
 				$ajax('/user/report', {
-					method      : 'POST',
-					data        : formData,
+					method     : 'POST',
+					data       : formData,
 					success() {},
-					contentType : false,
-					processData : false
+					contentType: false,
+					processData: false
 				}).then(xhr => {
 					let obj;
 					try {
@@ -16556,7 +16563,11 @@ function getImageBoard(checkDomains, checkEngines) {
 			return $script('injection8');
 		}
 		clearFileInputs() {
-			$delAll('.sticker-input, .postform__sticker-img');
+			$q('.postform__sticker-img')?.remove();
+			const el = $q('.sticker-input', postform.form);
+			if(el) {
+				el.value = '';
+			}
 		}
 		deleteTruncMsg(post, el) {
 			el.previousSibling.remove();
@@ -16566,7 +16577,9 @@ function getImageBoard(checkDomains, checkEngines) {
 		fixFileInputs(el) {
 			el.innerHTML = Array.from({ length: 8 }, (val, i) =>
 				`<div class="de-file-wrap"${ i ? ' style="display: none;"' : '' }>
-				<input type="file" name="file[]"></div>`
+					<input type="file" name="file[]">
+					<input class="nsfw-input" name="file_${ i }_nsfw"` +
+						' type="checkbox" value="1" style="display: none;"></div>'
 			).join('');
 		}
 		getBanId(postEl) {
@@ -16583,16 +16596,12 @@ function getImageBoard(checkDomains, checkEngines) {
 			return +post.getAttribute('data-num');
 		}
 		getPostWrap(el) {
-			return this._isBeta ? el : el.parentNode;
+			return el;
 		}
 		getSage(post) {
 			this.getSage = $q('span[id^="id_tag_"]') ?
 				post => !$q('span[id^="id_tag_"], .post__ophui', post) : super.getSage;
 			return this.getSage(post);
-		}
-		fixHTMLHelper(str) {
-			return str.replace(/<a href="https?:\/\/[^"]*"([^>]*)>(https?:\/\/[^<]+)<\/a>([^<$\s\n]+)/ig,
-				'<a href="$2$3"$1>$2$3</a>');
 		}
 		getSubmitData(json) {
 			let error = null;
@@ -16609,29 +16618,25 @@ function getImageBoard(checkDomains, checkEngines) {
 		}
 		handlePostClick(post, el, e) {
 			// Click on like/dislike elements
-			let temp;
-			let c = el.classList;
-			if(c.contains('post__rate') || c[0] === 'like-div' || c[0] === 'dislike-div' ||
-				(temp = el.parentNode) && (
-					(c = temp.classList).contains('post__rate') ||
-					c[0] === 'like-div' ||
-					c[0] === 'dislike-div') ||
-				(temp = temp.parentNode) && (
-					(c = temp.className) === 'like-div' ||
-					c === 'dislike-div')
-			) {
-				const task = temp.id.split('-')[0];
-				const num = +temp.id.match(/\d+/);
+			const likeEl = el.closest('.post__rate');
+			if(likeEl) {
+				const task = likeEl.id.split('-')[0];
+				const num = +likeEl.id.match(/\d+/);
 				$ajax(`/api/${ task }?board=${ aib.b }&num=${ num }`).then(xhr => {
 					const obj = JSON.parse(xhr.responseText);
 					if(obj.result !== 1) {
 						$popup('err-2chlike', Lng.error[lang] + ': ' + obj.error.message);
 						return;
 					}
-					temp.classList.add(`${ task }-div-checked`, `post__rate_${ task }d`);
-					const countEl = $q(`.${ task }-count, #${ task }-count${ num }`, temp);
+					likeEl.classList.add(`post__rate_${ task }d`);
+					const countEl = $q(`#${ task }-count${ num }`, likeEl);
 					countEl.textContent = +countEl.textContent + 1;
 				}, () => $popup('err-2chlike', Lng.noConnect[lang]));
+			}
+			// Click on spoiler image
+			const spoilerEl = el.closest('.post__file-nsfw');
+			if(spoilerEl) {
+				$hide(spoilerEl.firstElementChild);
 			}
 			// Click on "truncated message" link
 			if(el.classList.contains('expand-large-comment')) {
@@ -16641,43 +16646,13 @@ function getImageBoard(checkDomains, checkEngines) {
 			}
 		}
 		async initAsync() {
+			let isOldMakaba = true;
 			if($id('js-posts')) { // New Makaba engine
-				this._isBeta = true;
+				isOldMakaba = false;
 				$Q('.thread__missed').forEach(el =>
 					el.innerHTML = el.innerHTML.replace(/ (\d+) постов/, (m, i) => ` ${ i - 1 } постов`));
-			} else if($q('section.posts')) { // Old Makaba engine
-				this.cReply = 'post reply';
-				this.qBan = '.pomyanem';
-				this.qFormFile = 'tr input[type="file"]';
-				this.qFormRules = '.rules-area';
-				this.qFormTd = 'td';
-				this.qFormTr = 'tr';
-				this.qOmitted = '.mess-post';
-				this.qOPost = '.oppost';
-				this.qPost = '.post.reply[data-num]';
-				this.qPostHeader = '.post-details';
-				this.qPostImg = '.preview';
-				this.qPostImgInfo = '.file-attr';
-				this.qPostMsg = '.post-message';
-				this.qPostName = '.ananimas, .post-email';
-				this.qPostRef = '.reflink';
-				this.qPostSubj = '.post-title';
-				this.hasArchive = false;
-				const { css } = this;
-				Object.defineProperty(this, 'css', {
-					configurable : true,
-					get          : () => `${ css }
-						#ABU-alert-wait, .ABU-refmap, .fa-media-icon, .kupi-passcode-suka, .logo + hr,
-						.media-expand-button, #media-thumbnail, .message-byte-len, .nav-arrows, .norm-reply,
-						.postform-hr, .postpanel > :not(img), .posts > hr, .reflink::before, .thread-nav,
-						.toolbar-area { display: none !important; }
-						${ Cfg.addSageBtn ? `.box[onclick="ToggleSage()"] {
-							display: none !important; }` : '' }
-						${ Cfg.imgNames === 2 ? `.filesize { display: inline !important; }
-							.file-attr { margin-bottom: 1px; }` : '' }`
-				});
 			}
-			await $script(this._isBeta ? 'injection9a' : 'injection9b');
+			await $script(!isOldMakaba ? 'injection9a' : 'injection9b');
 			$Q('.autorefresh').forEach(el => {
 				const inpEl = $q('input', el);
 				if(inpEl.checked) {
@@ -16697,12 +16672,6 @@ function getImageBoard(checkDomains, checkEngines) {
 			}
 			return false;
 		}
-		insertMarkupButtons(postForm, el) {
-			const formEl = Cfg.txtBtnsLoc ? $id('de-resizer-text') || postForm.txta : postForm.subm;
-			const posEl = formEl.parentNode;
-			posEl.insertAdjacentHTML('afterend', '<div class="postform__raw"></div>');
-			posEl.nextSibling.appendChild(el);
-		}
 		observeContent(checkDomains, dataPromise) {
 			if($q('#posts-form > .thread, #js-posts > .thread, [de-form] > .thread')) {
 				return true;
@@ -16719,53 +16688,88 @@ function getImageBoard(checkDomains, checkEngines) {
 			}
 			return false;
 		}
-		removeMarkupButtons(el) {
-			el?.parentNode.remove();
+		updateCounters(postCount, filesCount, postersCount) {
+			$Q('.tn__item > span[title="Всего постов в треде"]').forEach(
+				el => el.innerHTML = el.innerHTML.replace(/\d+$/, postCount));
+			$Q('.tn__item > span[title="Всего файлов в треде"]').forEach(
+				el => el.innerHTML = el.innerHTML.replace(/\d+$/, filesCount));
+			$Q('.tn__item > span[title="Постеры"]').forEach(
+				el => el.innerHTML = el.innerHTML.replace(/\d+$/, postersCount));
 		}
 	}
-	ibDomains['2ch.hk'] = ibDomains['2ch.life'] = ibDomains['2ch.su'] = ibDomains['dva4.ru'] = Makaba;
+	ibDomains['2ch.life'] = ibDomains['2ch.org'] = ibDomains['2ch.su'] = Makaba;
 
 	class _2channel extends Makaba {
 		constructor(...args) {
 			super(...args);
-
-			this.qClosed = '.icon-lock';
-
+			this.cReply = 'post reply';
+			this.hasArchive = false;
 			this.JsonBuilder = null;
+			this.jsonSubmit = true;
+			this.qBan = '.pomyanem';
+			this.qClosed = '.icon-lock';
+			this.qForm = '#de-postform';
+			this.qFormFile = 'input[name="formimages[]"]';
+			this.qFormTd = 'div[class^="freply__"]';
+			this.qFormTr = 'div[class^="freply__"]';
+			this.qFormRules = '.rules-area';
+			this.qOmitted = '.mess-post';
+			this.qOPost = '.oppost';
+			this.qPost = '.post.reply[data-num]';
+			this.qPostHeader = '.post-details';
+			this.qPostImg = '.preview';
+			this.qPostImgInfo = '.file-attr';
+			this.qPostMsg = '.post-message';
+			this.qPostName = '.ananimas, .post-email';
+			this.qPostRef = '.reflink';
+			this.qPostSubj = '.post-title';
+			this.qReplyBtn = '.post-details > .desktop > a';
+		}
+		get css() {
+			return `.newpost, .newpost + hr, .postpanel > :not(img), .refmap, #youtube-thumb-float
+					{ display: none !important; }
+				.de-win-opened:not(#de-win-cfg) > .de-win-body { background-color: #eee !important; }
+				.postform { width: initial; }
+				.preview.lazy { opacity: 1; }`;
+		}
+		get qPostImgNameLink() {
+			return '.file-attr > .desktop';
 		}
 		reportForm() {
 			return Promise.resolve(null);
 		}
-		initCaptchaAsync(cap) {
-			return this.updateCaptchaAsync(cap);
+		initCaptchaAsync(captcha) {
+			return this.updateCaptchaAsync(captcha);
 		}
 		get needCallUpdateCaptchaAsync() {
 			return true;
 		}
-		async updateCaptchaAsync(cap) {
-			const url = `/api/captcha/service_id?board=${ this.b }&thread=` + postform.tNum;
-			return cap.updateHelper(url, xhr => {
+        async updateCaptchaAsync(captcha) {
+			$script(`grecaptcha.execute(window.recaptcha_site_key, { action: "submit" })
+				.then(function(t) { document.getElementById("g-key").value = t; });`);
+			const url = `/api/captcha/service_id?board=${ this.b }&thread=` + (postform.tNum || 0);
+			return captcha.updateHelper(url, xhr => {
 				const box = $q('.captcha');
 				let data = xhr.responseText;
 				try {
 					data = JSON.parse(data);
 				} catch(err) {}
-				switch(data.result) {
+				switch(data.mode) {
 				case 1: { // Captcha is enabled
 					const el = $q('.captcha__image');
 					const img = $q('img', el) || $aBegin(el, '<img>');
 					img.src = '';
-					img.src = `/api/captcha/image/${ data.id }`;
-					$q('input[name="captcha_id"]').value = data.id;
+					img.src = 'data:image/png;base64,' + data.image;
+					$id('captcha-key').value = data.token;
 					break;
 				}
 				case 2: return CancelablePromise.reject(new CancelError()); // Captcha is disabled
-				case 3: box.innerHTML = 'Вам больше не нужно вводить капчу.'; break;
-				default: box.innerHTML = data;
+				case 3: box.innerHTML = 'Вам больше не нужно вводить капчу.'; break; // Trusted
+				default: box.innerHTML = Lng.error[lang];
 				}
 				$show(box);
 				box.removeAttribute('hidden');
-				cap.textEl.tabIndex = 999;
+				captcha.textEl.tabIndex = 999;
 			});
 		}
 		fixFileInputs(el) {
@@ -16777,44 +16781,54 @@ function getImageBoard(checkDomains, checkEngines) {
 		fixHTMLHelper(str) {
 			return str.replace(/src="[^>]+" data-src="/g, 'src="');
 		}
-		getCapParent() {
+		getCaptchaParent() {
 			return $q('.captcha');
 		}
+		getPostWrap(el) {
+			return el.parentNode;
+		}
+		getSubmitData(json) {
+			let error = json.Reason || json.Error || null;
+			let postNum = null;
+			if(error) {
+				error = Lng.error[lang] + ': ' + error;
+			} else if(json.Status) {
+				if(json.Status === 'Redirect') {
+					postNum = +json.Target;
+				} else if(json.Status === 'OK') {
+					postNum = +json.Num;
+				}
+			}
+			return { error, postNum };
+		}
+
 		async initAsync() {
 			await super.initAsync();
-			this.qFormFile = 'input[name="formimages[]"]';
-			this.qFormTd = 'div[class^="freply__"]';
-			this.qFormTr = 'div[class^="freply__"]';
-			const { css } = this;
-			Object.defineProperty(this, 'css', {
-				configurable : true,
-				get          : () => `${ css }
-					#AlertBox, .postform__checkbox.first, .postform__header, .refmap, #youtube-thumb-float
-						{ display: none !important; }
-					.de-win-open:not(#de-win-cfg) > .de-win-body { background-color: #eee !important; }
-					.preview.lazy { opacity: 1; }`
-			});
-			let el = $q('.captcha');
+			let el = $id('postform');
+			if(el) {
+				el.id = 'de-postform';
+				el.setAttribute('action', '/api' + el.getAttribute('action'));
+			}
+			el = $q('.freply__sendarea');
+			if(el) {
+				el.innerHTML = '<input id="submit" type="submit" tabindex="5" title="Или Ctrl+Enter"' +
+							   ' class="freply__sendbutton" value="Ответ">';
+			}
+			el = $q('.captcha');
 			if(el) {
 				$q('.freply__files-and-captcha').before(el);
-			}
-			el = $id('postform');
-			if(el) {
-				el.setAttribute('action', el.getAttribute('action') + '?json=1');
 			}
 			return false;
 		}
 	}
-	ibDomains['2channel.moe'] = ibDomains['2channel5xx5xchx.onion'] = _2channel;
+	ibDomains['2channel.moe'] =
+		ibDomains['2channel5s3pvmo2364gs25e5xrx7nz6kivqhpj6ihh3df4hykvxysqd.onion'] = _2channel;
 
 	class _2chRip extends BaseBoard {
 		constructor(...args) {
 			super(...args);
-
-			this.captchaRu = true;
 			this.jsonSubmit = true;
-
-			this.captchaUpdPromise = null;
+			this.qReplyBtn = '.replytothread > a';
 		}
 		get css() {
 			return `small[id^="rfmap_"], #submit_button, .qreply_btn { display: none; }
@@ -16824,20 +16838,22 @@ function getImageBoard(checkDomains, checkEngines) {
 		get needCallUpdateCaptchaAsync() {
 			return true;
 		}
-		updateCaptchaAsync(cap) {
-			return cap.updateHelper('/cgi/captcha?task=get_id', ({ responseText: id }) => {
+		updateCaptchaAsync(captcha) {
+			return captcha.updateHelper('/cgi/captcha?task=get_id', ({ responseText: id }) => {
 				$id('imgcaptcha').src = '/cgi/captcha?task=get_image&id=' + id;
 				$id('captchaid').value = id;
 			});
 		}
 		getSubmitData(json) {
 			return {
-				error   : json.message ? json.message_title + ': ' + json.message : null,
-				postNum : json.num ? +json.num : null
+				error  : json.message ? json.message_title + ': ' + json.message : null,
+				postNum: json.num ? +json.num : null
 			};
 		}
 		async initAsync() {
 			await $script('injection10');
+			defaultCfg.captchaLang = 2;
+			$script('postFormSubmit = Function.prototype;');
 			$id('postform').insertAdjacentHTML('beforeend', '<input type="hidden" name="json" value="1">');
 			return false;
 		}
@@ -16847,29 +16863,18 @@ function getImageBoard(checkDomains, checkEngines) {
 	class _410chan extends Kusaba {
 		constructor(...args) {
 			super(...args);
-
+			this.hasCatalog = true;
+			this.markupBB = false;
 			this.qClosed = '.post-badge-locked';
 			this.qFormRedir = 'input#noko';
 			this.qPages = '.pgstbl > table > tbody > tr > td:nth-child(2)';
-
-			this.captchaRu = true;
-			this.captchaUpdPromise = null;
-			this.hasCatalog = true;
-			this.markupBB = false;
 			this.timePattern = 'dd+nn+yyyy++w++hh+ii+ss';
-		}
-		get captchaLang() {
-			return 0;
 		}
 		get css() {
 			return `${ super.css }
-				#resizer { display: none; }
-				form > span { margin-top: 5px; }
-				.de-thr-hid { display: inherit; }
-				.post-badge { display: inline-block !important; }
+				#posttypeindicator, #resizer, .threadlinksbottom { display: none; }
 				.reflink::after { content: none !important; }
-				.spoiler-image:hover::after { content: none !important; }
-				.topmenu { z-index: 1; }`;
+				.toppanel { z-index: 1; }`;
 		}
 		get markupTags() {
 			return ['**', '*', '__', '^^', '%%', '`'];
@@ -16877,16 +16882,16 @@ function getImageBoard(checkDomains, checkEngines) {
 		get needCallUpdateCaptchaAsync() {
 			return true;
 		}
-		updateCaptchaAsync(cap) {
-			return cap.updateHelper(`/api_adaptive.php?board=${ this.b }`, xhr => {
+		updateCaptchaAsync(captcha) {
+			return captcha.updateHelper(`/api_adaptive.php?board=${ this.b }`, xhr => {
 				if(xhr.responseText === '1') {
-					cap.textEl.disabled = true;
-					setTimeout(() => (cap.textEl.value = 'проезд оплачен'), 0);
+					captcha.textEl.disabled = true;
+					setTimeout(() => (captcha.textEl.value = 'проезд оплачен'), 0);
 					return;
 				}
-				cap.textEl.disabled = false;
-				cap.textEl.value = '';
-				const img = $q('img', cap.parentEl);
+				captcha.textEl.disabled = false;
+				captcha.textEl.value = '';
+				const img = $q('img', captcha.parentEl);
 				const src = img.getAttribute('src');
 				img.src = '';
 				img.src = this.getCaptchaSrc(src);
@@ -16898,15 +16903,26 @@ function getImageBoard(checkDomains, checkEngines) {
 		getSage(post) {
 			return !!$q('.filetitle', post)?.textContent.includes('\u21E9');
 		}
+		init() {
+			defaultCfg.captchaLang = 0;
+			return false;
+		}
 	}
-	ibDomains['410chan.org'] = _410chan;
+	ibDomains['410chan.org'] = ibDomains['410chan.ru'] = _410chan;
 
 	class _4chan extends BaseBoard {
 		constructor(...args) {
 			super(...args);
 			this._4chan = true;
 
+			this.anchor = '#p';
 			this.cReply = 'post reply';
+			this.docExt = '';
+			this.firstPage = 1;
+			this.formParent = 'resto';
+			this.hasCatalog = true;
+			this.hasTextLinks = true;
+			this.JsonBuilder = _4chanPostsBuilder;
 			this.qBan = 'strong[style="color: red;"]';
 			this.qClosed = '.archivedIcon, .closedIcon';
 			this.qDelBtn = '.deleteform > input[type="submit"]';
@@ -16924,14 +16940,7 @@ function getImageBoard(checkDomains, checkEngines) {
 			this.qPostRef = '.postInfo > .postNum';
 			this.qPostSubj = '.subject';
 			this.qPostUid = '.hand';
-
-			this.anchor = '#p';
-			this.docExt = '';
-			this.firstPage = 1;
-			this.formParent = 'resto';
-			this.hasCatalog = true;
-			this.hasTextLinks = true;
-			this.JsonBuilder = _4chanPostsBuilder;
+			this.qReplyBtn = '.replylink';
 			this.res = 'thread/';
 			this.timePattern = 'nn+dd+yy+w+hh+ii-?s?s?';
 		}
@@ -16944,7 +16953,7 @@ function getImageBoard(checkDomains, checkEngines) {
 		get needCallUpdateCaptchaAsync() {
 			return true;
 		}
-		updateCaptchaAsync(cap) {
+		updateCaptchaAsync(captcha) {
 			if(!$id('captchaFormPart')) {
 				return Promise.resolve(null);
 			}
@@ -16952,16 +16961,16 @@ function getImageBoard(checkDomains, checkEngines) {
 			const _z = async () => {
 				const containerEl = $id('t-root');
 				if(!containerEl) {
-					cap.hasCaptcha = false;
+					captcha.hasCaptcha = false;
 					return;
 				}
 				containerEl.insertAdjacentHTML('afterend', '<div id="t-root"></div>');
 				containerEl.remove();
 				await $script('injection11');
 				setTimeout(() => {
-					cap.textEl = $id('t-resp');
-					cap.textEl.tabIndex = 999;
-					cap.initTextEl();
+					captcha.textEl = $id('t-resp');
+					captcha.textEl.tabIndex = 999;
+					captcha.initTextEl();
 				}, 1e3);
 				return null;
 			};
@@ -16999,6 +17008,12 @@ function getImageBoard(checkDomains, checkEngines) {
 			}
 			return value;
 		}
+		get qFormSubj() {
+			return 'input[name="sub"]';
+		}
+		get qPostImgNameLink() {
+			return '.fileText > a';
+		}
 		fixDeadLinks(str) {
 			return str.replace(/<span class="deadlink">&gt;&gt;(\d+)<\/span>/g,
 				'<a class="de-ref-del deadlink" href="#p$1">&gt;&gt;$1</a>');
@@ -17013,18 +17028,17 @@ function getImageBoard(checkDomains, checkEngines) {
 			return [];
 		}
 		getImgInfo(wrap) {
-			const el = $q(this.qPostImgInfo, wrap);
-			return el ? el.lastChild.textContent : '';
+			return $q(this.qPostImgInfo, wrap)?.lastChild.textContent || '';
 		}
 		getImgRealName(wrap) {
 			const el = $q(this.qPostImgNameLink, wrap);
 			return el ? el.title || el.parentNode.title || el.textContent : '';
 		}
-		getJsonApiUrl(board, tNum) {
-			return `//a.4cdn.org/${ board }/thread/${ tNum }.json`;
-		}
 		getImgWrap(img) {
 			return img.parentNode.parentNode;
+		}
+		getJsonApiUrl(board, tNum) {
+			return `//a.4cdn.org/${ board }/thread/${ tNum }.json`;
 		}
 		getPageUrl(board, page) {
 			return fixBoardName(board) + (page > 1 ? page : '');
@@ -17068,7 +17082,7 @@ function getImageBoard(checkDomains, checkEngines) {
 			return false;
 		}
 	}
-	ibDomains['4chan.org'] = ibDomains['4channel.org'] = _4chan;
+	ibDomains['4chan.org'] = _4chan;
 
 	class _7chan extends Kusaba {
 		async initAsync() {
@@ -17091,14 +17105,25 @@ function getImageBoard(checkDomains, checkEngines) {
 
 	class _8kun extends Vichan {
 		getEmptyFile(field, name) {
-			return {
-				el    : field,
-				name,
-				value : undefined
-			};
+			return { el: field, name, value: undefined };
 		}
 	}
 	ibDomains['8kun.top'] = _8kun;
+
+	class Aoba extends Kusaba {
+		constructor(...args) {
+			super(...args);
+			this.hasCatalog = true;
+		}
+		get css() {
+			return '.extrabtns, input[name="board"] + hr, .replymode, #rswapper + hr { display: none; }';
+		}
+		init() {
+			defaultCfg.captchaLang = 2;
+			return false;
+		}
+	}
+	ibDomains['aoba.me'] = Aoba;
 
 	class Archived extends FoolFuuka {
 		getImgRedirectSrc(url) {
@@ -17110,8 +17135,9 @@ function getImageBoard(checkDomains, checkEngines) {
 	class Arhivach extends BaseBoard {
 		constructor(...args) {
 			super(...args);
-
 			this.cReply = 'post';
+			this.docExt = '';
+			this.hasOPNum = true;
 			this.qDelBtn = null;
 			this.qDelForm = 'body > .container-fluid';
 			this.qDelPassw = null;
@@ -17121,16 +17147,7 @@ function getImageBoard(checkDomains, checkEngines) {
 			this.qPostMsg = '.post_comment_body';
 			this.qPostRef = '.post_id, .post_head > b';
 			this.qPostSubj = '.post_subject';
-
-			this.docExt = '';
-			this.hasOPNum = true;
 			this.res = 'thread/';
-		}
-		get qPostImgNameLink() {
-			return '.img_filename';
-		}
-		get qThread() {
-			return '.thread_inner';
 		}
 		get css() {
 			return `.media-expand-button, .post_replies, .post_num, .poster_sage { display: none !important; }
@@ -17140,6 +17157,12 @@ function getImageBoard(checkDomains, checkEngines) {
 		}
 		get isArchived() {
 			return true;
+		}
+		get qPostImgNameLink() {
+			return '.img_filename';
+		}
+		get qThread() {
+			return '.thread_inner';
 		}
 		fixHTML(data, isForm) {
 			const formEl = super.fixHTML(data, isForm);
@@ -17191,11 +17214,67 @@ function getImageBoard(checkDomains, checkEngines) {
 			return false;
 		}
 	}
-	ibDomains['arhivach.top'] = ibDomains['arhivach.xyz'] = ibDomains['arhivachovtj2jrp.onion'] = Arhivach;
+	ibDomains['arhivach.vc'] =
+		ibDomains['arhivachqqqvwqcotafhk4ks2he56seuwcshpayrm5myeq45vlff44yd.onion'] = Arhivach;
+
+	class Bulochka extends _410chan {
+		constructor(...args) {
+			super(...args);
+			this.markupBB = true;
+		}
+		get captchaUpdate() {
+			return null;
+		}
+		get markupTags() {
+			return ['b', 'i', 'u', 's', 'spoiler', 'code'];
+		}
+		getCaptchaSrc(src) {
+			return super.getCaptchaSrc(src);
+		}
+		init() {
+			super.init();
+			const capInp = $q('input[name="captcha"]');
+			const fapInp = $q('input[name="faptcha"]');
+			if(capInp && fapInp) {
+				capInp.disabled = false;
+				fapInp.disabled = true;
+				$hide($q('tr[name=faptcha_tr]'));
+				while(capInp.nextSibling) {
+					capInp.nextSibling.remove();
+				}
+			}
+			$script('try { $(\'input.preview-btn\').on(\'click\', preview_clicked); } catch(err) {}');
+			return false;
+		}
+	}
+	ibDomains['014chan.org'] = ibDomains['bulochka.org'] = Bulochka;
+
+	class Deadach extends Vichan {
+		constructor(...args) {
+			super(...args);
+			this.qPostImg = '.post-img';
+		}
+		get css() {
+			return `${ super.css }
+				.format-text > button:not([class]), .image_id, .open-form { display: none !important; }
+				.file { margin-right: 20px; }
+				.format-text { display: block !important; }
+				.postarea { display: initial !important; }
+				.postform__limits { position: initial; }`;
+		}
+		get markupTags() {
+			return ['[b', '[i', '__', '~~', '**', '```'];
+		}
+		fixHTMLHelper(str) {
+			return super.fixHTMLHelper(str).replace(/<img class="post-image/g, '<img class="post-img');
+		}
+	}
+	ibDomains['deada.ch'] = Deadach;
 
 	class Dobrochan extends Vichan {
 		get css() {
 			return `${ super.css }
+				.de-parea > hr { margin-top: 0.7em; }
 				#de-pform input[type="text"] { float: none !important; }`;
 		}
 		get markupTags() {
@@ -17207,66 +17286,196 @@ function getImageBoard(checkDomains, checkEngines) {
 	}
 	ibDomains['dobrochan.net'] = Dobrochan;
 
-	class Dollchan extends TinyIB {
+	class Dollchan extends BaseBoard {
 		constructor(...args) {
 			super(...args);
-
-			this.qPages = '.pagelist';
+			this.hasCatalog = true;
 			this.markupBB = true;
 			this.multiFile = true;
+			this.qDelForm = $id('posts') ? '#posts' : '#delform';
+			this.qError = 'body[align=center] div';
+			this.qOPost = '.op';
+			this.qPages = '.pagelist';
+			this.qPostHeader = '.post-meta';
+			this.qPostImg = '.file-thumb';
+			this.qPostImgInfo = '.file-info';
+			this.qPostMsg = '.post-message';
+			this.qPostName = '.poster-name';
+			this.qPostRef = '.post-id';
+			this.qPostSubj = '.post-subject';
+			this.qPostTrip = '.poster-trip';
+			this.qPostUid = '.poster-uid';
 			this.timePattern = 'yy+nn+dd+w+hh+ii+ss';
 		}
+		async initAsync() {
+			return false;
+		}
 		async initCaptchaAsync() {
-			const switchCaptcha = status => {
-				const hasPasscode = status === 'validpasscode';
-				$toggle($id('captchablock').lastElementChild, !hasPasscode);
-				$toggle($id('validcaptchablock'), hasPasscode);
-				$toggle($id('invalidcaptchablock'), status === 'invalidpasscode');
-				if(!hasPasscode) {
-					const captchaInput = $id('captcha');
-					if(captchaInput) {
-						captchaInput.value = '';
-					}
+			debugger; // todo delme
+			const status = await this._getPasscodeStatus();
+			const hasPasscode = status === 'valid';
+			$toggle($id('captchablock').lastElementChild, !hasPasscode);
+			$toggle($id('validcaptchablock'), hasPasscode);
+			$toggle($id('invalidcaptchablock'), status === 'invalid');
+			if(!hasPasscode) {
+				const inpEl = $id('captcha');
+				if(inpEl) {
+					inpEl.value = '';
 				}
-			};
-			if(getCookies().passcode === '1') {
-				$ajax(this.protocol + '//' + this.host + '/' + this.b + '/imgboard.php?passcode&check').then(
-					xhr => switchCaptcha(xhr.responseText === 'OK' ? 'validpasscode' : 'invalidpasscode'),
-					() => switchCaptcha('invalidpasscode'));
-			} else {
-				switchCaptcha('showcaptcha');
 			}
+
 			return null;
 		}
-		get fixHTMLHelper() {
-			return null;
+		get reportForm() {
+			const value = async (pNum, tNum) => {
+				const passcodeStatus = await this._getPasscodeStatus();
+				const isValidPasscode = passcodeStatus === 'valid';
+				const recapEl = $id('g-recaptcha');
+				const hasCaptcha = !!$id('captchablock');
+				let captchaHTML = '';
+				if(recapEl || hasCaptcha) {
+					if(isValidPasscode) {
+						captchaHTML = `<div>No captcha: you are a passcode user. <a href="/${
+							aib.b }/imgboard.php?passcode&logout">Log Out.</a></div>`;
+					} else {
+						if(recapEl) {
+							captchaHTML = '<div style="min-height: 80px;"><div id="g-recaptcha2" class="' +
+								`g-recaptcha" data-sitekey="${ recapEl.dataset.sitekey }"></div></div>`;
+						} else {
+							captchaHTML = `<div><img src="/${ aib.b }/inc/captcha.php?${ Math.random() }"` +
+								' width="175" height="55" alt="CAPTCHA" style="cursor: pointer;" onclick="' +
+								`this.src = '/${ aib.b }/inc/captcha.php?' + Math.random();"></div>` +
+								`<input type="text" name="captcha" style="width: 300px;" placeholder="${
+									Lng.captcha[lang] }" accesskey="c" autocomplete="off">`;
+						}
+						if(passcodeStatus === 'invalid') {
+							captchaHTML += `<div>Your pass code seems to be not valid. <a href="/${
+								aib.b }/imgboard.php?passcode" target="_blank">Log In Again?</a></div>`;
+						}
+					}
+				}
+				const formEl = $q('.report-form', $popup('edit-report',
+					(pNum === tNum ? Lng.reportThr[lang] : Lng.reportPost[lang]) +
+					`<div class="report-form"><input type="text" name="reason" value="" placeholder="${
+						Lng.reportReason[lang] }" style=" width: 300px;">` + captchaHTML + '</div>'));
+				if(recapEl && !isValidPasscode) {
+					const script = doc.createElement('script');
+					script.type = 'text/javascript';
+					script.textContent = `grecaptcha.render('g-recaptcha2', {'sitekey': '${
+						recapEl.dataset.sitekey }'});`;
+					doc.head.append(script);
+				}
+				$bEnd(formEl, '<input type="button" value="OK">').onclick = () => {
+					const inpEl = $q('input', formEl);
+					if(!inpEl.value) {
+						inpEl.classList.add('de-input-error');
+						return;
+					}
+					const formData = new FormData();
+					const data = { id: pNum, reason: inpEl.value, json: 1 };
+					if(!isValidPasscode) {
+						if(recapEl) {
+							data['g-recaptcha-response'] = $q('.g-recaptcha-response', formEl).value;
+						} else if(hasCaptcha) {
+							data.captcha = $q('input[name="captcha"]', formEl).value;
+						}
+					}
+					for(const key in data) {
+						if($hasProp(data, key)) {
+							formData.append(key, data[key]);
+						}
+					}
+					closePopup('edit-report');
+					$popup('report', Lng.sending[lang], true);
+					const url = this.protocol + '//' + this.host + '/' + this.b +
+						'/imgboard.php?report&addreport&json=1';
+					$ajax(url, {
+						method     : 'POST',
+						data       : formData,
+						success() {},
+						contentType: false,
+						processData: false
+					}).then(xhr => {
+						let obj;
+						try {
+							obj = JSON.parse(xhr.responseText);
+						} catch(err) {
+							$popup('report', Lng.reportError[lang] + ':<br>' + xhr.responseText);
+							return;
+						}
+						$popup('report', obj.result === 'ok' ? Lng.succReported[lang] :
+							obj.result === 'alreadysent' ? Lng.alreadyReported[lang] :
+							Lng.reportError[lang] +
+								(obj.result === 'error' && obj.message ? ':<br>' + obj.message : ''));
+					});
+				};
+			};
+			Object.defineProperty(this, 'reportForm', { value });
+			return value;
 		}
 		fixFileInputs(el) {
 			const str = ' class="de-file-wrap"><input type="file" name="file[]"></div>';
 			el.innerHTML = '<div' + str + ('<div style="display: none;"' + str).repeat(3);
 		}
-		getImgRealName(wrap) {
-			return $q('.filesize > a', wrap).textContent;
+		getCaptchaSrc(src) {
+			return src.replace(/\?[^?]+$|$/, '?' + Math.random());
 		}
-		async initAsync() {
-			return false;
+		getImgRealName(wrap) {
+			return $q('.file-fullname', wrap).textContent;
+		}
+		getImgWrap(img) {
+			return img.closest('.post-file');
+		}
+		async _getPasscodeStatus() {
+			let status = 'showcaptcha';
+			if(getCookies().passcode === '1') {
+				try {
+					const xhr = await $ajax(this.protocol + '//' + this.host + '/' + this.b +
+											'/imgboard.php?passcode&check');
+					status = xhr.responseText === 'OK' ? 'valid' : 'invalid';
+				} catch(err) {
+					status = 'invalid';
+				}
+			}
+			return status;
 		}
 	}
 	ibDomains['dollchan.net'] = Dollchan;
 
+	class Ejchan extends Vichan {
+		constructor(...args) {
+			super(...args);
+			this.qDelForm = '.thread-outer';
+			this.qPostRef = '.post-left';
+		}
+		get css() {
+			return `${ super.css }
+				.intro { justify-content: normal; }`;
+		}
+		getTNum(thr) {
+			return thr.id.match(/\d+/);
+		}
+	}
+	ibDomains['ejchan.site'] = Ejchan;
+
 	class Endchan extends Lynxchan {
 		constructor(...args) {
 			super(...args);
-
-			this.qTrunc = '.contentOmissionIndicator > p';
-
 			this.jsonSubmit = false;
+			this.qTrunc = '.contentOmissionIndicator > p';
 		}
 		get css() {
 			return `${ super.css }
 				.bottomNav, .delLink, #expandAll, .hidePost, .hideThread, .linkLast50,
 					.linkPreview, #modeBanner, .watchButton { display: none !important; }
-				#de-main, .de-pview { font-size: 75%; }`;
+				#de-main-container, .de-pview { font-size: 75%; }`;
+		}
+		getSubmitData(jsonString) {
+			const { status, data } = JSON.parse(jsonString);
+			return {
+				error  : status === 'error' ? data : null,
+				postNum: status === 'ok' ? +data : null
+			};
 		}
 		async initAsync() {
 			await super.initAsync();
@@ -17278,76 +17487,25 @@ function getImageBoard(checkDomains, checkEngines) {
 			this._hasNewAPI = false;
 			return false;
 		}
-
-		getSubmitData(jsonString) {
-			const { status, data } = JSON.parse(jsonString);
-			return {
-				error   : status === 'error' ? data : null,
-				postNum : status === 'ok' ? +data : null
-			};
-		}
 	}
-	ibDomains['endchan.net'] = ibDomains['endchan.gg'] = ibDomains['endchan.org'] =
+	ibDomains['endchan.net'] = ibDomains['endchan.org'] =
 		ibDomains['endchancxfbnrfgauuxlztwlckytq7rgeo5v6pc2zd4nyqo3khfam4ad.onion'] =
-		ibDomains['enxx3byspwsdo446jujc52ucy2pf5urdbhqw3kbsfhlfjwmbpj5smdad.onion'] =
-		ibDomains['kqrtg5wz4qbyjprujkz33gza7r73iw3ainqp1mz5zmu16symcdwy.loki'] = Endchan;
+		ibDomains['enxx3byspwsdo446jujc52ucy2pf5urdbhqw3kbsfhlfjwmbpj5smdad.onion'] = Endchan;
 
-	class Ernstchan extends BaseBoard {
-		constructor(...args) {
-			super(...args);
-
-			this.cReply = 'post';
-			this.qError = '.error > .info';
-			this.qFormRedir = 'input[name="gb2"][value="thread"]';
-			this.qFormSpoiler = 'input[type="checkbox"][name="spoilered"]';
-			this.qOPost = '.thread_OP';
-			this.qPages = '.pagelist > li:nth-last-child(2)';
-			this.qPost = '.thread_reply';
-			this.qPostHeader = '.post_head';
-			this.qPostMsg = '.text';
-			this.qPostSubj = '.subject';
-			this.qPostTrip = '.tripcode';
-			this.qTrunc = '.tldr';
-
-			this.docExt = '';
-			this.firstPage = 1;
-			this.markupBB = true;
-			this.multiFile = true;
-			this.res = 'thread/';
+	class Escapechain extends Makaba {
+		get clearFileInputs() {
+			return null;
 		}
-		get qPostImgNameLink() {
-			return '.filename > a';
-		}
-		get css() {
-			return `.content > hr, .de-parea > hr, .de-pview > .doubledash, .sage { display: none !important }
-				.de-pview > .post { margin-left: 0; border: none; }
-				#de-win-reply { float:left; margin-left:2em }`;
-		}
-		fixFileInputs(el) {
-			const str = ` class="de-file-wrap"><input name="file" type="file">
-				<input type="hidden" name="spoilered" value="0">
-				<input type="checkbox" name="spoilered" value="1"></div>`;
-			el.innerHTML = '<div' + str + ('<div style="display: none;"' + str).repeat(3);
-		}
-		getImgWrap(img) {
-			return img.parentNode.parentNode.parentNode;
-		}
-		getPageUrl(board, page) {
-			return page > 1 ? fixBoardName(board) + 'page/' + page : fixBoardName(board);
-		}
-		getPostElOfEl(el) {
-			while(el && !nav.matchesSelector(el, '.post')) {
-				el = el.parentElement;
-			}
-			return el.parentNode;
+		getCaptchaEl() {
+			return null;
 		}
 	}
-	ibDomains['ernstchan.xyz'] = Ernstchan;
+	ibDomains['escapechain.ru'] =
+		ibDomains['mk2dodftctwgnux6z7iafm5tcyj7xrv7aytlh25zka45m7svvb6olfyd.onion'] = Escapechain;
 
 	class Gensokyo extends Kusaba {
 		constructor(...args) {
 			super(...args);
-
 			this.hasRefererErr = true;
 		}
 	}
@@ -17356,9 +17514,18 @@ function getImageBoard(checkDomains, checkEngines) {
 	class Iichan extends BaseBoard {
 		constructor(...args) {
 			super(...args);
-
 			this.hasArchive = true;
 			this.hasCatalog = true;
+		}
+		get catalogUrl() {
+			return `${ this.protocol }//${ this.host }/${ this.b }/catalogue.html`;
+		}
+		get css() {
+			return `.iichan-hide-thread-btn, .iichan-quick-reply-btn, .postnum { display: none !important; }
+			.replypage div[id^="thread"] span.reflink::after { content: none; }`;
+		}
+		get isArchived() {
+			return this.b.includes('/arch');
 		}
 		get qFormMail() {
 			return 'input[name="nya2"]';
@@ -17368,61 +17535,6 @@ function getImageBoard(checkDomains, checkEngines) {
 		}
 		get qFormSubj() {
 			return 'input[name="nya3"]';
-		}
-		get catalogUrl() {
-			return `${ this.protocol }//${ this.host }/${ this.b }/catalogue.html`;
-		}
-		get css() {
-			return `${ !this.t ? '' : 'hr + #de-main { margin-top: -32px; } .logo { margin-bottom: 14px; }' }
-			.iichan-hide-thread-btn, .iichan-quick-reply-btn, .postnum { display: none; }
-			.replypage div[id^="thread"] span.reflink::after { content: none; }`;
-		}
-		get isArchived() {
-			return this.b.includes('/arch');
-		}
-		stormWallFixAjax(url, text, el, needForm, fnResult) {
-			return this.stormWallHelper(url, text, () => fnResult(el),
-				frText => fnResult(getAjaxResponseEl(frText, needForm)));
-		}
-		stormWallFixCaptcha(url, img) {
-			img.onload = img.onerror = () => {
-				if(!(img.naturalHeight + img.naturalWidth)) {
-					this.stormWallHelper(url, null, Function.prototype, () => {
-						img.src = '';
-						img.src = url;
-					});
-				}
-			};
-		}
-		stormWallFixSubmit(url, text, ajaxParams) {
-			return this.stormWallHelper(url, text, () => $createDoc(text),
-				() => $ajax(url, ajaxParams).then(xhr => $createDoc(xhr.responseText)));
-		}
-		stormWallHelper(url, text, fnOK, fnRes) {
-			const stormWallTxt = '<script src="https://static.stormwall.pro/';
-			if(text !== null && !text.includes(stormWallTxt)) {
-				return fnOK();
-			}
-			return new Promise((resolve, reject) => {
-				let loadCounter = 0;
-				$popup('err-stormwall', `<div>${ Lng.stormWallCheck[lang] }</div>` +
-					`<iframe id="de-stormwall" name="de-prohibited" src="${
-						url }" width="500" height="500" style="display: none;"></iframe>`);
-				const frEl = $id('de-stormwall');
-				frEl.onload = () => {
-					if(loadCounter++ < 1) {
-						return;
-					}
-					const frText = frEl.contentWindow.document.documentElement.outerHTML;
-					if(frText.includes(stormWallTxt)) {
-						$show(frEl);
-						reject(new AjaxError(0, Lng.stormWallErr[lang]));
-						return;
-					}
-					closePopup('err-stormwall');
-					resolve(fnRes(frText));
-				};
-			});
 		}
 		getImgRealName(wrap) {
 			return $q('.filesize > em', wrap).textContent.split(',')[2] || super.getImgRealName(wrap);
@@ -17438,13 +17550,14 @@ function getImageBoard(checkDomains, checkEngines) {
 			return false;
 		}
 	}
-	ibDomains['iichan.hk'] = ibDomains['iichan.lol'] =
-		ibDomains['iichan.moe'] = ibDomains['ii.yakuji.moe'] = Iichan;
+	ibDomains['iichan.hk'] = ibDomains['iichan.lol'] = ibDomains['ii.yakuji.moe'] = Iichan;
 
 	class Ivchan extends BaseBoard {
 		constructor(...args) {
 			super(...args);
-
+			this.anchor = '#i';
+			this.formParent = 'thread_id';
+			this.multiFile = true;
 			this.qClosed = 'img[src="/images/locked.png"]';
 			this.qDelForm = 'form[action*="delete"]';
 			this.qError = '.post-error, h2';
@@ -17455,12 +17568,6 @@ function getImageBoard(checkDomains, checkEngines) {
 			this.qPostMsg = '.postbody';
 			this.qPostSubj = '.replytitle';
 			this.qTrunc = '.abbrev > span:first-of-type';
-
-			this.anchor = '#i';
-			this.captchaRu = true;
-			this.formParent = 'thread_id';
-			this.hasPicWrap = true;
-			this.multiFile = true;
 			this.timePattern = 'dd+m+?+?+?+?+?+yyyy++w++hh+ii-?s?s?';
 		}
 		get css() {
@@ -17508,16 +17615,17 @@ function getImageBoard(checkDomains, checkEngines) {
 			super(...args);
 			this.kohlchan = true;
 
-			this.qFormRules = '#rules_row';
-			this.qPostImg = '.uploadCell > a > img';
-
 			this.hasTextLinks = true;
 			this.markupBB = true;
+			this.qFormRules = '#rules_row';
+			this.qPostImg = '.uploadCell > a > img';
+			this.qReplyBtn = '.linkReply';
 			this.timePattern = 'yyyy+nn+dd+hh+ii+ss';
 		}
 		get css() {
 			return `${ super.css }
-				.extraMenuButton, #postingForm, .sage { display: none; }`;
+				.extraMenuButton, #postingForm, .sage { display: none; }
+				::placeholder { color: gray !important; }`;
 		}
 		get fixKCUnixFilenames() {
 			let value = null;
@@ -17527,12 +17635,12 @@ function getImageBoard(checkDomains, checkEngines) {
 					const imgLinks = $Q('.de-img-link:not(.unixLink)', containerEl);
 					let timetext = new Date(containerEl.parentElement.parentElement
 						.querySelectorAll('span.labelCreated')[0].textContent.replaceAll('-', '/')).getTime();
-					timetext = timetext + timetext % 999;
-					for(let j = 0; j < imgLinks.length; j++) {
+					timetext += timetext % 999;
+					for(let j = 0; j < imgLinks.length; ++j) {
 						const imgLink = imgLinks[j];
 						const parentEl = imgLink.parentElement;
 						imgLink.href += '/' + timetext +
-							(j === 0 && imgLinks.length === 1 ? '.' : '-' + j + '.') +
+							(j === 0 && imgLinks.length === 1 ? '.' : `-${ j }.`) +
 							$q('a.originalNameLink', parentEl.nodeName === 'SPAN' ?
 								parentEl.parentElement : parentEl).title.split('.').pop();
 						imgLink.classList.add('unixLink');
@@ -17630,14 +17738,12 @@ function getImageBoard(checkDomains, checkEngines) {
 			return super.sendHTML5Post(form, data, needProgress, hasFiles);
 		}
 	}
-	ibDomains['kohlchan.net'] = ibDomains['kohlchan.top'] = ibDomains['kohlchanagb7ih5g.onion'] =
-		ibDomains['kohlchanvwpfx6hthoti5fvqsjxgcwm3tmddvpduph5fqntv5affzfqd.onion'] =
-		ibDomains['kohlkanal.net'] = Kohlchan;
+	ibDomains['kohlchan.net'] = ibDomains['kohlchan.ws'] =
+		ibDomains['kohlchanvwpfx6hthoti5fvqsjxgcwm3tmddvpduph5fqntv5affzfqd.onion'] = Kohlchan;
 
 	class Kropyvach extends Vichan {
 		constructor(...args) {
 			super(...args);
-
 			this.markupBB = true;
 		}
 		get css() {
@@ -17652,14 +17758,15 @@ function getImageBoard(checkDomains, checkEngines) {
 	class Lainchan extends Vichan {
 		constructor(...args) {
 			super(...args);
-
+			this.markupBB = true;
 			this.qOPost = '.op';
 		}
 		get css() {
 			return `${ super.css }
-				.sidearrows { display: none !important; }
-				.bar { z-index: 1; }
 				${ Cfg.imgNames ? '.details > a { display: none; }' : '' }`;
+		}
+		get markupTags() {
+			return ['b', 'i', '', '', 'spoiler', 'code'];
 		}
 		getImgRealName(wrap) {
 			return $q('.details > a, .postfilename', wrap).textContent;
@@ -17672,13 +17779,22 @@ function getImageBoard(checkDomains, checkEngines) {
 	}
 	ibDomains['lainchan.org'] = Lainchan;
 
-	class Niuchan extends Kusaba {
+	class Nichan extends Vichan {
+		constructor(...args) {
+			super(...args);
+			this.markupBB = true;
+			this.qPages = '.bottom > .pages';
+			this.qPostImg = '.post-image[alt]:not(.deleted), video.post-image';
+		}
 		get css() {
 			return `${ super.css }
-				.replybacklinks, .resize { display: none; }`;
+				.createbutton, label[for="email_selectbox"] { display: none !important; }`;
+		}
+		get markupTags() {
+			return ['b', 'i', 'u', 's', 'spoiler', 'code'];
 		}
 	}
-	ibDomains['niuchan.org'] = Niuchan;
+	ibDomains['nichan.net'] = Nichan;
 
 	class Nowere extends BaseBoard {
 		get markupTags() {
@@ -17694,13 +17810,11 @@ function getImageBoard(checkDomains, checkEngines) {
 	class Ponyach extends BaseBoard {
 		constructor(...args) {
 			super(...args);
-
-			this.qBan = 'font[color="#FF0000"]';
-			this.qPostImgInfo = '.filesize[style="display: inline;"]';
-
 			this.formParent = 'replythread';
 			this.jsonSubmit = true;
 			this.multiFile = true;
+			this.qBan = 'font[color="#FF0000"]';
+			this.qPostImgInfo = '.filesize[style="display: inline;"]';
 		}
 		get qPostImgNameLink() {
 			return 'a:first-of-type';
@@ -17709,10 +17823,10 @@ function getImageBoard(checkDomains, checkEngines) {
 			return wrap.textContent;
 		}
 		getImgRealName(wrap) {
-			return $q('.mobile_filename_hide', wrap).textContent;
+			return $q('.mobile_filename_hide', wrap).textContent.trim();
 		}
 		getImgWrap(img) {
-			return $id('fs_' + img.alt);
+			return $q('#fs_' + img.alt, img.closest('.post-files')) || img.closest('.filesize');
 		}
 		getPNum(post) {
 			return +post.getAttribute('data-num');
@@ -17730,85 +17844,14 @@ function getImageBoard(checkDomains, checkEngines) {
 			return false;
 		}
 	}
-	ibDomains['ponyach.ru'] = Ponyach;
+	ibDomains['ponyach.com'] = Ponyach;
 
-	class Ponychan extends Tinyboard {
+	class Synch extends Vichan {
 		constructor(...args) {
 			super(...args);
-
-			this.qClosed = 'img[title="Locked"]';
-			this.qOPost = '.opContainer';
-
-			this.jsonSubmit = false;
-		}
-		get css() {
-			return `${ super.css }
-				.mature_thread { display: block !important; }
-				.mature_warning { display: none; }
-				${ Cfg.imgNames ? '.post-filename { display: none; }' : '' }`;
-		}
-		getImgRealName(wrap) {
-			return $q('.post-filename', wrap).textContent;
-		}
-		async initAsync() {
-			await super.initAsync();
-			$Q('img[data-mature-src]').forEach(el => (el.src = el.getAttribute('data-mature-src')));
-			return false;
-		}
-	}
-	ibDomains['ponychan.net'] = Ponychan;
-
-	class Rfch extends Vichan {
-		get css() {
-			return `${ super.css }
-				#coll-hide, #coll-show { display: none; }
-				form[name="post"], form[name="post"] > table > tbody > tr:first-child
-					{ display: block !important; }`;
-		}
-	}
-	ibDomains['rfch.rocks'] = Rfch;
-
-	class Spirech extends Vichan {
-		constructor(...args) {
-			super(...args);
-
-			this.qForm = 'form[name="post"], form[name="de-post"]';
-			this.qFormRules = '#post-info';
-
-			this.jsonSubmit = true;
 			this.markupBB = true;
-		}
-		get css() {
-			return `${ super.css }
-				.favorite-button, .stylebuttons, #symbols-left + br { display: none !important; }
-				#post-info { width: auto }`;
-		}
-		get markupTags() {
-			return ['b', 'i', 'u', 's', 'spoiler', 'code', 'sup', 'sub'];
-		}
-		updateCaptchaAsync() {
-			return $script('injection17');
-		}
-		async initAsync() {
-			await super.initAsync();
-			await $script('injection18');
-			$q('form[name="post"]').name = 'de-post';
-		}
-	}
-	ibDomains['spirech.org'] = ibDomains['old52qbrspw6jivvrcjlybucxatpnzwea3oxrsw75be4ka53qfqhrnid.onion'] =
-		Spirech;
-
-	class Synch extends Tinyboard {
-		constructor(...args) {
-			super(...args);
-
 			this.qPages = '.pagination';
 			this.qPostImgInfo = '.unimportant';
-
-			this.markupBB = true;
-		}
-		get qPostImgNameLink() {
-			return '.file-info > a';
 		}
 		get css() {
 			return `${ super.css }
@@ -17816,7 +17859,21 @@ function getImageBoard(checkDomains, checkEngines) {
 				time::after { content: none; }`;
 		}
 		get markupTags() {
-			return ['b', 'i', 'u', 's', 'spoiler', 'code', 'sup', 'sub'];
+			return ['b', 'i', 'u', 's', 'h', 'code', 'sup', 'sub'];
+		}
+		get qPostImgNameLink() {
+			return '.file-info > a';
+		}
+		fixHTML(data, isForm) {
+			const formEl = super.fixHTML(data, isForm);
+			const els = $Q('.btn-group', formEl);
+			for(let i = 0, len = els.length; i < len; ++i) {
+				els[i].replaceWith($q('a', els[i]));
+			}
+			return formEl;
+		}
+		getImgWrap(img) {
+			return img.parentNode.parentNode;
 		}
 		async initAsync() {
 			const val = '{ "simpleNavbar": true }';
@@ -17831,36 +17888,44 @@ function getImageBoard(checkDomains, checkEngines) {
 			defaultCfg.correctTime = 1;
 			return false;
 		}
-		fixHTML(data, isForm) {
-			const formEl = super.fixHTML(data, isForm);
-			const els = $Q('.btn-group', formEl);
-			for(let i = 0, len = els.length; i < len; ++i) {
-				els[i].replaceWith($q('a', els[i]));
-			}
-			return formEl;
-		}
 	}
-	ibDomains['syn-ch.ru'] = ibDomains['syn-ch.com'] = ibDomains['syn-ch.com.ua'] =
-		ibDomains['syn-ch.org'] = Synch;
+	ibDomains['syn-ch.com'] = ibDomains['syn-ch.com.ua'] = ibDomains['syn-ch.org'] =
+		ibDomains['syn-ch.ru'] = Synch;
 
 	class Warosu extends BaseBoard {
 		constructor(...args) {
 			super(...args);
-
+			this.hasHtmlTag = false;
 			this.qDelForm = '.content';
 			this.qForm = '.subreply';
 			this.qFormSubm = '.g-recaptcha';
+			this.qOPost = '.comment';
 			this.qPostImgInfo = '.fileinfo';
 			this.qPostRef = '.js';
-			this.qOPost = '.comment';
-
 			this.res = 'thread/';
 		}
 		get css() {
-			return '.quoted-by { display: none !important; }';
+			return `.quoted-by { display: none !important; }
+				.de-btn-img { float: left; }
+				.thumb { margin-left: 0; }`;
+		}
+		get qPostImgNameLink() {
+			return 'br + a';
+		}
+		fixHTMLHelper(str) {
+			return str.replace(/\/post\/(\d+)"/g, '/$1"');
+		}
+		getImgRealName(wrap) {
+			return $q('.fileinfo', wrap).textContent.split(', ').pop();
+		}
+		getImgWrap(img) {
+			return img.parentNode.parentNode;
 		}
 		getTNum(thr) {
 			return +$q('.comment', thr).id.match(/\d+/);
+		}
+		getThrUrl(board, tNum) {
+			return this.protocol + '//' + this.host + fixBoardName(board) + this.res + tNum;
 		}
 	}
 	ibDomains['warosu.org'] = Warosu;
@@ -17870,9 +17935,9 @@ function getImageBoard(checkDomains, checkEngines) {
 	let domain = localData?.domain;
 	if(checkDomains) {
 		if(!domain) {
+			const host = wLoc.hostname.toLowerCase();
 			const ibKeys = Object.keys(ibDomains);
 			let i = ibKeys.length;
-			const host = wLoc.hostname.toLowerCase();
 			while(i--) {
 				domain = ibKeys[i];
 				if(host === domain || host.endsWith('.' + domain)) {
@@ -17965,7 +18030,7 @@ const DollchanAPI = {
 async function checkForUpdates(isManual, lastUpdateTime) {
 	if(!isManual) {
 		if(Date.now() - +lastUpdateTime < [0, 1, 2, 7, 14, 30][Cfg.updDollchan] * 1e3 * 60 * 60 * 24) {
-			throw new Error('Itʼs not time for an update yet');
+			throw new Error('It\'s not time for an update yet');
 		}
 	}
 	let responseText;
@@ -17976,13 +18041,13 @@ async function checkForUpdates(isManual, lastUpdateTime) {
 		if(isManual) {
 			return `<div style="color: red; font-weigth: bold;">${ Lng.noConnect[lang] }</div>`;
 		} else {
-			throw new Error(Lng.noConnect[lang]);
+			throw new Error(Lng.noConnect[lang], { cause: err });
 		}
 	}
 	const v = responseText.match(/const version = '([0-9.]+)';/);
 	const remoteVer = v?.[1]?.split('.');
 	if(!remoteVer) {
-		throw new Error('Canʼt get remote version');
+		throw new Error('Can\'t get remote version');
 	}
 	const currentVer = version.split('.');
 	const src = `${ gitRaw }${
@@ -18008,18 +18073,16 @@ async function checkForUpdates(isManual, lastUpdateTime) {
 	throw new Error();
 }
 
-
 // Donation message after Dollchan update
 function showDonateMsg() {
 	const item = (name, value) =>
 		`<div>- <i>${ name }</i>: <i style="font: 14px monospace; color: green;">${ value }</i></div>`;
 	$popup('donate', Lng.donateMsg[lang] + `:<br style="margin-bottom: 8px;"><!--
-		--><div class="de-logo"><svg><use xlink:href="#de-symbol-panel-logo"/></svg></div><!--
+		--><div class="de-donate-logo"><svg><use xlink:href="#de-symbol-panel-logo"/></svg></div><!--
 		--><div style="display: inline-flex; flex-direction: column; gap: 6px; vertical-align: top;">` +
-			item('BTC', '1BmVjk3DMPZeJUqBtqZRUCmL234Wc3Bc9Y') +
-			item('BTC (SegWit)', 'bc1qleycjdph5v3g26ewy7x37n5a4kwegjgttpjwzw') +
-			item('ETH (ERC20)', '0xffa96732ae8df25c34444c70c0d59c752a47aafa') +
-			item('YooMoney RUB', '410012122418236') +
+			item('BTC', '13NWiiMocssmXiaVKRG4A4SQ6JP4WbLACz') +
+			item('BTC (SegWit)', 'bc1q2x33mkrwv6zadhflvxv2cct45ssn5a7t4ygvtj') +
+			item('ETH', '0xffa96732ae8df25c34444c70c0d59c752a47aafa') +
 			item('Mastercard', '5375411208220306') +
 			`<div>- <a href="https://send.monobank.ua/jar/A7Saf6YAaz" target="_blank">${
 				Lng.donateOnline[lang] }</a></div>` +
@@ -18166,7 +18229,7 @@ function addSVGIcons() {
 	<!-- WINDOW ICONS -->
 	<symbol viewBox="0 0 16 16" id="de-symbol-win-arrow">
 		<path class="de-svg-stroke" stroke-width="3.5" d="M8 13V6"/>
-		<path class="de-svg-fill"  d="M3.5 7h9L8 2.5 3.5 7z"/>
+		<path class="de-svg-fill" d="M3.5 7h9L8 2.5 3.5 7z"/>
 	</symbol>
 	<symbol viewBox="0 0 16 16" id="de-symbol-win-close">
 		<path class="de-svg-stroke" stroke-width="2.5" d="M3.5 3.5l9 9m-9 0l9-9"/>
@@ -18342,22 +18405,23 @@ function scriptCSS() {
 	let x = `
 	/* Main panel */
 	#de-panel { position: fixed; right: 0; bottom: 0; z-index: 9999; border-radius: 15px 0 0 0; cursor: default; display: flex; min-height: 25px; color: #F5F5F5; }
-	#de-panel-logo { flex: none; margin: auto 3px auto 0; cursor: pointer; }
+	.de-panel-btn { display: block; flex: none; margin: 0 1px; padding: 0 !important; min-width: auto; transition: all .3s ease; border: none !important; background: transparent !important; color: inherit !important; cursor: pointer; }
+	.de-panel-btn, .de-panel-svg { width: 25px; height: 25px; }
+	.de-panel-btn-active { stroke: #32ff32 !important; fill: #32ff32 !important; }
+	#de-panel-btn-audio-on > .de-panel-svg > .de-use-audio-off, #de-panel-btn-audio-off > .de-panel-svg > .de-use-audio-on { display: none; }
+	#de-panel-btn-expimg, #de-panel-btn-maskimg, #de-panel-btn-preimg { stroke: currentColor; fill: currentColor; }
+	#de-panel-btn-goback { transform: rotate(180deg); will-change: transform; }
+	#de-panel-btn-godown { transform: rotate(90deg); will-change: transform; }
+	#de-panel-btn-goup { transform: rotate(-90deg); will-change: transform; }
+	#de-panel-btn-info { display: flex; flex: none; margin-left: 2px; font: 18px arial; }
+	#de-panel-btn-info > span { background-color: #fff2; margin-right: 4px; padding: 0 1px; border: 1px solid #fff3; border-radius: 4px; }
+	#de-panel-btn-info > span:empty { display: none; }
+	#de-panel-btn-logo { flex: none; margin: auto 3px auto 0; cursor: pointer; }
+	#de-panel-btn-upd-on { fill: #32ff32; }
+	#de-panel-btn-upd-warn { fill: #fff441; }
+	#de-panel-btn-upd-off { fill: #ff3232; }
 	#de-panel-buttons { flex: 0 1 auto; display: flex; flex-flow: row wrap; align-items: center; padding: 0 0 0 2px; margin: 0; border-left: 1px solid #616b86; }
-	.de-panel-button { display: block; flex: none; margin: 0 1px; padding: 0 !important; min-width: auto; transition: all .3s ease; border: none !important; background-color: transparent !important; color: inherit !important; cursor: pointer; }
-	.de-panel-button, #de-panel-logo, #de-panel-logo-svg, .de-panel-svg { width: 25px; height: 25px; }
-	.de-panel-button-active { stroke: #32ff32 !important; fill: #32ff32 !important; }
-	#de-panel-expimg, #de-panel-maskimg, #de-panel-preimg { stroke: currentColor; fill: currentColor; }
-	#de-panel-goback { transform: rotate(180deg); will-change: transform; }
-	#de-panel-godown { transform: rotate(90deg); will-change: transform; }
-	#de-panel-goup { transform: rotate(-90deg); will-change: transform; }
-	#de-panel-upd-on { fill: #32ff32; }
-	#de-panel-upd-warn { fill: #fff441; }
-	#de-panel-upd-off { fill: #ff3232; }
-	#de-panel-audio-on > .de-panel-svg > .de-use-audio-off, #de-panel-audio-off > .de-panel-svg > .de-use-audio-on { display: none; }
-	#de-panel-info { display: flex; flex: none; margin-left: 2px; font: 18px arial; }
-	#de-panel-info > span { background-color: #fff2; margin-right: 4px; padding: 0 1px; border: 1px solid #fff3; border-radius: 4px; }
-	#de-panel-info > span:empty { display: none; }
+	.de-runned-userscript > #de-panel { z-index: 10000; }
 	#de-svg-icons, #de-svg-icons > svg { height: 0; width: 0; position: fixed; }
 	.de-svg-fill { stroke: none; fill: currentColor; }
 	.de-svg-stroke { stroke: currentColor; fill: none; }
@@ -18383,9 +18447,9 @@ function scriptCSS() {
 		`{ background: linear-gradient(to bottom, #e854ca, #8c1273 60%, #832da2 100%); }
 		#de-panel-buttons { border-color: #c15dad; }`
 	][Cfg.scriptStyle] }
-	.de-logo { background: linear-gradient(to bottom, #7b849b, #616b86 8%, #121212 60%, #1f2740 100%) }
-	.de-panel-svg:hover, #de-panel-logo-svg:hover { margin: -2px; width: 29px; height: 29px; color: #d0e7ff !important; }
-	.de-panel-button:hover { background-color: rgba(255,255,255,.15) !important; box-shadow: 0 0 3px rgba(200,200,200,0.5); color: inherit !important; }\r\n`;
+	.de-donate-logo { background: linear-gradient(to bottom, #7b849b, #616b86 8%, #121212 60%, #1f2740 100%) }
+	.de-panel-svg:hover { margin: -2px; width: 29px; height: 29px; color: #d0e7ff !important; }
+	.de-panel-btn:hover { background-color: rgba(255,255,255,.15) !important; box-shadow: 0 0 3px rgba(200,200,200,0.5); color: inherit !important; }\r\n`;
 
 	if(Cfg.disabled) {
 		$css(x).id = 'de-css';
@@ -18407,13 +18471,13 @@ function scriptCSS() {
 	.de-win-inpost > .de-win-head > .de-win-buttons > svg:hover { background-color: rgba(64,64,64,.15); box-shadow: 0 0 2px rgba(64,64,64,.3); color: inherit; }
 	#de-win-cfg { width: 355px; }
 	#de-win-cfg, #de-win-fav, #de-win-hid, #de-win-vid { position: fixed; max-width: calc(100vw - (100vw - 100%)); max-height: calc(100vh - 25px); overflow-x: hidden; overflow-y: auto; }
-	#de-win-cfg > .de-win-body { float: none; display: block; width: auto; min-width: 0; max-width: 100% !important; padding: 0 !important; margin: 0 !important; border: none; }
+	#de-win-cfg > .de-win-body { display: block; width: auto; min-width: 0; max-width: 100% !important; padding: 0 !important; margin: 0 !important; border: none; float: none; }
 	#de-win-fav > .de-win-body, #de-win-hid > .de-win-body, #de-win-vid > .de-win-body { padding: 6px; border: 1px solid gray; }
 	#de-win-hid { max-width: 60%; }
 	.de-win-title { width: 100%; }
 	#de-win-vid > .de-win-body { display: flex; flex-direction: column; align-items: center; }
 	#de-win-vid .de-entry { white-space: normal; }
-	.de-win-head { display: flex; height: 16px; padding: 2px; border-radius: 10px 10px 0 0; color: #F5F5F5; font: bold 14px/16px arial; text-align: center; cursor: default; }
+	.de-win-head { display: flex; height: 16px; padding: 2px; border-radius: 10px 10px 0 0; color: #F5F5F5; font: bold 14px/16px arial; text-align: center; -moz-box-sizing: content-box; box-sizing: content-box; cursor: default; }
 
 	/* Settings window */
 	.de-block { display: block; }
@@ -18421,18 +18485,18 @@ function scriptCSS() {
 	#de-cfg-bar { display: flex; margin: 0; padding: 0; }
 	.de-cfg-body { min-height: 355px; padding: 9px 7px 7px; margin-top: -1px; font: 13px/15px arial !important; -moz-box-sizing: content-box; box-sizing: content-box; }
 	.de-cfg-body, #de-cfg-buttons { border: 1px solid #183d77; border-top: none; }
-	.de-cfg-button { padding: 0 ${ nav.isFirefox ? '2' : '4' }px !important; margin: 0 4px; height: 21px; font: 12px arial !important; }
+	.de-cfg-button { display: initial; padding: 0 ${ nav.isFirefox ? '2' : '4' }px !important; margin: 0 4px; height: 21px; font: 12px arial !important; }
 	#de-cfg-button-debug { padding: 0 2px; font: 13px/15px arial; }
 	#de-cfg-buttons { display: flex; align-items: center; padding: 3px; }
 	#de-cfg-buttons > label { flex: 1 0 auto; }
-	.de-cfg-chkbox { ${ nav.isPresto ? '' : 'vertical-align: -1px !important; ' }margin: 2px 1px !important; }
+	.de-cfg-chkbox { display: initial; vertical-align: -1px !important; margin: 2px 1px !important; }
 	#de-cfg-info { display: flex; flex-direction: column; }
 	input[type="text"].de-cfg-inptxt { width: auto; height: auto; min-height: 0; padding: 0 2px !important; margin: 1px 4px 1px 0 !important; font: 13px arial !important; border-width: 1px; }
 	.de-cfg-inptxt, .de-cfg-label, .de-cfg-select { display: inline-block; width: auto; height: 19px !important; font: 13px/15px arial !important; }
 	.de-cfg-label { padding: 0; margin: 0; }
-	.de-cfg-needreload::after  { content: "* "; color: red; }
+	.de-cfg-needreload::after { content: "* "; color: red; }
 	.de-cfg-select { padding: 0 2px; margin: 1px 0; font: 13px arial !important; float: none; appearance: auto; }
-	.de-cfg-tab { flex: 1 0 auto; display: block !important; margin: 0 !important; float: none !important; width: auto !important; min-width: 0 !important; padding: 4px 0 !important; box-shadow: none !important; border: 1px solid #444 !important; border-radius: 4px 4px 0 0 !important; opacity: 1; font: bold 12px arial; text-align: center; cursor: default; background-image: linear-gradient(to bottom, rgba(132,132,132,.35) 0%, rgba(79,79,79,.35) 50%, rgba(40,40,40,.35) 50%, rgba(80,80,80,.35) 100%) !important; }
+	.de-cfg-tab { flex: 1 0 auto; display: block !important; margin: 0 !important; width: auto !important; min-width: 0 !important; padding: 4px 0 !important; box-shadow: none !important; border: 1px solid #444 !important; border-radius: 4px 4px 0 0 !important; float: none !important; opacity: 1; font: bold 12px arial; text-align: center; cursor: default; background-image: linear-gradient(to bottom, rgba(132,132,132,.35) 0%, rgba(79,79,79,.35) 50%, rgba(40,40,40,.35) 50%, rgba(80,80,80,.35) 100%) !important; }
 	.de-cfg-tab:hover { background-image: linear-gradient(to top, rgba(132,132,132,.35) 0%, rgba(79,79,79,.35) 50%, rgba(40,40,40,.35) 50%, rgba(80,80,80,.35) 100%) !important; }
 	.de-cfg-tab[selected], .de-cfg-tab[selected]:hover { background-image: none !important; border-bottom: none !important; }
 	.de-cfg-tab::${ nav.isFirefox ? '-moz-' : '' }selection { background: transparent; }
@@ -18446,7 +18510,7 @@ function scriptCSS() {
 	.de-spell-btn { padding: 0 4px; }
 	#de-spell-editor { display: flex; align-items: stretch; height: 256px; padding: 2px 0; }
 	#de-spell-panel { display: flex; }
-	#de-spell-txt { padding: 2px !important; margin: 0; width: 100%; min-width: 0; border: none !important; outline: none !important; font: 12px courier new; ${ nav.isPresto ? '' : 'resize: none !important; ' }}
+	#de-spell-txt { padding: 2px !important; margin: 0; width: 100%; min-width: 0; border: none !important; outline: none !important; font: 12px courier new; resize: none !important; }
 	#de-spell-rowmeter { padding: 2px 3px 0 0; overflow: hidden; min-width: 2em; background-color: #616b86; text-align: right; color: #fff; font: 12px courier new; }
 	#de-win-cfg.de-win-fixed { z-index: 10001 !important; }
 
@@ -18475,7 +18539,7 @@ function scriptCSS() {
 	][Cfg.scriptStyle] }
 
 	/* Favorites window */
-	.de-entry { display: flex !important; align-items: center; float: none !important; padding: 0 !important; margin: 1px 0 !important; min-width: 0 !important; border: none !important; font-size: 13px; overflow: hidden !important; white-space: nowrap; }
+	.de-entry { display: flex !important; align-items: center; padding: 0 !important; margin: 1px 0 !important; min-width: 0 !important; border: none !important; float: none !important; font-size: 13px; overflow: hidden !important; white-space: nowrap; }
 	.de-entry-title { flex: auto; padding-left: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 	#de-fav-buttons, #de-hid-buttons, #de-fav-del-confirm { padding-top: 6px; }
 	.de-fav-entries { border-top: 1px solid rgba(80,80,80,.3); }
@@ -18487,7 +18551,7 @@ function scriptCSS() {
 	.de-fav-header-btn { flex: 1 0 auto; margin-right: 2px; font-size: 11px; color: inherit; text-align: right; opacity: 0.65; }
 	.de-fav-header-link { margin-left: 2px; color: inherit; font-weight: bold; text-decoration: none; outline: none; }
 	.de-fav-inf { flex: none; padding: 0 4px 0 10px; font: bold 14px serif; cursor: default; }
-	.de-fav-inf-icon, .de-fav-inf-iwrap  { width: 16px; height: 16px; }
+	.de-fav-inf-icon, .de-fav-inf-iwrap { width: 16px; height: 16px; }
 	.de-fav-inf-icon { margin-bottom: -3px; }
 	.de-fav-inf-new { color: #424f79; }
 	.de-fav-inf-new::after { content: " +"; }
@@ -18526,7 +18590,7 @@ function scriptCSS() {
 	/* Text markup buttons */
 	.de-markup-back { fill: #f0f0f0; stroke: #808080; }
 	#de-txt-panel { display: block; font-weight: bold; white-space: nowrap; cursor: pointer; }
-	#de-txt-panel > div { display: inline-block; }
+	#de-txt-panel > div { display: inline-block; padding: 0; }
 	#de-txt-panel > div > button { margin-right: 2px; min-width: 23px; }
 	#de-txt-panel > div > svg { width: 23px; height: 22px; margin: 0 1px; }\r\n`;
 
@@ -18556,8 +18620,8 @@ function scriptCSS() {
 		.de-close { animation: de-close .15s ease-in both; }
 		.de-blink { animation: de-blink .7s ease-in-out both; }
 		.de-post-new { animation: de-post-new .2s ease-out both; }
-		.de-win-open { animation: de-win-open .2s ease-out backwards; }
-		.de-win-close { animation: de-win-close .2s ease-in both; }\r\n`;
+		.de-win-anim-open { animation: de-win-open .2s ease-out backwards; }
+		.de-win-anim-close { animation: de-win-close .2s ease-in both; }\r\n`;
 	} else {
 		Cfg.animation = 0;
 	}
@@ -18569,22 +18633,24 @@ function scriptCSS() {
 	.de-img-embed { max-width: 200px; max-height: 200px; }
 	.de-fullimg { display: block; }
 	.de-fullimg, .de-fullimg-wrap-link { flex: 0 0 auto; transition: none !important; max-width: none; max-height: none; }
-	.de-fullimg-after { clear: left; }
 	.de-fullimg-center { position: fixed; margin: 0 !important; z-index: 9999; background-color: #ccc; border: 1px solid black !important; -moz-box-sizing: content-box; box-sizing: content-box; }
-	.de-fullimg-info { position: absolute; bottom: -22px; left: 50%; padding: 1px 4px; transform: translateX(-50%); background-color: rgba(64,64,64,.8); white-space: nowrap; line-height: 17px; }
+	.de-fullimg-info { padding: 1px 4px; margin-bottom: -20px; background-color: rgba(64,64,64,.8); white-space: nowrap; line-height: 17px; }
 	.de-fullimg-info > .de-btn-img { color: #fff; }
-	.de-fullimg-link { float: none !important; display: inline-block; font: bold 12px tahoma; color: #fff !important; text-decoration: none; outline: none; }
+	.de-fullimg-link { display: inline-block; font: bold 12px tahoma; color: #fff !important; text-decoration: none; outline: none; }
 	.de-fullimg-link:hover { color: #fff !important; background: rgba(64,64,64,.6); }
 	.de-fullimg-load { position: absolute; z-index: 2; width: 50px; height: 50px; top: 50%; left: 50%; margin: -25px; }
-	.de-fullimg-rotated { transform-origin: top left; width: auto !important; max-width: none !important; }
+	.de-fullimg-rotated { position: absolute; max-width: none; }
+	.de-fullimg-rotated + .de-fullimg-info { position: absolute; bottom: 0; }
 	.de-fullimg-scale { color: #fff; font: bold 12px tahoma; cursor: default; }
-	.de-fullimg-video-hack { ${ nav.isWebkit && nav.isMobile ?
-		'width: 30px; top: 0; right: 0; color: #fff; font-size: 2em;' :
-		'width: 100%;' } height: calc(100% - 40px); position: absolute; z-index: 1; cursor: pointer; }
-	.de-fullimg-wrap { position: relative; margin-bottom: 24px; }
-	.de-fullimg-wrap-center, .de-fullimg-wrap-link, .de-fullimg-video > video { width: 100%; height: 100%; max-height: 100%; }
+	.de-fullimg-video-hack { position: absolute; ${ nav.isMobile && nav.isWebkit ?
+		// XXX: Videos won't close in Chrome Mobile. Create a close button.
+		'display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; top: 0; right: 0; color: #fff; font-size: 2em;' :
+		'width: 100%; height: calc(100% - 40px);'
+	} z-index: 1; cursor: pointer; }
+	.de-fullimg-wrap { position: relative; display: inline-flex; flex-direction: column; align-items: center; }
+	.de-fullimg-wrap-center, .de-fullimg-wrap-link, .de-fullimg-video > video { width: 100%; height: 100%; }
 	.de-fullimg-wrap-center > .de-fullimg-wrap-link > .de-fullimg { height: 100%; }
-	.de-fullimg-wrap-inpost { min-width: ${ p }px; min-height: ${ p }px; float: left; ${ aib.multiFile ? '' : 'margin: 2px 5px; -moz-box-sizing: border-box; box-sizing: border-box; ' } }
+	.de-fullimg-wrap-inpost { min-width: ${ p }px; min-height: ${ p }px; ${ aib.multiFile ? '' : 'margin: 2px 5px; -moz-box-sizing: border-box; box-sizing: border-box; ' } }
 	.de-fullimg-wrap-nosize > .de-fullimg-wrap-link > .de-fullimg { opacity: 0.3; }
 	.de-img-btn { position: fixed; top: 50%; z-index: 10000; height: 36px; width: 36px; border-radius: 10px 0 0 10px; color: #f0f0f0; cursor: pointer; }
 	.de-img-btn > svg { height: 32px; width: 32px; margin: 2px; }
@@ -18638,22 +18704,23 @@ function scriptCSS() {
 	.de-file-rarmsg { margin: 0 2px; vertical-align: 4px; font: bold 11px tahoma; cursor: default; }
 	.de-file-btn-del, .de-file-btn-rar, .de-file-btn-ren, .de-file-btn-txt { margin: 0 1px; width: 16px; height: 16px; cursor: pointer; }
 	.de-file-btn-del > svg, .de-file-btn-rar > svg, .de-file-btn-ren > svg, .de-file-btn-txt > svg { width: 16px; height: 16px; }
-	.de-file-spoil { margin: 0 3px; vertical-align: 1px; }
+	.de-file-spoil { margin: 0 3px; vertical-align: 1px !important; }
 	.de-file-txt-add { margin-left: 2px; padding: 0 !important; width: 22px; font-weight: bold; }
 	.de-file-txt-input { flex-grow: 1; border: 1px solid #9c9c9c; padding: 2px; font: 12px/16px sans-serif; }
 	.de-file-txt-noedit { background: rgba(255,255,255,.5); cursor: pointer; }
 	.de-file-txt-wrap { display: inline-flex; width: 100%; }
-	.de-file-utils { display: inline-flex; float: none; align-items: center; }
+	.de-file-utils { display: inline-flex; align-items: center; float: none; }
 	.de-file-wrap { display: flex; align-items: center; }
 
 	/* Reply form */
 	.de-parea { text-align: center; clear: both; }
+	.de-parea > #de-pform { margin-top: 4px; }
 	.de-parea-btn-close::after { content: "${ Lng.hideForm[lang] }"; }
 	.de-parea-btn-thr::after { content: "${ Lng.makeThr[lang] }"; }
 	.de-parea-btn-reply::after { content: "${ Lng.makeReply[lang] }"; }
 	#de-pform > form { padding: 0; margin: 0; border: none; }
-	#de-resizer-text { display: inline-block !important; float: none !important; padding: 5px; margin: ${ nav.isPresto ? '-2px -10px' : '0 0 -2px -10px' }; border-bottom: 2px solid #666; border-right: 2px solid #666; cursor: se-resize; }
-	.de-win-inpost { float: none; clear: left; display: inline-block; width: auto; padding: 3px; margin: 2px 0; }
+	#de-resizer-text { display: inline-block !important; padding: 5px; margin: 0 0 -2px -10px; border-bottom: 2px solid #666; border-right: 2px solid #666; float: none !important; cursor: se-resize; }
+	.de-win-inpost { display: inline-block; width: auto; padding: 3px; margin: 2px 0; float: none; clear: left; }
 	.de-win-inpost > .de-resizer { display: none; }
 	.de-win-inpost > .de-win-head { background: none; color: inherit; }
 	#de-win-reply { width: auto !important; min-width: 0; padding: 0 !important; border: none !important; }
@@ -18675,9 +18742,13 @@ function scriptCSS() {
 	:not(.de-thr-navpanel-hidden) > #de-thr-navup:hover, :not(.de-thr-navpanel-hidden) > #de-thr-navdown:hover { background: #555; }
 
 	/* Other */
-	.de-abtn { text-decoration: none !important; outline: none; }
+	.de-abtn, a.link-button { text-decoration: none !important; outline: none; }
 	.de-button { flex: none; padding: 0 ${ nav.isFirefox ? 2 : 4 }px !important; margin: 1px 2px; min-width: auto !iportant; height: 24px; font: 13px arial; }
+	.de-donate-logo { display: inline-block; margin-right: 10px; fill: inherit; color: #F5F5F5; border-radius: 80px 0 0 0; }
+	.de-donate-logo > svg { width: 130px; height: 130px; }
 	.de-editor { display: block; width: 600px; height: 300px; max-width: calc(100vw - 20px); font: 12px courier new; tab-size: 4; -moz-tab-size: 4; -o-tab-size: 4; }
+	.de-gotothr-button { vertical-align: 5px; font-size: 0 !important; }
+	.de-gotothr-button::after { content: "${ Lng.goToThr[lang] }"; font-size: 14px; }
 	.de-hidden { float: left; overflow: hidden !important; margin: 0 !important; padding: 0 !important; border: none !important; width: 0 !important; height: 0 !important; display: inline !important; }
 	.de-input-key { padding: 0 2px !important; margin: 0 !important; font: 13px/15px arial !important; }
 	input[type="text"].de-input-selected { background: rgba(255,255,150,0.4) !important }
@@ -18686,15 +18757,13 @@ function scriptCSS() {
 	.de-link-pview { font-weight: bold; }
 	.de-list { padding-top: 4px; }
 	.de-list::before { content: "\u25CF"; margin-right: 4px; }
-	.de-logo { display: inline-block; margin-right: 10px; fill: inherit; color: #F5F5F5; border-radius: 80px 0 0 0; }
-	.de-logo > svg { width: 130px; height: 130px; }
 	.de-menu { padding: 0 !important; margin: 0 !important; width: auto !important; min-width: 0 !important; z-index: 10002; border: 1px solid grey !important; text-align: left; }
 	.de-menu-item { display: block; padding: 3px 10px; color: inherit; text-decoration: none; font: 13px arial; white-space: nowrap; cursor: pointer; }
 	.de-menu-item:hover { background-color: #222; color: #fff; }
 	.de-omitted { color: grey; }
 	.de-omitted::before { content: "${ Lng.postsOmitted[lang] }"; }
 	.de-page-num { clear: both; }
-	.de-popup { overflow: visible !important; clear: both !important; width: auto !important; min-width: 0pt !important; padding: 8px !important; margin: 1px !important; border: 1px solid grey !important; display: block !important; float: right !important; white-space: pre-wrap; }
+	.de-popup { display: block !important; overflow: visible !important; width: auto !important; min-width: 0pt !important; padding: 8px !important; margin: 1px !important; border: 1px solid grey !important; float: right !important; clear: both !important; white-space: pre-wrap; }
 	.de-popup-btn { display: inline-block; vertical-align: -1px; color: green; font-size: 1.5em; line-height: 16px; cursor: pointer; }
 	.de-popup > hr { margin: 0 !important; }
 	.de-post-hiddencontent { display: none !important; }
@@ -18714,11 +18783,12 @@ function scriptCSS() {
 	.de-thr-updater-link::after { content: "${ Lng.getNewPosts[lang] }"; }
 	#de-updater-count::before { content: ": "; }
 	.de-viewed { color: #747488 !important; }
-	.de-wait, .de-fav-wait , .de-fullimg-load { animation: de-wait-anim 1s linear infinite; }
+	.de-wait, .de-fav-wait, .de-fullimg-load { animation: de-wait-anim 1s linear infinite; }
 	.de-wait { margin: 0 2px -3px 0 !important; width: 16px; height: 16px; }
 	#de-wrapper-popup { max-width: calc(100vw - (100vw - 100%)); overflow-x: hidden !important; overflow-y: auto !important; -moz-box-sizing: border-box; box-sizing: border-box; max-height: 100vh; position: fixed; right: 0; top: 0; z-index: 9999; font: 14px arial; cursor: default; }
+	.link-button { display: inline-flex; padding: 3px 5px; margin-left: 4px; background: rgba(0, 40, 140, 0.06); border: 1px solid rgba(120, 120, 120, .5); border-radius: 4px; font: 14px/14px arial; }
+	.link-button:hover { background: rgba(60, 60, 160, 0.12); }
 	@keyframes de-wait-anim { to { transform: rotate(360deg); } }
-	form > hr { clear: both }
 
 	/* Mobile devices */
 	@media screen and (max-width: 768px) {
@@ -18735,17 +18805,10 @@ function scriptCSS() {
 function updateCSS() {
 	const x = `
 	.de-video-obj { width: ${ Cfg.YTubeWidth }px; height: ${ Cfg.YTubeHeigh }px; }
-	.de-new-post { ${ nav.isPresto ?
-		'border-left: 4px solid rgba(107,134,97,.7); border-right: 4px solid rgba(107,134,97,.7)' :
-		'box-shadow: 6px 0 2px -2px rgba(107,134,97,.8), -6px 0 2px -2px rgba(107,134,97,.8)' } !important; }
-	.de-selected, .de-input-error { ${ nav.isPresto ?
-		'border-left: 4px solid rgba(220,0,0,.7); border-right: 4px solid rgba(220,0,0,.7)' :
-		'box-shadow: 6px 0 2px -2px rgba(220,0,0,.8), -6px 0 2px -2px rgba(220,0,0,.8)' } !important; }
+	.de-new-post { box-shadow: 6px 0 2px -2px rgba(107,134,97,.8), -6px 0 2px -2px rgba(107,134,97,.8) !important; }
+	.de-selected, .de-input-error { box-shadow: 6px 0 2px -2px rgba(220,0,0,.8), -6px 0 2px -2px rgba(220,0,0,.8) !important; }
 	${ Cfg.markMyPosts ?
-		`.de-mypost { ${ nav.isPresto ?
-			'border-left: 4px solid rgba(97,107,134,.7); border-right: 4px solid rgba(97,107,134,.7)' :
-			'box-shadow: 6px 0 2px -2px rgba(97,107,134,.8), -6px 0 2px -2px rgba(97,107,134,.8)'
-		} !important; }
+		`.de-mypost { box-shadow: 6px 0 2px -2px rgba(97,107,134,.8), -6px 0 2px -2px rgba(97,107,134,.8) !important; }
 		.de-mypost-reply:not(.de-pview) { position: relative; }
 		.de-mypost-reply::before { content: ""; position: absolute; top: -0; bottom: 0; left: -1px; border-left: 5px dotted rgba(97,107,134,.8) !important; }` : '' }
 	${ Cfg.markMyLinks ?
@@ -18757,7 +18820,7 @@ function updateCSS() {
 		`.de-btn-expthr, .de-btn-fav, .de-btn-hide, .de-btn-img, .de-btn-reply, .de-btn-stick, .de-btn-unhide { fill: rgba(0,0,0,0); color: currentColor; }
 			.de-btn-fav-sel, .de-btn-hide-user, .de-btn-sage, .de-btn-stick-on, .de-btn-unhide-user { fill: rgba(0,0,0,0); color: #F00; }` :
 		`.de-btn-expthr, .de-btn-fav, .de-btn-hide, .de-btn-img, .de-btn-reply, .de-btn-sage, .de-btn-stick, .de-btn-unhide { color: #F5F5F5; }
-			.de-btn-expthr, .de-btn-fav, .de-btn-fav-sel, .de-btn-hide, .de-btn-hide-user, .de-btn-img, .de-btn-reply, .de-btn-stick, .de-btn-stick-on, .de-btn-unhide, .de-btn-unhide-user { fill: ${ Cfg.postBtnsCSS === 1 && !nav.isPresto ? 'url(#de-btn-back-gradient)' : Cfg.postBtnsBack }; }
+			.de-btn-expthr, .de-btn-fav, .de-btn-fav-sel, .de-btn-hide, .de-btn-hide-user, .de-btn-img, .de-btn-reply, .de-btn-stick, .de-btn-stick-on, .de-btn-unhide, .de-btn-unhide-user { fill: ${ Cfg.postBtnsCSS === 1 ? 'url(#de-btn-back-gradient)' : Cfg.postBtnsBack }; }
 			.de-btn-fav-sel { color: #FFE100; }
 			.de-btn-hide-user { color: #BFFFBF; }
 			.de-btn-sage { fill: #4B4B4B; }
@@ -18773,7 +18836,7 @@ function updateCSS() {
 	${ Cfg.imgNames === 1 ? '.de-img-name { display: inline-block; max-width: 230px; vertical-align: top; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }' : '' }
 	${ Cfg.imgNames === 2 ? '.de-img-name { text-decoration: none !important; text-transform: capitalize; }' : '' }
 	${ Cfg.imgNames === 3 ? '.de-img-name { display: inline-block; max-width: 230px; vertical-align: top; word-wrap: break-word; white-space: break-spaces; }' : '' }
-	${ Cfg.widePosts ? '.de-reply { float: none; width: 99vw; margin-left: 0; }' : '' }
+	${ Cfg.widePosts ? '.de-oppost, .de-reply { width: 98vw; max-width: 98vw; margin-left: 0; float: none; }' : '' }
 	${ aib.qPostMsg } { max-width: ${ Cfg.limitPostMsg }px; overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; }
 	${ Cfg.strikeHidd ? '.de-link-hid { text-decoration: line-through !important; }' : '' }
 	${ Cfg.noSpoilers === 1 ?
@@ -18803,7 +18866,7 @@ function updateCSS() {
 	${ Cfg.fileInputs ? '' : '.de-file-txt-wrap, .de-file-btn-txt, ' }
 	${ !aib.formHeaders && (aib.multiFile || Cfg.fileInputs !== 2) ?
 		'#de-pform form > table > tbody > tr > td:not([colspan]):first-child, #de-pform form table > tbody > tr > th:first-child, ' : '' }
-	body > hr, .postarea, .theader { display: none !important; }\r\n`;
+	.postarea, .postarea + hr, .postarea + * + hr, .theader { display: none !important; }\r\n`;
 	$id('de-css-dynamic').textContent = (x + aib.css).replace(/[\r\n\t]+/g, '\r\n\t');
 	$id('de-css-user').textContent = Cfg.userCSS ? Cfg.userCSSTxt : '';
 }
@@ -18814,21 +18877,11 @@ function updateCSS() {
                                                      MAIN
 =========================================================================================================== */
 
+// XXX: Greasemonkey/Firemonkey hack to run in all frames
 function runFrames() {
-	let inf;
-	if(typeof GM !== 'undefined') {
-		inf = GM.info;
-	} else {
-		if(typeof GM_info === 'undefined') {
-			return;
-		}
-		inf = GM_info;
-	}
-	if(!inf) {
-		return;
-	}
-	const handlerName = inf.scriptHandler;
-	if(handlerName !== 'Greasemonkey' && handlerName !== 'FireMonkey' || !deWindow.frames[0]) {
+	if(!deWindow.frames[0] ||
+		!(nav.scriptHandler.startsWith('Greasemonkey') || nav.scriptHandler.startsWith('FireMonkey'))
+	) {
 		return;
 	}
 	const deMainFuncFrame = frameEl => {
@@ -18837,7 +18890,6 @@ function runFrames() {
 			const deWindow = fDoc.defaultView;
 			deMainFuncInner(
 				deWindow,
-				deWindow.opera?.scriptStorage,
 				deWindow.FormData,
 				(x, y) => deWindow.scrollTo(x, y),
 				typeof localData === 'object' ? localData : null
@@ -18864,23 +18916,18 @@ async function runMain(checkDomains, dataPromise) {
 	if(!doc.body || !aib && !(aib = getImageBoard(checkDomains, true))) {
 		return;
 	}
+	if(!locStorage) {
+		nav = initBrowser();
+	}
 	let formEl = $q(aib.qDelForm + ', [de-form]');
 	if(!formEl) {
 		runFrames();
 		return;
 	}
-	if(doc.body.classList.contains('de-runned') ||
-		aib.observeContent && !aib.observeContent(checkDomains, dataPromise)
-	) {
+	if(aib.observeContent?.(checkDomains, dataPromise) === false) {
 		return;
 	}
 	Logger.log('Imageboard check');
-	if(!locStorage) {
-		if(!checkStorage()) {
-			return;
-		}
-		initNavFuncs();
-	}
 	const [favObj] = await (dataPromise || Promise.all([readFavorites(), readCfg()]));
 	if(!Cfg.disabled) {
 		const u = await aib.initAsync();
@@ -18888,10 +18935,9 @@ async function runMain(checkDomains, dataPromise) {
 			return;
 		}
 	}
-	if(!localData && doc.body.classList.contains('de-mode-local')) {
+	if(!localData && doc.body.classList.contains('de-runned-local')) {
 		return;
 	}
-	doc.body.classList.add('de-runned');
 	Logger.log('Storage loading');
 	addSVGIcons();
 	if(Cfg.disabled) {
@@ -18990,9 +19036,6 @@ async function runMain(checkDomains, dataPromise) {
 }
 
 function initMain() {
-	if(window.name === 'de-prohibited') {
-		return;
-	}
 	if(doc.readyState !== 'loading') {
 		needScroll = false;
 		runMain(true, null);
@@ -19000,10 +19043,7 @@ function initMain() {
 	}
 	let dataPromise = null;
 	if((aib = getImageBoard(true, false))) {
-		if(!checkStorage()) {
-			return;
-		}
-		initNavFuncs();
+		nav = initBrowser();
 		dataPromise = Promise.all([readFavorites(), readCfg()]);
 	}
 	needScroll = true;
@@ -19076,7 +19116,6 @@ WORLD_CODE_INJECTIONS.injection18 = '$("textarea#body").on("change input propert
 /* ==[ Tail ]== */
 }(
 	window,
-	window.opera?.scriptStorage,
 	window.FormData,
 	(x, y) => window.scrollTo(x, y),
 	/* global localData */ typeof localData === 'object' ? localData : null

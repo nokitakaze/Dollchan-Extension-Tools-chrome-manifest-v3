@@ -8,7 +8,7 @@ const CfgWindow = {
 			e => winBody.addEventListener(e, this));
 
 		// Create tab bar and bottom buttons
-		let div = $bEnd(winBody, `<div id="de-cfg-bar">${
+		const div = $bEnd(winBody, `<div id="de-cfg-bar">${
 			this._getTab('filters') +
 			this._getTab('posts') +
 			this._getTab('images') +
@@ -44,7 +44,7 @@ const CfgWindow = {
 					}
 				};
 				// "Save" button. Copies the domain settings into global.
-				div = $bEnd(el, `<div id="de-list"><input type="button" value="${
+				$bEnd(el, `<div id="de-list"><input type="button" value="${
 					Lng.save[lang] }"> ${ Lng.saveGlobal[lang] }</div>`
 				).firstElementChild.onclick = async () => {
 					const data = await getStoredObj('DESU_Config');
@@ -65,7 +65,7 @@ const CfgWindow = {
 			}) : '',
 
 			// "File" button. Allows to save and load settings/favorites/hidden/etc from file.
-			!nav.isPresto ? $button(Lng.file[lang], Lng.fileImpExp[lang], () => {
+			$button(Lng.file[lang], Lng.fileImpExp[lang], () => {
 				const list = this._getList([
 					Lng.panelBtn.cfg[lang] + ' ' + Lng.allDomains[lang],
 					Lng.panelBtn.fav[lang],
@@ -170,7 +170,7 @@ const CfgWindow = {
 					}
 					e.preventDefault();
 				}, true);
-			}) : '',
+			}),
 
 			// "Clear" button. Allows to clear settings/favorites/hidden/etc optionally.
 			$button(Lng.reset[lang] + '…', Lng.resetCfg[lang], () => $popup(
@@ -218,8 +218,8 @@ const CfgWindow = {
 	// Event handler for Setting window and its controls.
 	async handleEvent(e) {
 		const { type, target: el } = e;
-		const tag = el.tagName.toLowerCase();
 		const { classList } = el;
+		const tag = el.tagName.toLowerCase();
 		if(type === 'mouseover' && classList.contains('de-cfg-needreload') && !el.title) {
 			el.title = Lng.cfgNeedReload[lang];
 		}
@@ -260,12 +260,6 @@ const CfgWindow = {
 				break;
 			}
 			case 'postBtnsCSS':
-				updateCSS();
-				if(nav.isPresto) {
-					$q('.de-svg-icons').remove();
-					addSVGIcons();
-				}
-				break;
 			case 'thrBtns':
 			case 'noSpoilers':
 			case 'resizeImgs': updateCSS(); break;
@@ -385,7 +379,6 @@ const CfgWindow = {
 				setTimeout(() => postform.toggleSage(), 0);
 				updateCSS();
 				break;
-			case 'altCaptcha': postform.cap.initCapPromise(); break;
 			case 'txtBtnsLoc':
 				postform.addMarkupPanel();
 				updateCSS();
@@ -440,12 +433,12 @@ const CfgWindow = {
 				$popup('cfg-debug',
 					Lng.infoDebug[lang] + ':<textarea readonly class="de-editor"></textarea>'
 				).lastChild.value = JSON.stringify({
-					version  : version + '.' + commit,
-					location : String(deWindow.location),
+					version : version + '.' + commit,
+					location: String(deWindow.location),
 					nav,
 					Cfg,
-					sSpells  : Spells.list.split('\n'),
-					oSpells  : sesStorage[`de-spells-${ aib.b }${ aib.t || '' }`],
+					sSpells : Spells.list.split('\n'),
+					oSpells : sesStorage[`de-spells-${ aib.b }${ aib.t || '' }`],
 					perf
 				}, (key, value) => {
 					switch(key) {
@@ -469,11 +462,6 @@ const CfgWindow = {
 					isValidColor = true;
 				} else if(color && color !== 'inherit' && color !== 'currentColor') {
 					const image = doc.createElement('img');
-					image.style.color = 'rgb(0, 0, 0)';
-					image.style.color = color;
-					if(image.style.color !== 'rgb(0, 0, 0)') {
-						isValidColor = true;
-					}
 					image.style.color = 'rgb(255, 255, 255)';
 					image.style.color = color;
 					isValidColor = image.style.color !== 'rgb(255, 255, 255)';
@@ -492,7 +480,9 @@ const CfgWindow = {
 			case 'minImgSize':
 				await CfgSaver.save('minImgSize', Math.min(Math.max(+el.value, 1)), Cfg.maxImgSize);
 				break;
-			case 'maxImgSize': await CfgSaver.save('maxImgSize', Math.max(+el.value, Cfg.minImgSize)); break;
+			case 'maxImgSize':
+				await CfgSaver.save('maxImgSize', Math.max(+el.value, Cfg.minImgSize));
+				break;
 			case 'zoomFactor':
 				await CfgSaver.save('zoomFactor', Math.min(Math.max(+el.value, 1), 100));
 				break;
@@ -578,7 +568,7 @@ const CfgWindow = {
 				this._updateRowMeter($id('de-spell-txt'));
 			}
 			if(id === 'common') {
-				// XXX: remove and make insertion in this._getCfgCommon()
+				// TODO: remove and make insertion in this._getCfgCommon()
 				$q('input[info="userCSS"]').parentNode.after(getEditButton(
 					'css',
 					fn => fn(Cfg.userCSSTxt, false, async inputEl => {
@@ -684,10 +674,8 @@ const CfgWindow = {
 				${ this._getInp('webmVolume') }<br>
 				${ this._getInp('minWebmWidth') }
 			</div>
-			${ nav.isPresto ? '' : this._getSel('preLoadImgs', true) + '<br>' }
-			${ nav.isPresto || aib._4chan ? '' : `<div class="de-depend">
-				${ this._getBox('findImgFile', true) }
-			</div>` }
+			${ this._getSel('preLoadImgs', true) + '<br>' }
+			${ aib._4chan ? '' : `<div class="de-depend">${ this._getBox('findImgFile', true) }</div>` }
 			${ this._getSel('openImgs', true) }<br>
 			${ this._getBox('imgSrcBtns') }<br>
 			${ this._getSel('imgNames') }<br>
@@ -738,7 +726,7 @@ const CfgWindow = {
 				${ this._getSel('removeFName') }<br>
 				${ this._getBox('sendErrNotif') }<br>
 				${ this._getBox('scrAfterRep') }<br>
-				${ postform.files && !nav.isPresto ? this._getSel('fileInputs') : '' }
+				${ postform.files ? this._getSel('fileInputs') : '' }
 			</div>` : '' }
 			${ postform.form ? this._getSel('addPostForm') + '<br>' : '' }
 			${ postform.txta ? this._getBox('spacedQuote') + '<br>' : '' }
@@ -746,10 +734,9 @@ const CfgWindow = {
 			${ postform.subj ? this._getBox('warnSubjTrip') + '<br>' : '' }
 			${ postform.mail ? `${ this._getBox('addSageBtn') }
 				${ this._getBox('saveSage') }<br>` : '' }
-			${ postform.cap ? `${ aib.hasAltCaptcha ? `${ this._getBox('altCaptcha') }<br>` : '' }
-				${ !aib.makaba ? `${ this._getInp('capUpdTime') }<br>` : '' }
-				${ this._getSel('captchaLang') }<br>` : '' }
-			${ postform.txta ? `${ this._getSel('addTextBtns') }
+			${ postform.captcha ? `${ !aib.noCapUpdTime ? this._getInp('capUpdTime', true, 4) + '<br>' : '' }
+				${ postform.captcha.textEl ? `${ this._getSel('captchaLang') }<br>` : '' }` : '' }
+			${ !aib.noMarkupBtns && postform.txta ? `${ this._getSel('addTextBtns') }
 				${ !aib._4chan ? this._getBox('txtBtnsLoc') : '' }<br>` : '' }
 			${ postform.passw ? `${ this._getInp('passwValue', false, 9) }
 				${ this._getBox('userPassw') }<input type="button"` +
@@ -808,7 +795,7 @@ const CfgWindow = {
 				<div id="de-info-stats">${ statsTable }</div>
 				<div id="de-info-log">${ this._getInfoTable(Logger.getLogData(false), true) }</div>
 			</div>
-			${ !nav.hasWebStorage && !nav.isPresto && !localData || nav.hasGMXHR ? `
+			${ !nav.hasWebStorage && !localData || nav.hasGMXHR ? `
 				${ this._getSel('updDollchan') }
 				<div style="margin-top: 3px; text-align: center;">&gt;&gt;
 					<input type="button" id="de-cfg-button-updnow" value="${ Lng.checkNow[lang] }">
@@ -827,7 +814,7 @@ const CfgWindow = {
 		<span class="de-info-name">${ val[0] }</span>
 		<span>${ val[1] + (needMs ? 'ms' : '') }</span></div>`).join(''),
 	// Creates a text input for text option values
-	_getInp(id, addText = true, size = 2) {
+	_getInp(id, addText = true, size = 3) {
 		const el = doc.createElement('div');
 		el.append(Cfg[id]); // Escape HTML
 		return `<label class="de-cfg-label">
@@ -835,9 +822,9 @@ const CfgWindow = {
 		el.innerHTML }">${ addText && Lng.cfg[id] ? Lng.cfg[id][lang] : '' }</label>`;
 	},
 	// Creates a menu with a list of checkboxes. Uses for popup window.
-	_getList : arr => arrTags(arr, '<label class="de-block"><input type="checkbox"> ', '</label>'),
+	_getList: arr => arrTags(arr, '<label class="de-block"><input type="checkbox"> ', '</label>'),
 	// Creates a select for multiple option values
-	_getSel  : (id, needReload) => `<label class="de-cfg-label${ needReload ? ' de-cfg-needreload' : '' }">
+	_getSel : (id, needReload) => `<label class="de-cfg-label${ needReload ? ' de-cfg-needreload' : '' }">
 		<select class="de-cfg-select" info="${ id }">${ Lng.cfg[id].sel[lang].map((val, i) =>
 		`<option value="${ i }">${ val }</option>`).join('') }</select> ${ Lng.cfg[id].txt[lang] }</label>`,
 	// Creates a tab for tab bar

@@ -17,14 +17,11 @@ async function getStored(id) {
 				chrome.storage.sync.get(id, obj => resolve(obj[id]));
 			}
 		}));
-	} else if(nav.hasPrestoStorage) {
-		return prestoStorage.getItem(id);
 	}
 	return locStorage[id];
 }
 
 // Saves data into the global storage
-// FIXME: make async?
 function setStored(id, value) {
 	if(nav.hasNewGM) {
 		return GM.setValue(id, value);
@@ -45,8 +42,6 @@ function setStored(id, value) {
 				resolve();
 			});
 		});
-	} else if(nav.hasPrestoStorage) {
-		prestoStorage.setItem(id, value);
 	} else {
 		locStorage[id] = value;
 	}
@@ -54,7 +49,6 @@ function setStored(id, value) {
 }
 
 // Removes data from the global storage
-// FIXME: make async?
 function delStored(id) {
 	if(nav.hasNewGM) {
 		return GM.deleteValue(id);
@@ -62,8 +56,6 @@ function delStored(id) {
 		GM_deleteValue(id);
 	} else if(nav.hasWebStorage) {
 		chrome.storage.sync.remove(id, Function.prototype);
-	} else if(nav.hasPrestoStorage) {
-		prestoStorage.removeItem(id);
 	} else {
 		locStorage.removeItem(id);
 	}
@@ -130,14 +122,14 @@ const CfgSaver = {
 			delete val[domain];
 		}
 		const rv = setStored('DESU_Config', JSON.stringify(val));
-		// Violentmonkey bug: GM.setValue promise is not fulfilled.
+		// XXX: Violentmonkey bug. GM.setValue promise is not fulfilled.
 		if(rv && !nav.isViolentmonkey) {
 			await rv;
 		}
 	},
 
-	_isBusy : false,
-	_queue  : []
+	_isBusy: false,
+	_queue : []
 };
 
 // Toggles a particular config option (1|0)
@@ -147,6 +139,21 @@ async function toggleCfg(id) {
 
 // Config initialization, checking for Dollchan update.
 async function readCfg() {
+	// Detect built-in-page Dollchan copy and block it
+	if(!nav.isInPage) {
+		let locObj;
+		const locConfig = JSON.parse(locStorage.DESU_Config || '{}') || {};
+		if(aib.domain in locConfig && !$isEmpty(locObj = locConfig[aib.domain])) {
+			nav.hasInPageDE = true;
+			if(locObj.disabled !== 1) {
+				locObj.disabled = 1;
+				locConfig[aib.domain] = locObj;
+				locStorage.DESU_Config = JSON.stringify(locConfig);
+				deWindow.location.reload();
+			}
+		}
+	}
+
 	let obj;
 	const val = await getStoredObj('DESU_Config');
 	if(!(aib.domain in val) || $isEmpty(obj = val[aib.domain])) {
@@ -157,7 +164,6 @@ async function readCfg() {
 			delete obj.captchaLang;
 		}
 	}
-	defaultCfg.captchaLang = aib.captchaLang;
 	const browserLang = String(navigator.language).toLowerCase();
 	defaultCfg.language =
 		browserLang.startsWith('ru') ? 0 :
@@ -179,15 +185,7 @@ async function readCfg() {
 	if(!('Notification' in deWindow)) {
 		Cfg.desktNotif = 0;
 	}
-	if(nav.isPresto) {
-		Cfg.preLoadImgs = 0;
-		Cfg.findImgFile = 0;
-		if(!nav.hasOldGM) {
-			Cfg.updDollchan = 0;
-		}
-		Cfg.fileInputs = 0;
-	}
-	if(nav.scriptHandler === 'WebExtension') {
+	if(nav.isWebExtension) {
 		Cfg.updDollchan = 0;
 	}
 	if(Cfg.updThrDelay < 10) {
@@ -328,7 +326,8 @@ function readPostsData(firstPost, favObj) {
 		maybeSpells.value.endSpells();
 	}
 	if(aib.t && Cfg.panelCounter === 2) {
-		$id('de-panel-info-posts').textContent = Thread.first.postsCount - Thread.first.hiddenCount;
+		$q('#de-panel-info-posts', Panel.mainEl).textContent =
+			Thread.first.postsCount - Thread.first.hiddenCount;
 	}
 	if(updatedFav) {
 		saveFavorites(favObj);
@@ -339,7 +338,7 @@ function readPostsData(firstPost, favObj) {
 	// After following a link from Favorites, we need to open Favorites again.
 	const hasFavWinKey = sesStorage['de-fav-win'] === '1';
 	if(hasFavWinKey || Cfg.favWinOn) {
-		toggleWindow('fav', !!$q('#de-win-fav.de-win-active'), null, true);
+		toggleWindow('fav', !!$q('#de-win-fav.de-win-opened'), null, true);
 		if(hasFavWinKey) {
 			sesStorage.removeItem('de-fav-win');
 		}
@@ -376,16 +375,13 @@ function readViewedPosts() {
 	if(!Cfg.markViewed) {
 		return;
 	}
-	const data = sesStorage['de-viewed'];
-	if(data) {
-		data.split(',').forEach(pNum => {
-			const post = pByNum.get(+pNum);
-			if(post) {
-				post.el.classList.add('de-viewed');
-				post.isViewed = true;
-			}
-		});
-	}
+	sesStorage['de-viewed']?.split(',').forEach(pNum => {
+		const post = pByNum.get(+pNum);
+		if(post) {
+			post.el.classList.add('de-viewed');
+			post.isViewed = true;
+		}
+	});
 }
 
 class PostsStorage {

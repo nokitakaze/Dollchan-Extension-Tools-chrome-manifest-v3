@@ -7,7 +7,7 @@ class Captcha {
 		this.hasCaptcha = true;
 		this.textEl = null;
 		this.tNum = initNum;
-		this.parentEl = nav.matchesSelector(el, aib.qFormTr) ? el : aib.getCapParent(el);
+		this.parentEl = el.closest(aib.qFormTr) || aib.getCaptchaParent(el);
 		this.isAdded = false;
 		this._isHcap = !!$q('.h-captcha', this.parentEl);
 		this._isRecap = this._isHcap || !!$q('[id*="recaptcha"], [class*="recaptcha"]', this.parentEl);
@@ -34,7 +34,18 @@ class Captcha {
 			this.parentEl.innerHTML = this.originHTML;
 			this.textEl = $q('input[type="text"][name*="aptcha"]', this.parentEl);
 		}
-		this.initCapPromise();
+		const initPromise = aib.captchaInit?.(this);
+		if(initPromise) {
+			initPromise.then(() => this.showCaptcha(), err => {
+				if(err instanceof AjaxError) {
+					this._setUpdateError(err);
+				} else {
+					this.hasCaptcha = false;
+				}
+			});
+		} else if(this.hasCaptcha) {
+			this.showCaptcha(true);
+		}
 	}
 	handleEvent(e) {
 		switch(e.type) {
@@ -89,7 +100,7 @@ class Captcha {
 	initTextEl() {
 		this.textEl.autocomplete = 'off';
 		if(!aib.formHeaders && (aib.multiFile || Cfg.fileInputs !== 2)) {
-			this.textEl.placeholder = Lng.cap[lang];
+			this.textEl.placeholder = Lng.captcha[lang];
 		}
 		['keypress', 'focus'].forEach(e => this.textEl.addEventListener(e, this));
 		this.textEl.onkeypress = null;
@@ -101,7 +112,7 @@ class Captcha {
 			if(aib.needCallUpdateCaptchaAsync) {
 				await aib.updateCaptchaAsync(this, false);
 			} else if(this._isRecap) {
-				this._updateRecap();
+				this._updateRecaptcha();
 			}
 			return;
 		}
@@ -145,7 +156,7 @@ class Captcha {
 				this._setUpdateError(err);
 			}
 		} else if(this._isRecap) {
-			this._updateRecap();
+			this._updateRecaptcha();
 		} else if(this.textEl) {
 			this._updateTextEl(isFocus);
 			const img = $q('img', this.parentEl);
@@ -163,15 +174,10 @@ class Captcha {
 			const newSrc = aib.getCaptchaSrc(src, tNum);
 			img.src = '';
 			img.src = newSrc;
-			if(aib.stormWallFixCaptcha) {
-				aib.stormWallFixCaptcha(newSrc, img);
-			}
 		}
 	}
 	updateHelper(url, fn) {
-		if(aib.captchaUpdPromise) {
-			aib.captchaUpdPromise.cancelPromise();
-		}
+		aib.captchaUpdPromise?.cancelPromise();
 		return (aib.captchaUpdPromise = $ajax(url).then(xhr => {
 			aib.captchaUpdPromise = null;
 			fn(xhr);
@@ -183,7 +189,7 @@ class Captcha {
 		}));
 	}
 	async updateOutdated() {
-		if(!aib.makaba && this._lastUpdate && (Date.now() - this._lastUpdate > Cfg.capUpdTime * 1e3)) {
+		if(!aib.noCapUpdTime && this._lastUpdate && (Date.now() - this._lastUpdate > Cfg.capUpdTime * 1e3)) {
 			await this.refreshCaptcha(false);
 		}
 	}
@@ -199,7 +205,7 @@ class Captcha {
 			$show(this.parentEl);
 		}
 	}
-	_updateRecap() {
+	_updateRecaptcha() {
 		// <EXCLUDED_FROM_EXTENSION>
 		const script = doc.createElement('script');
 		script.src = aib.protocol +

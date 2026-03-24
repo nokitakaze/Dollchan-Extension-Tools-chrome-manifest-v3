@@ -60,14 +60,14 @@ function $ajax(url, params = null, isCORS = false) {
 		};
 		let loadTO = needTO && setTimeout(timeoutFn, WAITING_TIME);
 		const newParams = {
-			method : params?.method || 'GET',
-			url    : nav.isSafari ? aib.getAbsLink(url) : url,
+			method: params?.method || 'GET',
+			url   : nav.isSafari ? aib.getAbsLink(url) : url,
 			onreadystatechange(e) {
 				if(needTO) {
 					clearTimeout(loadTO);
 				}
 				if(e.readyState === 4 && !(
-					// Violentmonkey gives extra stage with undefined responseText and 200 status
+					// XXX: Violentmonkey gives extra stage with undefined responseText and 200 status
 					nav.isViolentmonkey && e.status === 200 &&
 					typeof e.responseText === 'undefined' && typeof e.response === 'undefined'
 				)) {
@@ -158,7 +158,7 @@ function $ajax(url, params = null, isCORS = false) {
 			return $ajax(url, params);
 		}
 	} else {
-		reject(new AjaxError(0, 'Ajax error: Canʼt send any type of request.'));
+		reject(new AjaxError(0, 'Ajax error: Can\'t send any type of request.'));
 	}
 	return new CancelablePromise((res, rej) => {
 		resolve = res;
@@ -247,17 +247,15 @@ const AjaxCache = {
 };
 
 function getAjaxResponseEl(text, needForm) {
-	return !text.includes('</html>') ? null :
+	return aib.hasHtmlTag && !text.includes('</html>') ? null :
 		needForm ? $q(aib.qDelForm, $createDoc(text)) : $createDoc(text);
 }
 
 function ajaxLoad(url, needForm = true, useCache = false, checkArch = false) {
 	return AjaxCache.runCachedAjax(url, useCache).then(xhr => {
-		const fnResult = el => !el ? CancelablePromise.reject(new AjaxError(0, Lng.errCorruptData[lang])) :
+		const el = getAjaxResponseEl(xhr.responseText, needForm);
+		return !el ? CancelablePromise.reject(new AjaxError(0, Lng.errCorruptData[lang])) :
 			checkArch ? [el, (xhr.responseURL || '').includes('/arch/')] : el;
-		const text = xhr.responseText;
-		const el = getAjaxResponseEl(text, needForm);
-		return aib.stormWallFixAjax ? aib.stormWallFixAjax(url, text, el, needForm, fnResult) : fnResult(el);
 	}, err => err.code === 304 ? null : CancelablePromise.reject(err));
 }
 
@@ -276,11 +274,9 @@ function ajaxPostsLoad(board, tNum, useCache, useJson = true) {
 			}
 		}, err => err.code === 304 ? null : CancelablePromise.reject(err));
 	}
-	return aib.hasArchive ?
-		ajaxLoad(aib.getThrUrl(board, tNum), true, useCache, true)
-			.then(data => data?.[0] ? new DOMPostsBuilder(data[0], data[1]) : null) :
-		ajaxLoad(aib.getThrUrl(board, tNum), true, useCache)
-			.then(form => form ? new DOMPostsBuilder(form) : null);
+	return ajaxLoad(aib.getThrUrl(board, tNum), true, useCache, aib.hasArchive).then(aib.hasArchive ?
+		data => data?.[0] ? new DOMPostsBuilder(data[0], data[1]) : null :
+		formEl => formEl ? new DOMPostsBuilder(formEl) : null);
 }
 
 function infoLoadErrors(err, showError = true) {

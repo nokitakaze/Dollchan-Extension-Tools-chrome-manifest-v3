@@ -3,13 +3,13 @@
 =========================================================================================================== */
 
 const HotKeys = {
-	cPost          : null,
-	enabled        : false,
-	gKeys          : null,
-	lastPageOffset : 0,
-	ntKeys         : null,
-	tKeys          : null,
-	version        : 7,
+	cPost         : null,
+	enabled       : false,
+	gKeys         : null,
+	lastPageOffset: 0,
+	ntKeys        : null,
+	tKeys         : null,
+	version       : 7,
 	clearCPost() {
 		this.cPost = null;
 		this.lastPageOffset = 0;
@@ -126,7 +126,7 @@ const HotKeys = {
 				}
 				break;
 			case 5: // Send post (txt)
-				if(el !== postform.txta && el !== postform.cap.textEl) {
+				if(el !== postform.txta && el !== postform.captcha.textEl) {
 					return;
 				}
 				postform.subm.click();
@@ -138,7 +138,7 @@ const HotKeys = {
 				toggleWindow('hid', false);
 				break;
 			case 8: // Open/close panel
-				$toggle($id('de-panel-buttons'));
+				$toggle($q('#de-panel-buttons', Panel.mainEl));
 				break;
 			case 9: // Mask/unmask images
 				toggleCfg('maskImgs').then(() => updateCSS());
@@ -561,8 +561,8 @@ class KeyEditListener {
 	}
 }
 // Browsers have different codes for these keys (see HotKeys.readKeys):
-//    Firefox - '-' - 173, '=' - 61, ';' - 59
-//    Chrome/Opera: '-' - 189, '=' - 187, ';' - 186
+// Firefox: '-' - 173, '=' - 61, ';' - 59
+// Chrome: '-' - 189, '=' - 187, ';' - 186
 /* eslint-disable comma-spacing, no-sparse-arrays */
 KeyEditListener.keyCodes = [
 	'',,,,,,,,'Backspace','Tab',,,,'Enter',,,'Shift','Ctrl','Alt',/* Pause/Break */,/* Caps Lock */,,,,,,,

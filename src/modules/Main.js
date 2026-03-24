@@ -2,21 +2,11 @@
                                                      MAIN
 =========================================================================================================== */
 
+// XXX: Greasemonkey/Firemonkey hack to run in all frames
 function runFrames() {
-	let inf;
-	if(typeof GM !== 'undefined') {
-		inf = GM.info;
-	} else {
-		if(typeof GM_info === 'undefined') {
-			return;
-		}
-		inf = GM_info;
-	}
-	if(!inf) {
-		return;
-	}
-	const handlerName = inf.scriptHandler;
-	if(handlerName !== 'Greasemonkey' && handlerName !== 'FireMonkey' || !deWindow.frames[0]) {
+	if(!deWindow.frames[0] ||
+		!(nav.scriptHandler.startsWith('Greasemonkey') || nav.scriptHandler.startsWith('FireMonkey'))
+	) {
 		return;
 	}
 	const deMainFuncFrame = frameEl => {
@@ -25,7 +15,6 @@ function runFrames() {
 			const deWindow = fDoc.defaultView;
 			deMainFuncInner(
 				deWindow,
-				deWindow.opera?.scriptStorage,
 				deWindow.FormData,
 				(x, y) => deWindow.scrollTo(x, y),
 				typeof localData === 'object' ? localData : null
@@ -52,23 +41,18 @@ async function runMain(checkDomains, dataPromise) {
 	if(!doc.body || !aib && !(aib = getImageBoard(checkDomains, true))) {
 		return;
 	}
+	if(!locStorage) {
+		nav = initBrowser();
+	}
 	let formEl = $q(aib.qDelForm + ', [de-form]');
 	if(!formEl) {
 		runFrames();
 		return;
 	}
-	if(doc.body.classList.contains('de-runned') ||
-		aib.observeContent && !aib.observeContent(checkDomains, dataPromise)
-	) {
+	if(aib.observeContent?.(checkDomains, dataPromise) === false) {
 		return;
 	}
 	Logger.log('Imageboard check');
-	if(!locStorage) {
-		if(!checkStorage()) {
-			return;
-		}
-		initNavFuncs();
-	}
 	const [favObj] = await (dataPromise || Promise.all([readFavorites(), readCfg()]));
 	if(!Cfg.disabled) {
 		const u = await aib.initAsync();
@@ -76,10 +60,9 @@ async function runMain(checkDomains, dataPromise) {
 			return;
 		}
 	}
-	if(!localData && doc.body.classList.contains('de-mode-local')) {
+	if(!localData && doc.body.classList.contains('de-runned-local')) {
 		return;
 	}
-	doc.body.classList.add('de-runned');
 	Logger.log('Storage loading');
 	addSVGIcons();
 	if(Cfg.disabled) {
@@ -178,9 +161,6 @@ async function runMain(checkDomains, dataPromise) {
 }
 
 function initMain() {
-	if(window.name === 'de-prohibited') {
-		return;
-	}
 	if(doc.readyState !== 'loading') {
 		needScroll = false;
 		runMain(true, null);
@@ -188,10 +168,7 @@ function initMain() {
 	}
 	let dataPromise = null;
 	if((aib = getImageBoard(true, false))) {
-		if(!checkStorage()) {
-			return;
-		}
-		initNavFuncs();
+		nav = initBrowser();
 		dataPromise = Promise.all([readFavorites(), readCfg()]);
 	}
 	needScroll = true;

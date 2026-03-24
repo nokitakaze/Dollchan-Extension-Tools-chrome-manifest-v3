@@ -118,18 +118,21 @@ class ImagesViewer {
 	handleEvent(e) {
 		switch(e.type) {
 		case 'click': {
-			const el = e.target;
-			const tag = el.tagName.toLowerCase();
-			if(this.data.isVideo && ExpandableImage.isControlClick(e) ||
-				tag !== 'img' && tag !== 'video' &&
-				!el.classList.contains('de-fullimg-wrap') &&
-				!el.classList.contains('de-fullimg-wrap-link') &&
-				!el.classList.contains('de-fullimg-video-hack') &&
-				el.className !== 'de-fullimg-load'
-			) {
+			// Close ImagesViewer when clicking on image/video.
+			// NOTE: There is a close button in Chrome Mobile, don't need to check the controls area.
+			if(this.data.isVideo && !(nav.isMobile && nav.isWebkit) && ExpandableImage.isControlClick(e)) {
 				return;
 			}
-			if(e.button === 0) {
+			const tag = e.target.tagName.toLowerCase();
+			if(tag !== 'img' && tag !== 'video') {
+				const { classList } = e.target;
+				if(['de-fullimg-load', 'de-fullimg-video-hack', 'de-fullimg-wrap', 'de-fullimg-wrap-link']
+					.every(c => !classList.contains(c))
+				) {
+					return;
+				}
+			}
+			if(e.button === 0) { // Primary button
 				if(this._moved && !nav.isMobile) {
 					this._moved = false;
 				} else {
@@ -149,11 +152,12 @@ class ImagesViewer {
 			this._oldY = e.clientY;
 			['mousemove', 'mouseup'].forEach(e => doc.body.addEventListener(e, this, true));
 			break;
-		case 'mousemove': this._moveFullImg(e.clientX, e.clientY); return;
+		case 'mousemove':
+			this._moveFullImg(e.clientX, e.clientY);
+			return;
 		case 'mouseup':
 			['mousemove', 'mouseup'].forEach(e => doc.body.removeEventListener(e, this, true));
 			return;
-
 		case 'mousewheel':
 			this._handleZoom(e.clientX, e.clientY,
 				-1 / 40 * ('wheelDeltaY' in e ? e.wheelDeltaY : e.wheelDelta));
@@ -163,7 +167,7 @@ class ImagesViewer {
 				this._zoomed = false;
 				return;
 			}
-		/* falls through */
+			/* falls through */
 		case 'touchmove': {
 			const touchesLen = e.targetTouches.length;
 			if(touchesLen === 1 && !this._zoomed) {
@@ -215,17 +219,24 @@ class ImagesViewer {
 		if(isNextAngle) {
 			this.data.rotate += this.data.rotate === 270 ? -270 : 90;
 		}
+		const { isVideo } = this.data;
 		const angle = this.data.rotate;
-		const isVert = angle === 90 || angle === 270;
+		const isRotated = angle === 90 || angle === 270;
 		const img = $q('img, video', this._fullEl);
+		const ratio = this._height / this._width;
+		const ratio1 = 1 / ratio;
+		img.style.height = `${ (isRotated ? ratio : 1) * 100 }%`;
+		img.style.width = `${ (isRotated ? ratio1 : 1) * 100 }%`;
 		img.style.transform = `rotate(${ angle }deg)${
-			angle === 90 ? ' translateY(-100%)' : angle === 270 ? ' translateX(-100%)' : '' }`;
-		img.classList.toggle('de-fullimg-rotated', isVert);
-		img.style.height = `${ (isVert ? this._height / this._width : 1) * 100 }%`;
-		if(this.data.isVideo && nav.firefoxVer >= 59) {
-			img.previousElementSibling.style =
-				(isVert ? 'width: calc(100% - 40px); height: 100%; ' : '') +
-				(angle === 90 ? 'right: 0; ' : '') +
+			angle === 90 ? ` translate(${ (1 - ratio) * 50 }%, ${
+				isVideo ? 0 : (ratio1 - 1) * 50 }%)` :
+			angle === 270 ? ` translate(${ (ratio - 1) * 50 }%, ${
+				isVideo ? 0 : (1 - ratio1) * 50 }%)` : '' }`;
+		img.classList.toggle('de-fullimg-rotated', isRotated);
+		if(isVideo && nav.firefoxVer >= 59) {
+			img.previousElementSibling.style = // .de-fullimg-video-hack
+				(isRotated ? 'width: calc(100% - 40px); height: 100%; ' : '') +
+				(angle === 90 ? 'right: 0; ' : angle === 270 ? 'left: 0; ' : '') +
 				(angle === 180 ? 'bottom: 0;' : '');
 		}
 		if(isNextAngle || angle !== 180) {
@@ -363,9 +374,9 @@ class ImagesViewer {
 		this._oldL = (Post.sizing.wWidth - width) / 2 - 1;
 		this._oldT = (Post.sizing.wHeight - height) / 2 - 1;
 		const el = $add(`<div class="de-fullimg-center${
-			data.isVideo ? ' de-fullimg-center-video' : '' }" style="top:${ this._oldT -
-			(Cfg.imgInfoLink ? 11 : 0) - (nav.firefoxVer >= 59 && data.isVideo ? 10 : 0) }px; left:${
-			this._oldL }px; width:${ width }px; height:${ height }px; display: block"></div>`);
+			data.isVideo ? ' de-fullimg-center-video' : '' }" style="top:${
+			this._oldT - (Cfg.imgInfoLink ? 18 : 0) }px; left:${ this._oldL }px; width:${
+			width }px; height:${ height }px; display: block;"></div>`);
 		el.append(this._fullEl);
 		const scale = 100 * width / data.width;
 		$q('.de-fullimg-scale', this._fullEl).textContent = scale === 100 ? '' : `${ parseInt(scale, 10) }%`;
@@ -466,7 +477,7 @@ class ExpandableImage {
 			this.redirected = true;
 			Object.defineProperty(this, 'src', { value: newSrc });
 			$q('img, video', fullEl).src = this.el.src =
-				this.el.parentNode.href = getImgNameLink(this.el).href = newSrc;
+				this.el.parentNode.href = aib.getImgNameLink(this.el).href = newSrc;
 			if(!this.isVideo) {
 				$q('a', fullEl).href = newSrc;
 			}
@@ -485,7 +496,6 @@ class ExpandableImage {
 		this._fullEl.remove();
 		this._fullEl = null;
 		$show(this.el.parentNode);
-		(aib.hasPicWrap ? this._getImageParent : this.el.parentNode).nextSibling.remove();
 		if(e) {
 			e.preventDefault();
 			if(this.inPview) {
@@ -529,8 +539,7 @@ class ExpandableImage {
 			}
 		}
 		const maxWidth = Math.min(Post.sizing.wWidth - 2, Cfg.maxImgSize);
-		const maxHeight = Math.min(Post.sizing.wHeight -
-			(Cfg.imgInfoLink ? 24 : 2) - (nav.firefoxVer >= 59 && this.isVideo ? 19 : 0), Cfg.maxImgSize);
+		const maxHeight = Math.min(Post.sizing.wHeight - 2, Cfg.maxImgSize);
 		if(width > maxWidth || height > maxHeight) {
 			const ar = width / height;
 			if(ar > maxWidth / maxHeight) {
@@ -569,8 +578,6 @@ class ExpandableImage {
 			origImgTop = e.target.getBoundingClientRect().top;
 		}
 		this.expanded = true;
-		(aib.hasPicWrap ? this._getImageParent : this.el.parentNode).insertAdjacentHTML('afterend',
-			'<div class="de-fullimg-after"></div>');
 		const fullEl = this._fullEl = this.getFullImg(true, null, null);
 		fullEl.addEventListener('click', e => this.collapseImg(e), true);
 		this.srcBtnEvents(this);
@@ -689,6 +696,7 @@ class ExpandableImage {
 		const title = hasTitle ? this.el.getAttribute('de-metatitle') : '';
 		wrapEl = $add(`<div class="de-fullimg-wrap${ wrapClass }"${ inPostSize }>${
 			nav.firefoxVer >= 59 || nav.isMobile ? `<div class="de-fullimg-video-hack">${
+				// XXX: Videos won't close in Chrome Mobile. Create a close button.
 				nav.isMobile && nav.isWebkit ? '\u00D7' : ''
 			}</div>` : '' }
 			<video src="${ src }" ` +
@@ -906,14 +914,14 @@ class AttachedImage extends ExpandableImage {
 	}
 	_getImageSize() {
 		if(this.info) {
-			const size = this.info.match(/(?:[\s(]|^)(\d+)\s?[x\u00D7]\s?(\d+)(?:[)\s,]|$)/);
+			const size = this.info.match(/(?:[\s(,]|^)(\d+)\s?[x\u00D7]\s?(\d+)(?:[)\s,]|$)/);
 			return size ? [size[1], size[2]] : null;
 		}
 		return null;
 	}
 	_getImageSrc() {
-		// Donʼt use aib.getImgSrcLink(this.el).href
-		// If #ihash spells enabled, Chrome reads href in ajaxed posts as empty -> image canʼt be expanded!
+		// Don't use aib.getImgSrcLink(this.el).href
+		// If #ihash spells enabled, Chrome reads href in ajaxed posts as empty -> image can't be expanded!
 		return aib.getImgSrcLink(this.el).getAttribute('href');
 	}
 }
@@ -1082,10 +1090,6 @@ const ImagesHashStorage = Object.create({
 		return val;
 	}
 });
-
-function getImgNameLink(el) {
-	return $q(aib.qPostImgNameLink, aib.getImgWrap(el));
-}
 
 function addImgButtons(link) {
 	link.insertAdjacentHTML('beforebegin', '<svg class="de-btn-img">' +

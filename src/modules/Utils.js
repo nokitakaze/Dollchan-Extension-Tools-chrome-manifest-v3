@@ -107,6 +107,7 @@ function $script(mode) {
 
 function $css(text) {
 	return $bEnd(doc.head, `<style type="text/css">${
+		// XXX: Old Safari hack for unsupported style properties.
 		nav.isSafari && !('flex' in doc.body.style) ?
 			text.replace(/(transform|transition|flex|align-items)/g, ' -webkit-$1') : text
 	}</style>`);
@@ -326,8 +327,8 @@ const Logger = {
 		}
 	},
 
-	_finished : false,
-	_marks    : []
+	_finished: false,
+	_marks   : []
 };
 
 // Some async operations should be cancelable, to ignore all the chaining callbacks of promises.
@@ -625,7 +626,7 @@ class TarBuilder {
 class WebmParser {
 	constructor(data) {
 		let offset = 0;
-		const dv = nav.getUnsafeDataView(data);
+		const dv = nav.dataView(data);
 		const len = dv.byteLength;
 		const el = new WebmParser.Element(dv, len, 0);
 		const voids = [];
@@ -679,7 +680,7 @@ class WebmParser {
 		if(this.error) {
 			return null;
 		}
-		this.rv[0] = nav.getUnsafeUint8Array(this.data, 0, this.segment.endOffset);
+		this.rv[0] = nav.uint8Array(this.data, 0, this.segment.endOffset);
 		return this.rv;
 	}
 }

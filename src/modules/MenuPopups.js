@@ -28,7 +28,7 @@ function $popup(id, txt, isWait = false) {
 		el = $bEnd($id('de-wrapper-popup'),
 			`<div class="${ aib.cReply } de-popup" id="de-popup-${ id }">${ html }</div>`);
 		el.onclick = e => {
-			let el = nav.fixEventEl(e.target);
+			let el = e.target;
 			el = el.tagName.toLowerCase() === 'svg' ? el.parentNode : el;
 			if(el.className === 'de-popup-btn') {
 				closePopup(el.parentNode);
@@ -102,10 +102,10 @@ class Menu {
 			({ textContent: s }) => insertText($id('de-spell-txt'), s +
 				(!aib.t || s === '#op' || s === '#rep' || s === '#outrep' ? '' : `[${ aib.b },${ aib.t }]`) +
 				(Spells.needArg[Spells.names.indexOf(s.substr(1))] ? '(' : '')));
-		case 'de-panel-refresh':
+		case 'de-panel-btn-refresh':
 			return new Menu(el, tags(Lng.selAjaxPages[lang]),
 				el => Pages.loadPages(Array.prototype.indexOf.call(el.parentNode.children, el) + 1));
-		case 'de-panel-savethr':
+		case 'de-panel-btn-savethr':
 			return new Menu(el, tags($q(aib.qPostImg, DelForm.first.el) ?
 				Lng.selSaveThr[lang] : [Lng.selSaveThr[lang][0]]),
 			el => {
@@ -121,12 +121,12 @@ class Menu {
 					ContentLoader.downloadThread(imgOnly);
 				}
 			});
-		case 'de-panel-audio-off':
+		case 'de-panel-btn-audio-off':
 			return new Menu(el, tags(Lng.selAudioNotif[lang]), el => {
 				updater.enableUpdater();
 				updater.toggleAudio(
 					[3e4, 6e4, 12e4, 3e5][Array.prototype.indexOf.call(el.parentNode.children, el)]);
-				$id('de-panel-audio-off').id = 'de-panel-audio-on';
+				$q('#de-panel-btn-audio-off', Panel.mainEl).id = 'de-panel-btn-audio-on';
 			});
 		}
 	}
@@ -192,8 +192,8 @@ class Menu {
 			if(e.target.classList.contains('de-menu-item')) {
 				this.removeMenu();
 				this._clickFn(e.target, e);
-				if(!Cfg.expandPanel && !$q('.de-win-active')) {
-					$hide($id('de-panel-buttons'));
+				if(!Cfg.expandPanel && !$q('.de-win-opened')) {
+					$hide($q('#de-panel-buttons', Panel.mainEl));
 				}
 			}
 			break;
@@ -201,7 +201,7 @@ class Menu {
 			/* falls through */
 		case 'mouseout': {
 			clearTimeout(this._closeTO);
-			const targetEl = nav.fixEventEl(e.relatedTarget);
+			const targetEl = e.relatedTarget;
 			if(!$contains(this.el, targetEl)) {
 				if(isOverEvent) {
 					this.onover?.();

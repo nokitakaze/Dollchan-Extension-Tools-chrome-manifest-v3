@@ -7,7 +7,6 @@ class BaseBoard {
 		// Imageboard-specific booleans
 		this._4chan = false;
 		this.kohlchan = false;
-		this.makaba = false;
 
 		// Query paths
 		this.cReply = 'reply';
@@ -37,29 +36,30 @@ class BaseBoard {
 		this.qPostImgInfo = '.filesize';
 		this.qPostMsg = 'blockquote';
 		this.qPostName = '.postername, .commentpostername';
-		this.qPostUid = null;
+		this.qPostRef = '.reflink';
 		this.qPostSubj = '.filetitle';
 		this.qPostTrip = '.postertrip';
-		this.qPostRef = '.reflink';
+		this.qPostUid = null;
 		this.qPostsParent = null;
+		this.qReplyBtn = '.de-post-btns ~ a';
 		this.qTrunc = '.abbrev, .abbr, .shortened';
 
-		// Other propertioes
+		// Other properties
 		let { port } = deWindow.location;
 		port = port ? ':' + port : '';
 		this.anchor = '#';
 		this.b = '';
-		this.captchaRu = false;
-		this.domain = domain + port;
+		this.captchaUpdPromise = null;
 		this.docExt = null;
+		this.domain = domain + port;
 		this.firstPage = 0;
 		this.formHeaders = false;
 		this.formParent = 'parent';
-		this.hasAltCaptcha = false;
 		this.hasArchive = false;
 		this.hasCatalog = false;
+		this.hasHtmlTag = true;
 		this.hasOPNum = false;
-		this.hasPicWrap = false;
+		this.hasPostsBreak = false;
 		this.hasRefererErr = false;
 		this.hasTextLinks = false;
 		this.host = deWindow.location.hostname + port;
@@ -67,43 +67,13 @@ class BaseBoard {
 		this.jsonSubmit = false;
 		this.markupBB = false;
 		this.multiFile = false;
+		this.noCapUpdTime = false;
+		this.noMarkupBtns = false;
 		this.page = 0;
 		this.protocol = protocol;
 		this.res = 'res/';
 		this.t = false;
 		this.timePattern = 'w+dd+m+yyyy+hh+ii+ss';
-	}
-	get qFormMail() {
-		return $match('tr:not([style*="none"]) input:not([type="hidden"]):not([style*="none"])',
-			'[name="email"]', '[name="em"]', '[name="field2"]', '[name="sage"]');
-	}
-	get qFormName() {
-		return $match('tr:not([style*="none"]) input:not([type="hidden"]):not([style*="none"])',
-			'[name="name"]', '[name="field1"]');
-	}
-	get qFormSubj() {
-		return $match('tr:not([style*="none"]) input:not([type="hidden"]):not([style*="none"])',
-			'[name="subject"]', '[name="field3"]');
-	}
-	get qMsgImgLink() {
-		const value = $match(this.qPostMsg.split(', ').join(' a, ') + ' a',
-			'[href$=".jfif"]', '[href$=".jpg"]', '[href$=".jpeg"]', '[href$=".png"]', '[href$=".gif"]',
-			'[href$=".avif"]', '[href$=".webp"]');
-		Object.defineProperty(this, 'qMsgImgLink', { value });
-		return value;
-	}
-	get qPostImgNameLink() {
-		const value = $match(this.qPostImgInfo.split(', ').join(' a, ') + ' a',
-			'[href$=".jfif"]', '[href$=".jpg"]', '[href$=".jpeg"]', '[href$=".png"]', '[href$=".gif"]',
-			'[href$=".avif"]', '[href$=".webm"]', '[href$=".webp"]', '[href$=".mov"]', '[href$=".mp4"]',
-			'[href$=".m4v"]', '[href$=".ogv"]', '[href$=".apng"]', ', [href^="blob:"]');
-		Object.defineProperty(this, 'qPostImgNameLink', { value });
-		return value;
-	}
-	get qThread() {
-		const value = $q('.thread') ? '.thread' : '[id^="thread"]';
-		Object.defineProperty(this, 'qThread', { value });
-		return value;
 	}
 	get captchaAfterSubmit() {
 		return null;
@@ -153,6 +123,9 @@ class BaseBoard {
 	get getSubmitData() {
 		return null;
 	}
+	get handlePostClick() {
+		return null;
+	}
 	get isArchived() {
 		return false;
 	}
@@ -180,6 +153,38 @@ class BaseBoard {
 	getPostersCountAsync() {
 		return Promise.resolve('');
 	}
+	get qFormMail() {
+		return $match('tr:not([style*="none"]) input:not([type="hidden"]):not([style*="none"])',
+			'[name="email"]', '[name="em"]', '[name="field2"]', '[name="sage"]');
+	}
+	get qFormName() {
+		return $match('tr:not([style*="none"]) input:not([type="hidden"]):not([style*="none"])',
+			'[name="name"]', '[name="field1"]');
+	}
+	get qFormSubj() {
+		return $match('tr:not([style*="none"]) input:not([type="hidden"]):not([style*="none"])',
+			'[name="subject"]', '[name="field3"]');
+	}
+	get qMsgImgLink() {
+		const value = $match(this.qPostMsg + ' a',
+			'[href$=".jfif"]', '[href$=".jpg"]', '[href$=".jpeg"]', '[href$=".png"]', '[href$=".gif"]',
+			'[href$=".avif"]', '[href$=".webp"]');
+		Object.defineProperty(this, 'qMsgImgLink', { value });
+		return value;
+	}
+	get qPostImgNameLink() {
+		const value = $match(this.qPostImgInfo + ' a',
+			'[href$=".jfif"]', '[href$=".jpg"]', '[href$=".jpeg"]', '[href$=".png"]', '[href$=".gif"]',
+			'[href$=".avif"]', '[href$=".webm"]', '[href$=".webp"]', '[href$=".mov"]', '[href$=".mp4"]',
+			'[href$=".m4v"]', '[href$=".ogv"]', '[href$=".apng"]', '[href^="blob:"]');
+		Object.defineProperty(this, 'qPostImgNameLink', { value });
+		return value;
+	}
+	get qThread() {
+		const value = $q('.thread') ? '.thread' : '[id^="thread"]';
+		Object.defineProperty(this, 'qThread', { value });
+		return value;
+	}
 	get reCrossLinks() {
 		const value = new RegExp(`>https?:\\/\\/[^\\/]*${ this.domain }\\/([a-z0-9]+)\\/${
 			escapeRegExp(this.res) }(\\d+)(?:[^#<]+)?(?:#i?(\\d+))?<`, 'g');
@@ -192,16 +197,7 @@ class BaseBoard {
 	get sendHTML5Post() {
 		return null;
 	}
-	get stormWallFixAjax() {
-		return null;
-	}
-	get stormWallFixCaptcha() {
-		return null;
-	}
-	get stormWallFixSubmit() {
-		return null;
-	}
-	get stormWallHelper() {
+	get updateCounters() {
 		return null;
 	}
 	fixHTML(data, isForm = false) {
@@ -253,7 +249,7 @@ class BaseBoard {
 		if(isForm) {
 			const newForm = $bBegin(data, str);
 			$hide(data);
-			deWindow.addEventListener('load', () => $id('de-dform-old').remove());
+			deWindow.addEventListener('load', () => $id('de-dform-old')?.remove());
 			return newForm;
 		}
 		data.innerHTML = str;
@@ -286,7 +282,10 @@ class BaseBoard {
 	getBanId(postEl) {
 		return this.qBan && $q(this.qBan, postEl) ? 1 : 0;
 	}
-	getCapParent(el) {
+	getCaptchaEl(form) {
+		return $q('input[type="text"][name*="aptcha"], *[id*="captcha"], *[class*="captcha"]', form);
+	}
+	getCaptchaParent(el) {
 		return el.closest(this.qFormTr);
 	}
 	getCaptchaSrc(src, tNum) {
@@ -295,16 +294,13 @@ class BaseBoard {
 		return tNum ? temp.replace(/mainpage|res\d+/, 'res' + tNum) : temp.replace(/res\d+/, 'mainpage');
 	}
 	getEmptyFile(field, name) {
-		return {
-			el    : field,
-			name,
-			type  : 'application/octet-stream',
-			value : new File([''], '')
-		};
+		return { el: field, name, type: 'application/octet-stream', value: new File([''], '') };
 	}
 	getImgInfo(wrap) {
-		const el = $q(this.qPostImgInfo, wrap);
-		return el ? el.textContent : '';
+		return $q(this.qPostImgInfo, wrap)?.textContent || '';
+	}
+	getImgNameLink(img) {
+		return $q(this.qPostImgNameLink, this.getImgWrap(img));
 	}
 	getImgRealName(wrap) {
 		const el = $q(this.qPostImgNameLink, wrap);
@@ -339,11 +335,7 @@ class BaseBoard {
 		return +post.id.match(/\d+/);
 	}
 	getPostElOfEl(el) {
-		const sel = this.qPost + ', [de-thread], .de-pview';
-		while(el && !nav.matchesSelector(el, sel)) {
-			el = el.parentElement;
-		}
-		return el;
+		return el.closest(this.qPost + ', [de-thread], .de-pview');
 	}
 	getPostOfEl(el) {
 		return pByEl.get(this.getPostElOfEl(el));
@@ -372,14 +364,11 @@ class BaseBoard {
 	getTNum(thr) {
 		return +$q('input[type="checkbox"]', thr).value;
 	}
-	insertMarkupButtons(postForm, el) {
-		(Cfg.txtBtnsLoc ? $id('de-resizer-text') || postForm.txta : postForm.subm).after(el);
-	}
 	isAjaxStatusOK(status) {
 		return status === 200 || status === 206;
 	}
 	isIgnoreError(txt) {
-		return /successful|uploaded|updating|post deleted|post created|обновл|удален[о.]/i.test(txt);
+		return /successful|updating|post deleted|post created|обновл|удален[о.]/i.test(txt);
 	}
 	parseURL() {
 		const url = (deWindow.location.pathname || '').replace(/^[/]+/, '').replace(/[/]+/g, '/');
@@ -396,9 +385,6 @@ class BaseBoard {
 		if(this.docExt === null) {
 			this.docExt = (url.match(/\.[a-z]+$/) || ['.html'])[0];
 		}
-	}
-	removeMarkupButtons(el) {
-		el?.remove();
 	}
 	updateSubmitBtn(el) {
 		el.value = Lng.reply[lang];

@@ -4,9 +4,9 @@
 =========================================================================================================== */
 
 const ContentLoader = {
-	afterFn   : null,
-	isLoading : false,
-	popupId   : null,
+	afterFn  : null,
+	isLoading: false,
+	popupId  : null,
 	downloadThread(imgOnly) {
 		let progress, counter;
 		let current = 1;
@@ -17,7 +17,7 @@ const ContentLoader = {
 		let count = els.length;
 		const delSymbols = (str, r = '') => str.replace(/[\\/:*?"<>|]/g, r);
 		this._thrPool = new TasksPool(4, (num, data) => this.loadFileData(data[0]).then(fileData => {
-			const [url, fName, el, parentLink] = data;
+			const [url, fName, img, parentLink] = data;
 			let safeName = delSymbols(fName, '_');
 			progress.value = counter.innerHTML = current++;
 			if(parentLink) {
@@ -27,38 +27,36 @@ const ContentLoader = {
 				} else {
 					thumbName = 'thumbs/' + thumbName;
 					safeName = fileData ? 'images/' + safeName : thumbName;
-					parentLink.href = getImgNameLink(el).href = safeName;
+					parentLink.href = aib.getImgNameLink(img).href = safeName;
 				}
 				if(fileData) {
 					tar.addFile(safeName, fileData);
 				} else {
-					warnings += `<br>${ Lng.cantLoad[lang] } <a href="${ url }">${ url }</a>` +
-						`<br>${ Lng.willSavePview[lang] }`;
+					warnings += `<br>${ Lng.cantLoad[lang] } <a href="${ url }">${ url }</a><br>${
+						Lng.willSavePview[lang] }`;
 					$popup('err-files', Lng.loadErrors[lang] + warnings);
 					if(imgOnly) {
-						return this.getDataFromImg(el).then(data =>
+						return this.getDataFromImg(img).then(data =>
 							tar.addFile(thumbName, data), Function.prototype);
 					}
 				}
-				return imgOnly ? null : this.getDataFromImg(el).then(
-					data => tar.addFile(el.src = thumbName, data),
-					() => (el.src = safeName));
+				return imgOnly ? null : this.getDataFromImg(img)
+					.then(data => tar.addFile(img.src = thumbName, data), () => (img.src = safeName));
 			} else if(fileData?.length) {
-				tar.addFile(el.href = el.src = 'data/' + safeName, fileData);
+				tar.addFile(img.href = img.src = 'data/' + safeName, fileData);
 			} else {
-				el.remove();
+				img.remove();
 			}
 		}), async () => {
 			const docName = `${ aib.domain }-${ delSymbols(aib.b) }-${ aib.t }`;
 			if(!imgOnly) {
 				$q('head', dc).insertAdjacentHTML('beforeend',
 					'<script type="text/javascript" src="data/dollscript.js" charset="utf-8"></script>');
-				const dcBody = $q('body', dc);
-				dcBody.classList.remove('de-runned');
-				dcBody.classList.add('de-mode-local');
+				const docBody = $q('body', dc);
+				docBody.classList.add('de-runned-local');
 				$delAll('#de-css, #de-css-dynamic, #de-css-user', dc);
 				tar.addString('data/dollscript.js', `${ nav.isESNext ?
-					`(${ String(deMainFuncInner) })(window, null, null, (x, y) => window.scrollTo(x, y), ` :
+					`(${ String(deMainFuncInner) })(window, null, (x, y) => window.scrollTo(x, y), ` :
 					`(${ String(/* global deMainFuncOuter */ deMainFuncOuter) })(`
 				}${ JSON.stringify({ domain: aib.domain, b: aib.b, t: aib.t }) });`);
 				const dt = doc.doctype;
@@ -94,8 +92,9 @@ const ContentLoader = {
 			}
 		});
 		if(!imgOnly) {
-			$delAll('.de-btn-img, #de-main, .de-parea, .de-post-btns, .de-refmap, .de-thr-buttons, ' +
-				'.de-video-obj, #de-win-reply, link[rel="alternate stylesheet"], script, ' + aib.qForm, dc);
+			$delAll('.de-btn-img, #de-main-container, .de-parea, .de-post-btns, .de-refmap, ' +
+				'.de-thr-buttons, .de-video-obj, #de-win-reply, link[rel="alternate stylesheet"], script, ' +
+				aib.qForm, dc);
 			$Q('a', dc).forEach(el => {
 				let num;
 				const tc = el.textContent;
@@ -167,7 +166,7 @@ const ContentLoader = {
 		$ajax(url, { responseType: 'arraybuffer' }, !url.startsWith('blob')).then(xhr => {
 			if('response' in xhr) {
 				try {
-					return nav.getUnsafeUint8Array(xhr.response);
+					return nav.uint8Array(xhr.response);
 				} catch(err) {}
 			}
 			const txt = xhr.responseText;
@@ -187,10 +186,10 @@ const ContentLoader = {
 			const rarJpgFinder = (isPreImg || Cfg.findImgFile) && new WorkerPool(mReqs, this._detectImgFile,
 				err => console.error('File detector error:', `line: ${ err.lineno } - ${ err.message }`));
 			preloadPool = new TasksPool(mReqs, (num, data) => this.loadFileData(data[0]).then(fileData => {
-				const [url, parentLink, iType, isRepToOrig, el, isVideo] = data;
+				const [url, parentLink, iType, isRepToOrig, img, isVideo] = data;
 				if(fileData) {
 					const fName = decodeURIComponent(getFileName(url));
-					const nameLink = getImgNameLink(el);
+					const nameLink = aib.getImgNameLink(img);
 					parentLink.setAttribute('download', fName);
 					if(!Cfg.imgNames) {
 						nameLink.setAttribute('download', fName);
@@ -199,10 +198,10 @@ const ContentLoader = {
 					parentLink.href = nameLink.href =
 						deWindow.URL.createObjectURL(new Blob([fileData], { type: iType }));
 					if(isVideo) {
-						el.setAttribute('de-video', '');
+						img.setAttribute('de-video', '');
 					}
 					if(isRepToOrig) {
-						el.src = parentLink.href;
+						img.src = parentLink.href;
 					}
 					if(rarJpgFinder) {
 						rarJpgFinder.runWorker(fileData.buffer, [fileData.buffer],
@@ -259,8 +258,8 @@ const ContentLoader = {
 		}
 	},
 
-	_canvas  : null,
-	_thrPool : null,
+	_canvas : null,
+	_thrPool: null,
 	_addImgFileIcon(nameLink, fName, info) {
 		const { type } = info;
 		if(typeof type === 'undefined') {
@@ -268,7 +267,7 @@ const ContentLoader = {
 		}
 		const ext = ['7z', 'zip', 'rar', 'ogg', 'mp3'][type];
 		nameLink.insertAdjacentHTML('afterend', `<a href="${ deWindow.URL.createObjectURL(
-			new Blob([nav.getUnsafeUint8Array(info.data, info.idx)], {
+			new Blob([nav.uint8Array(info.data, info.idx)], {
 				type: [
 					'application/x-7z-compressed',
 					'application/zip',

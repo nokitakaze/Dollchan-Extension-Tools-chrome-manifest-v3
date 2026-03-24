@@ -17,7 +17,7 @@ function showSubmitError(error) {
 		postform.setReply(true, false);
 	}
 	if(/[cf]aptch|капч|подтвер|verifi/i.test(error)) {
-		postform.refreshCap(true);
+		postform.refreshCaptchaTNum(true);
 	}
 	$popup('upload', error.toString());
 	updater.sendErrNotif();
@@ -98,7 +98,7 @@ async function checkSubmit(data) {
 		pByNum.get(tNum).thr.loadPosts('new', false, false).then(() => closePopup('upload'));
 	}
 	postform.closeReply();
-	postform.refreshCap();
+	postform.refreshCaptchaTNum();
 }
 
 async function checkDelete(data) {
@@ -139,7 +139,7 @@ function isFormElDisabled(el) {
 		}
 		/* falls through */
 	default:
-		if(nav.matchesSelector(el, 'fieldset[disabled] > :not(legend):not(:first-of-type) *')) {
+		if(el.matches('fieldset[disabled] > :not(legend):not(:first-of-type) *')) {
 			return true;
 		}
 	}
@@ -197,8 +197,8 @@ function* getFormElements(form, submitter) {
 					yield {
 						name,
 						type,
-						el    : field,
-						value : new File([img.data], img.name, { type: img.type })
+						el   : field,
+						value: new File([img.data], img.name, { type: img.type })
 					};
 				} else {
 					yield aib.getEmptyFile(field, fixName(name));
@@ -215,10 +215,10 @@ function* getFormElements(form, submitter) {
 		const dirname = field.getAttribute('dirname');
 		if(dirname) {
 			yield {
-				el    : field,
-				name  : fixName(dirname),
-				type  : 'direction',
-				value : nav.matchesSelector(field, ':dir(rtl)') ? 'rtl' : 'ltr'
+				el   : field,
+				name : fixName(dirname),
+				type : 'direction',
+				value: field.matches(':dir(rtl)') ? 'rtl' : 'ltr'
 			};
 		}
 	}
@@ -289,14 +289,13 @@ async function html5Submit(form, submitter, needProgress = false) {
 	if(needProgress && hasFiles) {
 		ajaxParams.onprogress = getUploadFunc();
 	}
-	const url = form.action;
-	return $ajax(url, ajaxParams).then(({ responseText: text }) => aib.jsonSubmit ? text :
-		aib.stormWallFixSubmit ? aib.stormWallFixSubmit(url, text, ajaxParams) : $createDoc(text)
-	).catch(err => Promise.reject(err));
+	return $ajax(form.action, ajaxParams)
+		.then(({ responseText: text }) => aib.jsonSubmit ? text : $createDoc(text))
+		.catch(err => Promise.reject(err));
 }
 
 function cleanFile(data, extraData) {
-	const img = nav.getUnsafeUint8Array(data);
+	const img = nav.uint8Array(data);
 	const rand = Cfg.postSameImg && String(Math.round(Math.random() * 1e6));
 	const rv = extraData ?
 		rand ? [img, extraData, rand] : [img, extraData] :
@@ -306,7 +305,7 @@ function cleanFile(data, extraData) {
 		return rv;
 	}
 	let i, len, val, lIdx, jpgDat;
-	const subarray = (begin, end) => nav.getUnsafeUint8Array(data, begin, end - begin);
+	const subarray = (begin, end) => nav.uint8Array(data, begin, end - begin);
 	// JPG
 	if(img[0] === 0xFF && img[1] === 0xD8) {
 		let deep = 1;
@@ -349,7 +348,7 @@ function cleanFile(data, extraData) {
 		if(lIdx === 2) {
 			// Remove data after the end marker
 			if(i < len) {
-				rv[0] = nav.getUnsafeUint8Array(data, 0, i);
+				rv[0] = nav.uint8Array(data, 0, i);
 			}
 			return rv;
 		}
@@ -376,7 +375,7 @@ function cleanFile(data, extraData) {
 		i += 8;
 		// Remove data after the end marker
 		if(i !== len && (extraData || len - i <= 75)) {
-			rv[0] = nav.getUnsafeUint8Array(data, 0, i);
+			rv[0] = nav.uint8Array(data, 0, i);
 		}
 		return rv;
 	}
@@ -387,7 +386,7 @@ function cleanFile(data, extraData) {
 		while(i && img[--i - 1] !== 0x00 && img[i] !== 0x3B) /* empty */;
 		// Remove data after the end marker
 		if(++i !== len) {
-			rv[0] = nav.getUnsafeUint8Array(data, 0, i);
+			rv[0] = nav.uint8Array(data, 0, i);
 		}
 		return rv;
 	}
@@ -398,11 +397,11 @@ function cleanFile(data, extraData) {
 	return null;
 }
 
-function readExif(data, off, len) {
+function readExif(data, offset, len) {
 	let xRes = 0;
 	let yRes = 0;
 	let resT = 0;
-	const dv = nav.getUnsafeDataView(data, off);
+	const dv = nav.dataView(data, offset);
 	const le = String.fromCharCode(dv.getUint8(0), dv.getUint8(1)) !== 'MM';
 	if(dv.getUint16(2, le) !== 0x2A) {
 		return null;

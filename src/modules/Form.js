@@ -136,9 +136,12 @@ class PostForm {
 		return this.pForm.getBoundingClientRect().top;
 	}
 	addMarkupPanel() {
+		if(aib.noMarkupBtns) {
+			return;
+		}
 		let el = $id('de-txt-panel');
 		if(!Cfg.addTextBtns) {
-			aib.removeMarkupButtons(el);
+			el?.remove();
 			return;
 		}
 		if(!el) {
@@ -146,7 +149,7 @@ class PostForm {
 			['click', 'mouseover'].forEach(e => el.addEventListener(e, this));
 		}
 		el.style.cssFloat = Cfg.txtBtnsLoc ? 'none' : 'right';
-		aib.insertMarkupButtons(this, el);
+		(Cfg.txtBtnsLoc ? $id('de-resizer-text') || this.txta : this.subm).after(el);
 		const id = ['bold', 'italic', 'under', 'strike', 'spoil', 'code', 'sup', 'sub'];
 		const val = ['B', 'i', 'U', 'S', '%', 'C', 'x\u00b2', 'x\u2082'];
 		const mode = Cfg.addTextBtns;
@@ -238,8 +241,8 @@ class PostForm {
 		e.preventDefault();
 		e.stopPropagation();
 	}
-	refreshCap(isError = false) {
-		this.cap?.refreshCaptcha(isError, isError, this.tNum);
+	refreshCaptchaTNum(isError = false) {
+		this.captcha?.refreshCaptcha(isError, isError, this.tNum);
 	}
 	setPlaceholders() {
 		if(aib.formHeaders || !aib.multiFile && Cfg.fileInputs === 2) {
@@ -249,8 +252,8 @@ class PostForm {
 		this._setPlaceholder('subj');
 		this._setPlaceholder('mail');
 		this._setPlaceholder('video');
-		if(this.cap) {
-			this._setPlaceholder('cap');
+		if(this.captcha) {
+			this._setPlaceholder('captcha');
 		}
 	}
 	setReply(isQuick, needToHide) {
@@ -269,7 +272,7 @@ class PostForm {
 		this.closeReply();
 		if(!aib.t) {
 			this.tNum = false;
-			this.refreshCap();
+			this.refreshCaptchaTNum();
 		}
 		if(this.isBottom === isBottom) {
 			$toggle(this.pForm, this.isHidden);
@@ -288,7 +291,7 @@ class PostForm {
 			this.isQuick = true;
 			this.setReply(true, false);
 			$q('a', this._pBtn[+this.isBottom]).className =
-				`de-abtn de-parea-btn-${ aib.t ? 'reply' : 'thr' }`;
+				`link-button de-parea-btn-${ aib.t ? 'reply' : 'thr' }`;
 		} else if(isCloseReply && !this.quotedText && post.wrap.nextElementSibling === this.qArea) {
 			this.closeReply();
 			return;
@@ -306,7 +309,7 @@ class PostForm {
 		}
 		if(!aib.t && this.tNum !== qNum) {
 			this.tNum = qNum;
-			this.refreshCap();
+			this.refreshCaptchaTNum();
 		}
 		this.tNum = qNum;
 		const txt = this.txta.value;
@@ -337,7 +340,7 @@ class PostForm {
 		}
 	}
 	updatePAreaBtns() {
-		const txt = 'de-abtn de-parea-btn-';
+		const txt = 'link-button de-parea-btn-';
 		const rep = aib.t ? 'reply' : 'thr';
 		$q('a', this._pBtn[+this.isBottom]).className = txt + (!this.pForm.style.display ? 'close' : rep);
 		$q('a', this._pBtn[+!this.isBottom]).className = txt + rep;
@@ -388,31 +391,28 @@ class PostForm {
 		};
 	}
 	_initCaptcha() {
-		const capEl =
-			$q('input[type="text"][name*="aptcha"], *[id*="captcha"], *[class*="captcha"]', this.form);
+		const capEl = aib.getCaptchaEl(this.form);
 		if(!capEl) {
-			this.cap = null;
+			this.captcha = null;
 			return;
 		}
-		this.cap = new Captcha(capEl, this.tNum);
-		const updCapFn = () => {
-			this.cap.addCaptcha();
-			this.cap.updateOutdated().then();
+		this.captcha = new Captcha(capEl, this.tNum);
+		const updCaptchaFn = () => {
+			this.captcha.addCaptcha();
+			this.captcha.updateOutdated().then();
 		};
-		this.txta.addEventListener('focus', updCapFn);
+		this.txta.addEventListener('focus', updCaptchaFn);
 		if(this.files) {
-			this.files.onchange = updCapFn;
+			this.files.onchange = updCaptchaFn;
 		}
-		this.form.addEventListener('click', () => this.cap.addCaptcha(), true);
+		this.form.addEventListener('click', () => this.captcha.addCaptcha(), true);
 	}
 	_initFileInputs() {
 		const fileEl = $q(aib.qFormFile, this.form);
 		if(!fileEl) {
 			return;
 		}
-		if(aib.fixFileInputs) {
-			aib.fixFileInputs(fileEl.closest(aib.qFormTd));
-		}
+		aib.fixFileInputs?.(fileEl.closest(aib.qFormTd));
 		this.files = new Files(this, $q(aib.qFormFile, this.form));
 		// We need to clear file inputs in case if session was restored.
 		deWindow.addEventListener('load',
@@ -431,7 +431,7 @@ class PostForm {
 			}
 			if(this.tNum && pByNum.get(this.tNum).subj === 'Dollchan Extension Tools') {
 				const temp = `\n\n${ PostForm._wrapText(aib.markupTags[5],
-					`${ '-'.repeat(50) }\n${ nav.ua }\nv${ version }.${ commit }${
+					`${ '-'.repeat(50) }\n${ nav.userAgent }\nv${ version }.${ commit }${
 						nav.isESNext ? '.es6' : '' } [${ nav.scriptHandler }]`
 				)[1] }`;
 				if(!val.includes(temp)) {
@@ -471,7 +471,7 @@ class PostForm {
 		// Add image from clipboard to file inputs on Ctrl+V
 		el.addEventListener('paste', async e => {
 			const files = e?.clipboardData?.files;
-			for(const file of files) {
+			for(const file of files || []) {
 				const inputs = this.files._inputs;
 				for(let i = 0, len = inputs.length; i < len; ++i) {
 					const input = inputs[i];
@@ -482,7 +482,7 @@ class PostForm {
 				}
 			}
 		});
-		// Make textarea resizer
+		// Saving the textarea size when resizing.
 		if(nav.isFirefox || nav.isWebkit) {
 			el.addEventListener('mouseup', ({ target }) => {
 				const s = target.style;
@@ -494,9 +494,10 @@ class PostForm {
 			});
 			return;
 		}
+		// Creating a resizer in browsers that don't have one.
 		$aEnd(el, '<div id="de-resizer-text"></div>').addEventListener('mousedown', {
-			_el      : el,
-			_elStyle : style,
+			_el     : el,
+			_elStyle: style,
 			handleEvent(e) {
 				switch(e.type) {
 				case 'mousedown':
@@ -520,11 +521,8 @@ class PostForm {
 	_makeHideableContainer() {
 		(this.pForm = $add('<div id="de-pform" class="de-win-body"></div>'))
 			.append(this.form || '', this.oeForm || '');
-		const html = '<div class="de-parea"><div>[<a href="#"></a>]</div><hr></div>';
-		this.pArea = [
-			$bBegin(DelForm.first.el, html),
-			$aEnd(aib._4chan ? $q('.board', DelForm.first.el) : DelForm.first.el, html)
-		];
+		const html = '<div class="de-parea"><div><a href="#"></a></div><hr></div>';
+		this.pArea = [$bBegin(DelForm.first.el, html), $aEnd(DelForm.first.el, html)];
 		this._pBtn = [this.pArea[0].firstChild, this.pArea[1].firstChild];
 		this._pBtn[0].firstElementChild.onclick = e => this.showMainReply(false, e);
 		this._pBtn[1].firstElementChild.onclick = e => this.showMainReply(true, e);
@@ -550,7 +548,7 @@ class PostForm {
 		const buttons = $q('.de-win-buttons', this.qArea);
 		buttons.onmouseover = ({ target }) => {
 			const el = target.parentNode;
-			switch(nav.fixEventEl(target).classList[0]) {
+			switch(target.classList[0]) {
 			case 'de-win-btn-clear': el.title = Lng.clearForm[lang]; break;
 			case 'de-win-btn-close': el.title = Lng.closeReply[lang]; break;
 			case 'de-win-btn-toggle': el.title = Cfg.replyWinDrag ? Lng.underPost[lang] : Lng.makeDrag[lang];
@@ -561,8 +559,8 @@ class PostForm {
 			await CfgSaver.save('sageReply', 0);
 			this.toggleSage();
 			this.files.clearInputs();
-			[this.txta, this.name, this.mail, this.subj, this.video, this.cap && this.cap.textEl].forEach(
-				el => el && (el.value = ''));
+			[this.txta, this.name, this.mail, this.subj, this.video, this.captcha && this.captcha.textEl]
+				.forEach(el => el && (el.value = ''));
 		};
 		toggleBtn.onclick = async () => {
 			await toggleCfg('replyWinDrag');
@@ -577,7 +575,7 @@ class PostForm {
 		closeBtn.onclick = () => this.closeReply();
 	}
 	_setPlaceholder(val) {
-		const el = val === 'cap' ? this.cap.textEl : this[val];
+		const el = val === 'captcha' ? this.captcha.textEl : this[val];
 		if(el) {
 			if(aib.multiFile || Cfg.fileInputs !== 2) {
 				el.placeholder = Lng[val][lang];
