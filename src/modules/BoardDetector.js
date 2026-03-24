@@ -1492,7 +1492,6 @@ function getImageBoard(checkDomains, checkEngines) {
 			return false;
 		}
 		async initCaptchaAsync() {
-			debugger; // todo delme
 			const status = await this._getPasscodeStatus();
 			const hasPasscode = status === 'valid';
 			$toggle($id('captchablock').lastElementChild, !hasPasscode);

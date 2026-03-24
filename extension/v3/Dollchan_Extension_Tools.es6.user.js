@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name            Dollchan Extension Tools
-// @version         24.9.17.1
+// @version         24.9.17.2
 // @namespace       http://www.freedollchan.org/scripts/*
 // @author          Sthephan Shinkufag @ FreeDollChan
 // @copyright       © Dollchan Extension Team. See the LICENSE file for license rights and limitations (MIT).
@@ -28,7 +28,7 @@
 'use strict';
 
 const version = '24.9.17.0';
-const commit = '31eca1b';
+const commit = '6dd016c';
 
 /* ==[ GlobalVars.js ]== */
 
@@ -17311,7 +17311,6 @@ function getImageBoard(checkDomains, checkEngines) {
 			return false;
 		}
 		async initCaptchaAsync() {
-			debugger; // todo delme
 			const status = await this._getPasscodeStatus();
 			const hasPasscode = status === 'valid';
 			$toggle($id('captchablock').lastElementChild, !hasPasscode);

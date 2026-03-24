@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name            Dollchan Extension Tools
-// @version         24.9.17.1
+// @version         24.9.17.2
 // @namespace       http://www.freedollchan.org/scripts/*
 // @author          Sthephan Shinkufag @ FreeDollChan
 // @copyright       © Dollchan Extension Team. See the LICENSE file for license rights and limitations (MIT).
@@ -8522,7 +8522,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
   var _this24 = this;
   var _marked = _regenerator().m(getFormElements);
   var version = '24.9.17.0';
-  var commit = '31eca1b';
+  var commit = '6dd016c';
 
 
   var doc = deWindow.document;
@@ -28223,7 +28223,6 @@ Spells.addSpell(9, '', false);
             return _regenerator().w(function (_context81) {
               while (1) switch (_context81.n) {
                 case 0:
-                  debugger; 
                   _context81.n = 1;
                   return this._getPasscodeStatus();
                 case 1:
