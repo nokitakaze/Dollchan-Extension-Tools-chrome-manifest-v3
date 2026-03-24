@@ -8522,7 +8522,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
   var _this24 = this;
   var _marked = _regenerator().m(getFormElements);
   var version = '24.9.17.0';
-  var commit = '6dd016c';
+  var commit = 'ac542de';
 
 
   var doc = deWindow.document;
@@ -22932,7 +22932,9 @@ Spells.addSpell(9, '', false);
               cnv = _this85._canvas;
               cnv.width = w;
               cnv.height = h;
-              ctx = cnv.getContext('2d');
+              ctx = cnv.getContext('2d', {
+                willReadFrequently: true
+              });
               ctx.drawImage(el, 0, 0);
               buffer = ctx.getImageData(0, 0, w, h).data.buffer;
               if (!buffer) {
@@ -24708,7 +24710,9 @@ Spells.addSpell(9, '', false);
       _initIconsHelper: function _initIconsHelper(icon) {
         var _this97 = this;
         var canvas = doc.createElement('canvas');
-        var ctx = canvas.getContext('2d');
+        var ctx = canvas.getContext('2d', {
+          willReadFrequently: true
+        });
         var wh = Math.max(icon.naturalHeight, 16 * (deWindow.devicePixelRatio || 1));
         var scale = wh / 16;
         canvas.width = canvas.height = wh;

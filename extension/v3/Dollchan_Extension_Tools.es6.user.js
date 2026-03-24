@@ -28,7 +28,7 @@
 'use strict';
 
 const version = '24.9.17.0';
-const commit = '6dd016c';
+const commit = 'ac542de';
 
 /* ==[ GlobalVars.js ]== */
 
@@ -13150,7 +13150,7 @@ const ImagesHashStorage = Object.create({
 		const cnv = this._canvas;
 		cnv.width = w;
 		cnv.height = h;
-		const ctx = cnv.getContext('2d');
+		const ctx = cnv.getContext('2d', { willReadFrequently: true });
 		ctx.drawImage(el, 0, 0);
 		const { buffer } = ctx.getImageData(0, 0, w, h).data;
 		if(buffer) {
@@ -14744,7 +14744,7 @@ function initThreadUpdater(title, enableUpdate) {
 		},
 		_initIconsHelper(icon) {
 			const canvas = doc.createElement('canvas');
-			const ctx = canvas.getContext('2d');
+			const ctx = canvas.getContext('2d', { willReadFrequently: true });
 			const wh = Math.max(icon.naturalHeight, 16 * (deWindow.devicePixelRatio || 1));
 			const scale = wh / 16;
 			canvas.width = canvas.height = wh;

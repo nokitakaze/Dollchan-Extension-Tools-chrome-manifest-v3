@@ -1076,7 +1076,7 @@ const ImagesHashStorage = Object.create({
 		const cnv = this._canvas;
 		cnv.width = w;
 		cnv.height = h;
-		const ctx = cnv.getContext('2d');
+		const ctx = cnv.getContext('2d', { willReadFrequently: true });
 		ctx.drawImage(el, 0, 0);
 		const { buffer } = ctx.getImageData(0, 0, w, h).data;
 		if(buffer) {

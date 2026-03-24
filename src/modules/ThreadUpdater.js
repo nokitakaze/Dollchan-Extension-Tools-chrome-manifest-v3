@@ -228,7 +228,7 @@ function initThreadUpdater(title, enableUpdate) {
 		},
 		_initIconsHelper(icon) {
 			const canvas = doc.createElement('canvas');
-			const ctx = canvas.getContext('2d');
+			const ctx = canvas.getContext('2d', { willReadFrequently: true });
 			const wh = Math.max(icon.naturalHeight, 16 * (deWindow.devicePixelRatio || 1));
 			const scale = wh / 16;
 			canvas.width = canvas.height = wh;
